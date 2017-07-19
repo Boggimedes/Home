@@ -1,0 +1,400 @@
+<!-- HTML generated using hilite.me --><div style="background: #202020; overflow:auto;width:auto;padding:.2em .6em;"><pre style="background: #202020; margin: 0; line-height: 125%"><span style="color: #d0d0d0">.factory(</span><span style="color: #ed9d13">&#39;mapService&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;mapDatasource&#39;</span><span style="color: #d0d0d0">,</span>
+    <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(mapDatasource)</span> <span style="color: #d0d0d0">{</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">map;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">lastOpenInfoWin;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">zoomLevel;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">places;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">toggle</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">img;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">mapId;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">target;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">src;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">centreLat;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">centreLon;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">initialZoom;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">imageWraps;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">gmicMapType;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">fieldScope;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">markerFields;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">currentIndex;</span>
+
+
+
+        <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">Tooltip(options)</span> <span style="color: #d0d0d0">{</span>
+
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.marker_</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">options.marker;</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.content_</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">options.content;</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.map_</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">options.marker.get(</span><span style="color: #ed9d13">&#39;map&#39;</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.cssClass_</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">options.cssClass</span> <span style="color: #d0d0d0">||</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">;</span>
+
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.setMap(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.map_);</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">me</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">google.maps.event.addListener(me.marker_,</span> <span style="color: #ed9d13">&#39;mouseover&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">overlayProjection</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">me.getProjection();</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">ne</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">overlayProjection.fromLatLngToDivPixel(me.marker_.getPosition());</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">div</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">me.div_;</span>
+            <span style="color: #d0d0d0">div.style.left</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">ne.x</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">div.style.top</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">ne.y</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #d0d0d0">me.show();</span>
+            <span style="color: #d0d0d0">});</span>
+            <span style="color: #d0d0d0">google.maps.event.addListener(me.marker_,</span> <span style="color: #ed9d13">&#39;mouseout&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #d0d0d0">me.hide();</span>
+            <span style="color: #d0d0d0">});</span>
+        <span style="color: #d0d0d0">}</span>
+        <span style="color: #d0d0d0">Tooltip.prototype</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.OverlayView();</span>
+
+        <span style="color: #d0d0d0">Tooltip.prototype.onAdd</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">div</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.createElement(</span><span style="color: #ed9d13">&#39;DIV&#39;</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #d0d0d0">div.style.position</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;absolute&quot;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">div.style.visibility</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;hidden&quot;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.cssClass_)</span>
+                <span style="color: #d0d0d0">div.className</span> <span style="color: #d0d0d0">+=</span> <span style="color: #ed9d13">&quot; &quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.cssClass_;</span>
+
+            <span style="color: #d0d0d0">div.innerHTML</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.content_;</span>
+
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">div;</span>
+
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">panes</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.getPanes();</span>
+            <span style="color: #d0d0d0">panes.floatPane.appendChild(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_);</span>
+
+        <span style="color: #d0d0d0">};</span>
+        <span style="color: #d0d0d0">Tooltip.prototype.draw</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">overlayProjection</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.getProjection();</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">ne</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">overlayProjection.fromLatLngToDivPixel(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.marker_.getPosition());</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">div</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_;</span>
+            <span style="color: #d0d0d0">div.style.left</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">ne.x</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">div.style.top</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">ne.y</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+
+        <span style="color: #d0d0d0">};</span>
+        <span style="color: #d0d0d0">Tooltip.prototype.onRemove</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_.parentNode.removeChild(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_);</span>
+        <span style="color: #d0d0d0">};</span>
+
+        <span style="color: #d0d0d0">Tooltip.prototype.hide</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_.style.visibility</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;hidden&quot;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">}</span>
+        <span style="color: #d0d0d0">};</span>
+
+        <span style="color: #d0d0d0">Tooltip.prototype.show</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.div_.style.visibility</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;visible&quot;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">}</span>
+        <span style="color: #d0d0d0">};</span>
+
+        <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">createInfoWindow(marker,</span> <span style="color: #d0d0d0">key,</span> <span style="color: #d0d0d0">markerFields)</span> <span style="color: #d0d0d0">{</span>
+              <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">infowindow</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.InfoWindow({</span>
+                  <span style="color: #d0d0d0">content:</span> <span style="color: #d0d0d0">places[key].html,</span>
+                  <span style="color: #d0d0d0">maxWidth:</span> <span style="color: #3677a9">550</span>
+              <span style="color: #d0d0d0">});</span>
+
+              <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tooltipOptions</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+                  <span style="color: #d0d0d0">marker:</span> <span style="color: #d0d0d0">marker,</span>
+                  <span style="color: #d0d0d0">content:</span> <span style="color: #d0d0d0">places[key].name,</span>
+                  <span style="color: #d0d0d0">cssClass:</span> <span style="color: #ed9d13">&#39;map-tooltip&#39;</span>
+              <span style="color: #d0d0d0">};</span>
+              <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tooltip</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">Tooltip(tooltipOptions);</span>
+
+              <span style="color: #d0d0d0">google.maps.event.addListener(marker,</span> <span style="color: #ed9d13">&#39;dragend&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+
+              <span style="color: #d0d0d0">markerFields.ttip</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key].name;</span>
+              <span style="color: #d0d0d0">markerFields.lat</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">marker.getPosition().lat();</span>
+              <span style="color: #d0d0d0">markerFields.lng</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">marker.getPosition().lng();</span>
+              <span style="color: #d0d0d0">markerFields.html</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key].html;</span>
+              <span style="color: #d0d0d0">markerFields.zoom</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key].zoom;</span>
+              <span style="color: #d0d0d0">markerFields.id</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key].id;</span>
+              <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(marker.getPosition().lat())</span> <span style="color: #d0d0d0">!=</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(places[key].latitude)</span> <span style="color: #d0d0d0">||</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(marker.getPosition().lng())</span> <span style="color: #d0d0d0">!=</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(places[key].longitude))</span> <span style="color: #d0d0d0">markerFields.warn</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">markerFields.warn</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+
+            <span style="color: #d0d0d0">angular.forEach(markerFields.checkModel,</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">(value,</span> <span style="color: #d0d0d0">key)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #d0d0d0">markerFields.checkModel[key]=</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+              <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(markerFields.zoom.indexOf(key+</span><span style="color: #3677a9">2</span><span style="color: #d0d0d0">)&gt;=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">markerFields.checkModel[key]=</span><span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">});</span>
+              <span style="color: #d0d0d0">});</span>
+
+              <span style="color: #d0d0d0">google.maps.event.addListener(marker,</span> <span style="color: #ed9d13">&#39;click&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+
+              <span style="color: #d0d0d0">markerFields.ttip</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key].name;</span>
+              <span style="color: #d0d0d0">markerFields.lat</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">marker.getPosition().lat();</span>
+              <span style="color: #d0d0d0">markerFields.lng</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">marker.getPosition().lng();</span>
+              <span style="color: #d0d0d0">markerFields.html</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key].html;</span>
+              <span style="color: #d0d0d0">markerFields.zoom</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key].zoom;</span>
+              <span style="color: #d0d0d0">markerFields.id</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key].id;</span>
+              <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(marker.getPosition().lat())</span> <span style="color: #d0d0d0">!=</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(places[key].latitude)</span> <span style="color: #d0d0d0">||</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(marker.getPosition().lng())</span> <span style="color: #d0d0d0">!=</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(places[key].longitude))</span> <span style="color: #d0d0d0">markerFields.warn</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">markerFields.warn</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">angular.forEach(markerFields.checkModel,</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">(value,</span> <span style="color: #d0d0d0">key)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #d0d0d0">markerFields.checkModel[key]=</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+
+              <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(markerFields.zoom.indexOf(key+</span><span style="color: #3677a9">2</span><span style="color: #d0d0d0">)&gt;=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">markerFields.checkModel[key]=</span><span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">});</span>
+
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(infowindow.position</span> <span style="color: #d0d0d0">==</span> <span style="color: #d0d0d0">marker.position</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">infowindow.anchor)</span> <span style="color: #d0d0d0">infowindow.close();</span>
+                <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+                  <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(lastOpenInfoWin)</span> <span style="color: #d0d0d0">lastOpenInfoWin.close();</span>
+                  <span style="color: #d0d0d0">lastOpenInfoWin</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">infowindow;</span>
+                  <span style="color: #d0d0d0">infowindow.open(marker.get(</span><span style="color: #ed9d13">&#39;map&#39;</span><span style="color: #d0d0d0">),</span> <span style="color: #d0d0d0">marker);</span>
+                  <span style="color: #d0d0d0">}</span>
+              <span style="color: #d0d0d0">});</span>
+        <span style="color: #d0d0d0">}</span>
+        <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">createTooltip(marker,</span> <span style="color: #d0d0d0">key)</span> <span style="color: #d0d0d0">{</span>
+              <span style="color: #d0d0d0">}</span>
+
+
+        <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">GMICMapType(img)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.sourceImg</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">img;</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.Cache</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">Array</span><span style="color: #d0d0d0">();</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.opacity</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">1.0</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #d0d0d0">}</span>
+
+
+
+        <span style="color: #d0d0d0">GMICMapType.prototype.tileSize</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.Size(</span><span style="color: #3677a9">256</span><span style="color: #d0d0d0">,</span> <span style="color: #3677a9">256</span><span style="color: #d0d0d0">);</span>
+        <span style="color: #d0d0d0">GMICMapType.prototype.maxZoom</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">19</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #d0d0d0">GMICMapType.prototype.getTile</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(coord,</span> <span style="color: #d0d0d0">zoom,</span> <span style="color: #d0d0d0">ownerDocument)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">c</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.pow(</span><span style="color: #3677a9">2</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">zoom);</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tilex=coord.x,tiley=coord.y;</span>
+            <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(tilex</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">tilex=c+tilex%c;</span>
+                <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(tilex&gt;=c)</span> <span style="color: #d0d0d0">tilex=tilex%c;</span>
+                <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(tiley</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">tiley=c+tiley%c;</span>
+                <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(tiley&gt;=c)</span> <span style="color: #d0d0d0">tiley=tiley%c;</span>
+            <span style="color: #d0d0d0">}</span>
+            <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">((tilex</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)||(tilex&gt;=c)||(tiley</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)||(tiley&gt;=c))</span>
+                <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">blank</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">ownerDocument.createElement(</span><span style="color: #ed9d13">&#39;DIV&#39;</span><span style="color: #d0d0d0">);</span>
+                    <span style="color: #d0d0d0">blank.style.width</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.tileSize.width</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #d0d0d0">blank.style.height</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.tileSize.height</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">blank;</span>
+                <span style="color: #d0d0d0">}</span>
+            <span style="color: #d0d0d0">}</span>
+
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">img</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">ownerDocument.createElement(</span><span style="color: #ed9d13">&#39;img&#39;</span><span style="color: #d0d0d0">);</span>
+
+            <span style="color: #d0d0d0">img.id</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;t_&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">zoom</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;_&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">tilex</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;_&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">tiley;</span>
+            <span style="color: #d0d0d0">img.style.width</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.tileSize.width</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">img.style.height</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.tileSize.height</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">canvas</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">ownerDocument.createElement(</span><span style="color: #ed9d13">&#39;canvas&#39;</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #d0d0d0">canvas.width</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.tileSize.width;</span>
+            <span style="color: #d0d0d0">canvas.height</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.tileSize.height;</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">ctx</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">canvas.getContext(</span><span style="color: #ed9d13">&quot;2d&quot;</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #d0d0d0">ctx.drawImage(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.sourceImg,</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.sourceImg.width</span> <span style="color: #d0d0d0">/</span> <span style="color: #d0d0d0">c</span> <span style="color: #d0d0d0">*</span> <span style="color: #d0d0d0">tilex,</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.sourceImg.height</span> <span style="color: #d0d0d0">/</span> <span style="color: #d0d0d0">c</span> <span style="color: #d0d0d0">*</span> <span style="color: #d0d0d0">tiley,</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.sourceImg.width</span> <span style="color: #d0d0d0">/</span> <span style="color: #d0d0d0">c,</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.sourceImg.height</span> <span style="color: #d0d0d0">/</span> <span style="color: #d0d0d0">c,</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.tileSize.width,</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.tileSize.height);</span>
+            <span style="color: #d0d0d0">img.src</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">canvas.toDataURL();</span>
+
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.Cache.push(img);</span>
+
+            <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">img;</span>
+        <span style="color: #d0d0d0">};</span>
+
+        <span style="color: #d0d0d0">GMICMapType.prototype.realeaseTile</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(tile)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">idx</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.Cache.indexOf(tile);</span>
+            <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(idx!=-</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">)</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.Cache.splice(idx,</span> <span style="color: #3677a9">1</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #d0d0d0">tile=</span><span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #d0d0d0">};</span>
+
+        <span style="color: #d0d0d0">GMICMapType.prototype.name</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;GMap-JSlicer&quot;</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #d0d0d0">GMICMapType.prototype.alt</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;GMap-JSlicer&quot;</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #d0d0d0">GMICMapType.prototype.setOpacity</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(newOpacity)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.opacity</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">newOpacity;</span>
+            <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.Cache.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.Cache[i].style.opacity</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">newOpacity;</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.Cache[i].style.filter</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;alpha(opacity=&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">newOpacity</span> <span style="color: #d0d0d0">*</span> <span style="color: #3677a9">100</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;)&quot;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #d0d0d0">}</span>
+        <span style="color: #d0d0d0">};</span>
+
+
+        <span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">{</span>
+
+            <span style="color: #d0d0d0">init:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">init(target,</span> <span style="color: #d0d0d0">src,</span> <span style="color: #d0d0d0">id)</span> <span style="color: #d0d0d0">{</span>
+
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.mapId</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">id;</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.target</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">target;</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.src</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">src;</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.toggle</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.centreLat)</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.centreLat</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0.0</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.centreLon)</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.centreLon</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0.0</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.initialZoom)</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.initialZoom</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">3</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.imageWraps</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.markerFields.map_id</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">id;</span>
+
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">that</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">;</span>
+
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">downloadAsset</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(src,</span> <span style="color: #d0d0d0">callback)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!that.img)</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">img</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.createElement(</span><span style="color: #ed9d13">&#39;img&#39;</span><span style="color: #d0d0d0">);</span>
+
+                        <span style="color: #d0d0d0">img.onerror</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(callback)</span> <span style="color: #d0d0d0">{</span>
+                                <span style="color: #d0d0d0">callback(</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">);</span>
+                            <span style="color: #d0d0d0">}</span>
+                        <span style="color: #d0d0d0">};</span>
+
+                        <span style="color: #d0d0d0">img.onload</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">canvas</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.createElement(</span><span style="color: #ed9d13">&#39;canvas&#39;</span><span style="color: #d0d0d0">);</span>
+                            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">dimension</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.max(img.width,</span> <span style="color: #d0d0d0">img.height);</span>
+                            <span style="color: #d0d0d0">canvas.width</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">dimension;</span>
+                            <span style="color: #d0d0d0">canvas.height</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">dimension;</span>
+                            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">ctx</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">canvas.getContext(</span><span style="color: #ed9d13">&quot;2d&quot;</span><span style="color: #d0d0d0">);</span>
+                            <span style="color: #d0d0d0">ctx.drawImage(img,</span> <span style="color: #d0d0d0">(dimension</span> <span style="color: #d0d0d0">-</span> <span style="color: #d0d0d0">img.width)</span> <span style="color: #d0d0d0">/</span> <span style="color: #3677a9">2</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">(dimension</span> <span style="color: #d0d0d0">-</span> <span style="color: #d0d0d0">img.height)</span> <span style="color: #d0d0d0">/</span> <span style="color: #3677a9">2</span><span style="color: #d0d0d0">);</span>
+
+                            <span style="color: #d0d0d0">img.onload</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+                                <span style="color: #d0d0d0">img.removeEventListener(</span><span style="color: #ed9d13">&#39;onload&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">img.onload,</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">);</span>
+                                <span style="color: #d0d0d0">that.img</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">img;</span>
+                                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(callback)</span> <span style="color: #d0d0d0">{</span>
+                                    <span style="color: #d0d0d0">callback(img);</span>
+                                <span style="color: #d0d0d0">}</span>
+                            <span style="color: #d0d0d0">};</span>
+
+                            <span style="color: #d0d0d0">img.src</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">canvas.toDataURL();</span>
+                        <span style="color: #d0d0d0">};</span>
+
+                        <span style="color: #d0d0d0">img.src</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">src;</span>
+                    <span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(callback)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">callback(img);</span>
+                        <span style="color: #d0d0d0">}</span>
+                    <span style="color: #d0d0d0">}</span>
+                <span style="color: #d0d0d0">};</span>
+
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">latlng</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.LatLng(that.centreLat,</span> <span style="color: #d0d0d0">that.centreLon);</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">myOptions</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">zoom:</span> <span style="color: #d0d0d0">that.initialZoom,</span>
+                    <span style="color: #d0d0d0">minZoom:</span> <span style="color: #3677a9">2</span><span style="color: #d0d0d0">,</span>
+                    <span style="color: #d0d0d0">maxZoom:</span> <span style="color: #3677a9">5</span><span style="color: #d0d0d0">,</span>
+                    <span style="color: #d0d0d0">center:</span> <span style="color: #d0d0d0">latlng,</span>
+                    <span style="color: #d0d0d0">panControl:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+                    <span style="color: #d0d0d0">zoomControl:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+                    <span style="color: #d0d0d0">mapTypeControl:</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">,</span>
+                    <span style="color: #d0d0d0">scaleControl:</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">,</span>
+                    <span style="color: #d0d0d0">streetViewControl:</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">,</span>
+                    <span style="color: #d0d0d0">overviewMapControl:</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">,</span>
+                    <span style="color: #d0d0d0">mapTypeControlOptions:</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #d0d0d0">mapTypeIds:</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&quot;GameMap&quot;</span><span style="color: #d0d0d0">],</span>
+                        <span style="color: #d0d0d0">position:</span> <span style="color: #d0d0d0">google.maps.ControlPosition.TOP_RIGHT,</span>
+                        <span style="color: #d0d0d0">style:</span> <span style="color: #d0d0d0">google.maps.MapTypeControlStyle.DEFAULT</span>
+                    <span style="color: #d0d0d0">},</span>
+                    <span style="color: #d0d0d0">mapTypeId:</span> <span style="color: #ed9d13">&quot;GameMap&quot;</span>
+                <span style="color: #d0d0d0">};</span>
+
+                <span style="color: #d0d0d0">map</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.Map(that.target,</span> <span style="color: #d0d0d0">myOptions);</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">gmicMapType</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">GMICMapType(that.img);</span>
+                <span style="color: #d0d0d0">map.mapTypes.set(</span><span style="color: #ed9d13">&quot;GameMap&quot;</span><span style="color: #d0d0d0">,gmicMapType);</span>
+
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!that.imageWraps)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">that.setBounds();</span>
+                <span style="color: #d0d0d0">}</span>
+
+                <span style="color: #d0d0d0">google.maps.event.addListener(map,</span> <span style="color: #ed9d13">&#39;click&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(event)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(lastOpenInfoWin)</span> <span style="color: #d0d0d0">{</span>
+                         <span style="color: #d0d0d0">lastOpenInfoWin.close();</span>
+                         <span style="color: #d0d0d0">that.markerFields.id</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;&#39;</span><span style="color: #d0d0d0">;</span>
+                       <span style="color: #d0d0d0">}</span>
+
+                    <span style="color: #d0d0d0">that.markerFields.lng</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">event.latLng.lng();</span>
+                    <span style="color: #d0d0d0">that.markerFields.lat</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">event.latLng.lat();</span>
+                <span style="color: #d0d0d0">});</span>
+
+                <span style="color: #d0d0d0">google.maps.event.addListener(map,</span> <span style="color: #ed9d13">&#39;zoom_changed&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">zoomLevel</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getZoom();</span>
+                        <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">places.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+                             <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(places[i].zoom.indexOf(zoomLevel)&gt;=</span><span style="color: #3677a9">0</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">toggle)</span> <span style="color: #d0d0d0">places[i].marker.setVisible(</span><span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+                             <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">places[i].marker.setVisible(</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">);</span>
+                         <span style="color: #d0d0d0">}</span>
+                <span style="color: #d0d0d0">});</span>
+
+                <span style="color: #d0d0d0">mapDatasource.getMarkers({</span><span style="color: #ed9d13">&quot;map_id&quot;</span><span style="color: #d0d0d0">:that.mapId}).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">places</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+                    <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">key</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">key</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">places.length;</span> <span style="color: #d0d0d0">key++)</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">myPlace</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">places[key];</span>
+                        <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(myPlace.latitude)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">places[key].marker</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.Marker({</span>
+                                <span style="color: #d0d0d0">map:</span> <span style="color: #d0d0d0">map,</span>
+                                <span style="color: #d0d0d0">icon:</span> <span style="color: #ed9d13">&quot;/demo/note.png&quot;</span><span style="color: #d0d0d0">,</span>
+                                <span style="color: #d0d0d0">draggable:</span><span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+                                <span style="color: #d0d0d0">position:</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.LatLng(myPlace.latitude,</span> <span style="color: #d0d0d0">myPlace.longitude)</span>
+                             <span style="color: #d0d0d0">});</span>
+                             <span style="color: #d0d0d0">createInfoWindow(places[key].marker,</span> <span style="color: #d0d0d0">key,</span> <span style="color: #d0d0d0">that.markerFields);</span>
+                            <span style="color: #d0d0d0">createTooltip(places[key].marker,</span> <span style="color: #d0d0d0">key);</span>
+                            <span style="color: #d0d0d0">zoomLevel</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getZoom();</span>
+                            <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(places[key].zoom.indexOf(zoomLevel)</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                                <span style="color: #d0d0d0">places[key].marker.setVisible(</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">);</span>
+                            <span style="color: #d0d0d0">}</span>
+                        <span style="color: #d0d0d0">}</span>
+                    <span style="color: #d0d0d0">}</span>
+                <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+                <span style="color: #d0d0d0">downloadAsset(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.src,</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">load();</span>
+                <span style="color: #d0d0d0">});</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">setBounds:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">setBounds()</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">allowedBounds</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.LatLngBounds(</span>
+                     <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.LatLng(-</span><span style="color: #3677a9">165.0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">-</span><span style="color: #3677a9">165.0</span><span style="color: #d0d0d0">),</span>
+                     <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">google.maps.LatLng(</span><span style="color: #3677a9">165.0</span><span style="color: #d0d0d0">,</span> <span style="color: #3677a9">165.0</span><span style="color: #d0d0d0">)</span>
+                <span style="color: #d0d0d0">);</span>
+
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">lastValidCenter</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getCenter();</span>
+
+                <span style="color: #d0d0d0">google.maps.event.addListener(map,</span> <span style="color: #ed9d13">&#39;center_changed&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(allowedBounds.contains(map.getCenter()))</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #d0d0d0">lastValidCenter</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getCenter();</span>
+                        <span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #d0d0d0">}</span>
+
+                    <span style="color: #d0d0d0">map.panTo(lastValidCenter);</span>
+                <span style="color: #d0d0d0">});</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">redraw:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">redraw()</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">zoom</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getZoom();</span>
+                <span style="color: #d0d0d0">map.setZoom(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">);</span>
+                <span style="color: #d0d0d0">setTimeout(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){map.setZoom(zoom);},</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">setFields:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">setFields(fields){</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.markerFields</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">fields;</span>
+                <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">toggleMarkers:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">toggleMarkers(){</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i;</span>
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(toggle){</span>
+                    <span style="color: #d0d0d0">toggle</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">!toggle;</span>
+                        <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">places.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">places[i].marker.setVisible(</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">);</span>
+                        <span style="color: #d0d0d0">}</span>
+                <span style="color: #d0d0d0">}</span>
+                <span style="color: #6ab825; font-weight: bold">else</span><span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">toggle</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">!toggle;</span>
+                    <span style="color: #d0d0d0">zoomLevel</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getZoom();</span>
+                        <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">places.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(places[i].zoom.indexOf(zoomLevel)&gt;=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">places[i].marker.setVisible(</span><span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+                        <span style="color: #d0d0d0">}</span>
+                <span style="color: #d0d0d0">}</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">toggleTooltips:</span>   <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">toggleTooltips(){</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tooltips</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.getElementsByClassName(</span><span style="color: #ed9d13">&#39;map-tooltip&#39;</span><span style="color: #d0d0d0">);</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i;</span>
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #24909d">document</span><span style="color: #d0d0d0">.getElementsByClassName(</span><span style="color: #ed9d13">&#39;hidden-tooltips&#39;</span><span style="color: #d0d0d0">).length&gt;</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">){</span>
+                    <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span>     <span style="color: #d0d0d0">tooltips.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #d0d0d0">tooltips[i].classList.remove(</span><span style="color: #ed9d13">&quot;hidden-tooltips&quot;</span><span style="color: #d0d0d0">);</span>
+                    <span style="color: #d0d0d0">}</span>
+                <span style="color: #d0d0d0">}</span>
+                <span style="color: #6ab825; font-weight: bold">else</span><span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span>     <span style="color: #d0d0d0">tooltips.length;</span> <span style="color: #d0d0d0">i++)</span>
+                    <span style="color: #d0d0d0">{</span>
+                        <span style="color: #d0d0d0">tooltips[i].classList.add(</span><span style="color: #ed9d13">&quot;hidden-tooltips&quot;</span><span style="color: #d0d0d0">);</span>
+                    <span style="color: #d0d0d0">}</span>
+                <span style="color: #d0d0d0">}</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">reloadMap:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">reloadMap(newMarker){</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.centreLat</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getCenter().lat();</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.centreLon</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getCenter().lng();</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.initialZoom</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">map.getZoom();</span>
+                <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.init(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.target,</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.src,</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.mapId);</span>
+            <span style="color: #d0d0d0">}</span>
+        <span style="color: #d0d0d0">};</span>
+    <span style="color: #d0d0d0">}</span>
+<span style="color: #d0d0d0">])</span>
+</pre></div>

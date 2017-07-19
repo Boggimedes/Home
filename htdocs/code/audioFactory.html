@@ -1,0 +1,212 @@
+<!-- HTML generated using hilite.me --><div style="background: #202020; overflow:auto;width:auto;padding:.2em .6em;"><pre style="background: #202020; margin: 0; line-height: 125%"><span style="color: #d0d0d0">.factory(</span><span style="color: #ed9d13">&#39;soundsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$http&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$rootScope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$interval&#39;</span><span style="color: #d0d0d0">,</span>
+    <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($http,</span> <span style="color: #d0d0d0">$rootScope,</span> <span style="color: #d0d0d0">$interval)</span> <span style="color: #d0d0d0">{</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">scenes</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{};</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">unregister</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">getRandomInt</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(min,</span> <span style="color: #d0d0d0">max)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor(</span><span style="color: #24909d">Math</span><span style="color: #d0d0d0">.random()</span> <span style="color: #d0d0d0">*</span> <span style="color: #d0d0d0">(max</span> <span style="color: #d0d0d0">-</span> <span style="color: #d0d0d0">min</span> <span style="color: #d0d0d0">+</span> <span style="color: #3677a9">1</span><span style="color: #d0d0d0">))</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">min;</span>
+        <span style="color: #d0d0d0">}</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">mixToMono</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(buffer)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(buffer.numberOfChannels</span> <span style="color: #d0d0d0">==</span> <span style="color: #3677a9">2</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">pL</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">buffer.getChannelData(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">);</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">pR</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">buffer.getChannelData(</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">length</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">buffer.length;</span>
+
+                <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">length;</span> <span style="color: #d0d0d0">++i)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">mono</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0.5</span> <span style="color: #d0d0d0">*</span> <span style="color: #d0d0d0">(pL[i]</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">pR[i]);</span>
+                    <span style="color: #d0d0d0">pL[i]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">mono;</span>
+                    <span style="color: #d0d0d0">pR[i]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">mono;</span>
+                <span style="color: #d0d0d0">}</span>
+            <span style="color: #d0d0d0">}</span>
+        <span style="color: #d0d0d0">}</span>
+        <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #d0d0d0">playSound:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(data)</span> <span style="color: #d0d0d0">{</span>
+
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">getScenes:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/sound/scene/get&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">getSounds:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(data)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/api/sounds/sounds/get&#39;</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">playEffect:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(data)</span> <span style="color: #d0d0d0">{</span>
+
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">toggleScene:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(data)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">scenes[data.name]</span> <span style="color: #d0d0d0">===</span> <span style="color: #ed9d13">&#39;undefined&#39;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(scenes.length</span> <span style="color: #d0d0d0">&gt;=</span> <span style="color: #3677a9">5</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #d0d0d0">alert(</span><span style="color: #ed9d13">&quot;You can only play 5 scenes at once.&quot;</span><span style="color: #d0d0d0">);</span>
+                        <span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #d0d0d0">}</span>
+                    <span style="color: #d0d0d0">scenes[data.name]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">angular.copy(data);</span>
+                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">aScene</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">scenes[data.name];</span>
+
+                    <span style="color: #d0d0d0">aScene.context</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">AudioContext();</span>
+                    <span style="color: #d0d0d0">aScene.gainNode</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+                    <span style="color: #d0d0d0">aScene.context.destination.channelCountMode</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;explicit&quot;</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #d0d0d0">aScene.context.destination.channelInterpretation</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;discrete&quot;</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #d0d0d0">aScene.context.destination.channelCount</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.context.destination.maxChannelCount;</span>
+
+                    <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">j</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">j</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">aScene.effects.length;</span> <span style="color: #d0d0d0">j++)</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.effects[j].preDelay&gt;</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">getRandomInt(aScene.effects[j].delayL,</span> <span style="color: #d0d0d0">aScene.effects[j].delayH)</span> 
+                            <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">aScene.context.currentTime</span> 
+                            <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">aScene.effects[j].preDelay</span> 
+                            <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">aScene.context.currentTime;</span>
+                        <span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+                        <span style="color: #d0d0d0">}</span>
+                        <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(j</span> <span style="color: #d0d0d0">==</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">aScene.nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.effects[j].nextPlay;</span>
+                        <span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.nextPlay</span> <span style="color: #d0d0d0">&gt;</span> <span style="color: #d0d0d0">aScene.effects[j].nextPlay)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">aScene.nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.effects[j].nextPlay;</span>
+                        <span style="color: #d0d0d0">}</span>
+                    <span style="color: #d0d0d0">}</span>
+                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">aScene.nextPlay</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;undefined&quot;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #d0d0d0">aScene.nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #d0d0d0">}</span>
+
+                    <span style="color: #d0d0d0">scenes[data.name].interval</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$interval(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){$rootScope.chkScene(data.name);},</span><span style="color: #3677a9">200</span><span style="color: #d0d0d0">);</span>
+
+                <span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">aScene</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">scenes[data.name];</span>
+                    <span style="color: #d0d0d0">aScene.gainNode.forEach(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(gNode)</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #d0d0d0">gNode.gain.linearRampToValueAtTime(gNode.gainSet,</span> <span style="color: #d0d0d0">aScene.context.currentTime);</span>
+                        <span style="color: #d0d0d0">gNode.gain.linearRampToValueAtTime(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">aScene.context.currentTime</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">(aScene.fadeOut));</span>
+                    <span style="color: #d0d0d0">});</span>
+                    <span style="color: #d0d0d0">aScene.closeTime</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.context.currentTime</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">(aScene.fadeOut);</span>
+                <span style="color: #d0d0d0">}</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">chkScene:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(name)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">aScene</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">scenes[name];</span>
+
+                <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.closeTime</span> <span style="color: #d0d0d0">&lt;=</span> <span style="color: #d0d0d0">aScene.context.currentTime)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">aScene.context.close();</span>
+                    <span style="color: #d0d0d0">$interval.cancel(aScene.interval);</span>
+                    <span style="color: #6ab825; font-weight: bold">delete</span> <span style="color: #d0d0d0">aScene.closeTime;</span>
+                    <span style="color: #6ab825; font-weight: bold">delete</span> <span style="color: #d0d0d0">aScene.effects;</span>
+                    <span style="color: #6ab825; font-weight: bold">delete</span> <span style="color: #d0d0d0">scenes[name];</span>
+                    <span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #d0d0d0">}</span>
+                <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.closeTime</span> <span style="color: #d0d0d0">&lt;=</span> <span style="color: #d0d0d0">aScene.context.currentTime+aScene.fadeOut)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #d0d0d0">}</span>
+                <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">j</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">j</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">aScene.effects.length;</span> <span style="color: #d0d0d0">j++)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;undefined&quot;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #d0d0d0">}</span>
+                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">aScene.context.currentTime</span> <span style="color: #d0d0d0">+</span> <span style="color: #3677a9">0.5</span> 
+                    <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">(aScene.effects[j].active</span> <span style="color: #d0d0d0">||</span> <span style="color: #d0d0d0">aScene.effects[j].active</span> <span style="color: #d0d0d0">==</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">))</span> <span style="color: #d0d0d0">{</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">source</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.context.createBufferSource();</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">perChance</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">perRoll</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">getRandomInt(</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">perChance);</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">k=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">cents;</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">rate;</span>
+                        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">request;</span>
+
+                       <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.context.currentTime</span> <span style="color: #d0d0d0">+</span> <span style="color: #3677a9">20000</span><span style="color: #d0d0d0">;</span>
+                        <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">k</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">k</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">aScene.effects[j].sounds.length;</span> <span style="color: #d0d0d0">k++)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">perChance</span> <span style="color: #d0d0d0">+=</span> <span style="color: #d0d0d0">aScene.effects[j].sounds[k].chance;</span>
+                        <span style="color: #d0d0d0">}</span>
+                        <span style="color: #d0d0d0">perChance</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+                        <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">l</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">l</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">aScene.effects[j].sounds.length;</span> <span style="color: #d0d0d0">l++)</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">perChance</span> <span style="color: #d0d0d0">+=</span> <span style="color: #d0d0d0">aScene.effects[j].sounds[l].chance;</span>
+                            <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(perChance</span> <span style="color: #d0d0d0">&gt;=</span> <span style="color: #d0d0d0">perRoll)</span> <span style="color: #d0d0d0">{</span>
+                                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">url</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;/sounds/&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">aScene.effects[j].sounds[l].file;</span>
+                                <span style="color: #d0d0d0">k=l;</span>
+                                <span style="color: #6ab825; font-weight: bold">break</span><span style="color: #d0d0d0">;</span>
+                            <span style="color: #d0d0d0">}</span>
+                        <span style="color: #d0d0d0">}</span>
+                        <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">url</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;undefined&quot;</span><span style="color: #d0d0d0">){</span>
+                            <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+                            <span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+                        <span style="color: #d0d0d0">}</span>
+                        <span style="color: #d0d0d0">cents</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.effects[j].sounds[k].pitchSet;</span>
+                        <span style="color: #d0d0d0">cents</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">cents</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">getRandomInt(-aScene.effects[j].sounds[k].pitchVar,</span> <span style="color: #d0d0d0">aScene.effects[j].sounds[k].pitchVar</span> <span style="color: #d0d0d0">*</span> <span style="color: #3677a9">2</span><span style="color: #d0d0d0">);</span>
+                        <span style="color: #d0d0d0">cents</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">cents</span> <span style="color: #d0d0d0">*</span> <span style="color: #3677a9">3</span><span style="color: #d0d0d0">;</span>
+                        <span style="color: #d0d0d0">rate</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">Math</span><span style="color: #d0d0d0">.pow(</span><span style="color: #3677a9">2.0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">cents</span> <span style="color: #d0d0d0">/</span> <span style="color: #3677a9">1200.0</span><span style="color: #d0d0d0">);</span>
+                        <span style="color: #d0d0d0">source.playbackRate.value</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">rate;</span>
+                        <span style="color: #d0d0d0">request</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">XMLHttpRequest();</span>
+                        <span style="color: #d0d0d0">request.open(</span><span style="color: #ed9d13">&quot;GET&quot;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">url</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;?&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">aScene.name</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;,&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">j</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;,&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">k,</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+                        <span style="color: #d0d0d0">request.responseType</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;arraybuffer&quot;</span><span style="color: #d0d0d0">;</span>
+                        <span style="color: #d0d0d0">request.onload</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+                            <span style="color: #d0d0d0">aScene.context.decodeAudioData(request.response,</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(buffer)</span> <span style="color: #d0d0d0">{</span>
+                                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">gainIndex;</span>
+                                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">startSceneFade;</span>
+                                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">silence;</span>
+                                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">channelMax;</span>
+                                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">channelplayed;</span>
+
+                                    <span style="color: #d0d0d0">mixToMono(buffer);</span>
+                                    <span style="color: #d0d0d0">source.buffer</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">buffer;</span>
+                                    <span style="color: #d0d0d0">aScene.merger</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.context.createChannelMerger(</span><span style="color: #3677a9">8</span><span style="color: #d0d0d0">);</span>
+                                    <span style="color: #d0d0d0">aScene.gainNode.push(aScene.merger.context.createGain());</span>
+                                    <span style="color: #d0d0d0">gainIndex</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.gainNode.length</span> <span style="color: #d0d0d0">-</span> <span style="color: #3677a9">1</span><span style="color: #d0d0d0">;</span>
+                                    <span style="color: #d0d0d0">aScene.gainNode[gainIndex].gainSet</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">(aScene.effects[j].sounds[k].vol</span> <span style="color: #d0d0d0">/</span> <span style="color: #3677a9">100</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">*</span> <span style="color: #d0d0d0">(aScene.effects[j].vol</span> <span style="color: #d0d0d0">/</span> <span style="color: #3677a9">100</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">*</span> <span style="color: #d0d0d0">(aScene.vol</span> <span style="color: #d0d0d0">/</span> <span style="color: #3677a9">100</span><span style="color: #d0d0d0">);</span>
+                                    <span style="color: #d0d0d0">aScene.merger.connect(aScene.gainNode[gainIndex]);</span>
+                                    <span style="color: #d0d0d0">aScene.gainNode[gainIndex].connect(aScene.context.destination);</span>
+                                    <span style="color: #d0d0d0">startSceneFade</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.effects[j].sounds[k].fadeIn;</span>
+
+                                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.context.currentTime</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">2</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                                        <span style="color: #d0d0d0">startSceneFade</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.fadeIn;</span>
+                                    <span style="color: #d0d0d0">}</span>
+
+                                    <span style="color: #d0d0d0">aScene.gainNode[gainIndex].gain.linearRampToValueAtTime(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">aScene.context.currentTime);</span>
+                                    <span style="color: #d0d0d0">aScene.gainNode[gainIndex].gain.linearRampToValueAtTime(aScene.gainNode[gainIndex].gainSet,</span> <span style="color: #d0d0d0">(aScene.context.currentTime</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">(startSceneFade)));</span>
+
+                                    <span style="color: #d0d0d0">silence</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.context.createBufferSource();</span>
+                                    <span style="color: #d0d0d0">channelMax</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">(aScene.context.destination.maxChannelCount</span> <span style="color: #d0d0d0">-</span> <span style="color: #3677a9">2</span><span style="color: #d0d0d0">);</span>
+
+                                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.context.destination.maxChannelCount</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">3</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                                        <span style="color: #d0d0d0">(channelMax</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">1</span><span style="color: #d0d0d0">)</span>
+                                    <span style="color: #d0d0d0">}</span>
+                                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.effects[j].sounds[k].randLoc)</span> <span style="color: #d0d0d0">{</span>
+                                        <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">7</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+                                            <span style="color: #d0d0d0">silence.connect(aScene.merger,</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">i);</span>
+                                        <span style="color: #d0d0d0">}</span>
+                                        <span style="color: #d0d0d0">channelplayed</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">getRandomInt(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">channelMax);</span>
+                                        <span style="color: #d0d0d0">source.connect(aScene.merger,</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">channelplayed);</span>
+                                        <span style="color: #d0d0d0">aScene.gainNode[gainIndex].gainSet</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">getRandomInt(aScene.gainNode[gainIndex].gainSet</span> <span style="color: #d0d0d0">*</span> <span style="color: #3677a9">0.2</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">aScene.gainNode[gainIndex].gainSet);</span>
+                                        <span style="color: #d0d0d0">feedback.channel=channelplayed;</span>
+                                    <span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+                                        <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">8</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+                                            <span style="color: #d0d0d0">source.connect(aScene.merger,</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">i);</span>
+                                        <span style="color: #d0d0d0">}</span>
+                                        <span style="color: #d0d0d0">channelplayed</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;all&quot;</span><span style="color: #d0d0d0">;</span>
+                                    <span style="color: #d0d0d0">}</span>
+
+                                    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(aScene.effects[j].loop)</span> <span style="color: #d0d0d0">{</span>
+                                        <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">getRandomInt(aScene.effects[j].delayL,</span> <span style="color: #d0d0d0">aScene.effects[j].delayH)</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">buffer.duration</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">aScene.context.currentTime</span> <span style="color: #d0d0d0">-</span> <span style="color: #d0d0d0">(aScene.effects[j].sounds[k].fadeIn);</span>
+                                    <span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+                                        <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">99999999</span><span style="color: #d0d0d0">;</span>
+                                        <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!aScene.effects[j].sounds[k].loop)</span> <span style="color: #d0d0d0">{</span>
+                                            <span style="color: #d0d0d0">aScene.closeTime</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">aScene.context.currentTime</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">(buffer.duration);</span>
+                                        <span style="color: #d0d0d0">}</span>
+                                    <span style="color: #d0d0d0">}</span>
+
+                                    <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(aScene.effects[j].sounds[k].loop)</span> <span style="color: #d0d0d0">{</span>
+                                        <span style="color: #d0d0d0">source.loop=</span><span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+                                        <span style="color: #d0d0d0">aScene.effects[j].nextPlay</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">9999999</span><span style="color: #d0d0d0">;</span>
+                                    <span style="color: #d0d0d0">}</span>
+                                    <span style="color: #d0d0d0">source.start(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">);</span>
+
+                                    <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(aScene.effects[j].sounds[k].fadeOut&gt;</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">){</span>
+                                        <span style="color: #d0d0d0">aScene.gainNode[gainIndex].gain.linearRampToValueAtTime(aScene.gainNode[gainIndex].gainSet,</span> <span style="color: #d0d0d0">(aScene.context.currentTime</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">buffer.duration</span> <span style="color: #d0d0d0">-</span> <span style="color: #d0d0d0">aScene.effects[j].sounds[k].fadeOut));</span>
+                                        <span style="color: #d0d0d0">aScene.gainNode[gainIndex].gain.linearRampToValueAtTime(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">(aScene.context.currentTime</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">buffer.duration));</span>
+                                    <span style="color: #d0d0d0">}</span>
+                                <span style="color: #d0d0d0">},</span>
+                                <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(e)</span> <span style="color: #d0d0d0">{</span>
+                                    <span style="color: #ed9d13">&quot;Error with decoding audio data&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">e</span>
+                                <span style="color: #d0d0d0">});</span>
+                        <span style="color: #d0d0d0">};</span>
+                        <span style="color: #d0d0d0">request.send();</span>
+                        <span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #d0d0d0">}</span>
+                <span style="color: #d0d0d0">}</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">scenes</span>
+        <span style="color: #d0d0d0">};</span>
+    <span style="color: #d0d0d0">}</span>
+<span style="color: #d0d0d0">])</span>
+</pre></div>
