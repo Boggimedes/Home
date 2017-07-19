@@ -1,0 +1,95 @@
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();var _react = require('react');var _react2 = _interopRequireDefault(_react);
+var _propTypes = require('prop-types');var _propTypes2 = _interopRequireDefault(_propTypes);
+var _FuelSavingsResults = require('./FuelSavingsResults');var _FuelSavingsResults2 = _interopRequireDefault(_FuelSavingsResults);
+var _FuelSavingsTextInput = require('./FuelSavingsTextInput');var _FuelSavingsTextInput2 = _interopRequireDefault(_FuelSavingsTextInput);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self, call) {if (!self) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call && (typeof call === "object" || typeof call === "function") ? call : self;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;}var
+
+FuelSavingsForm = function (_React$Component) {_inherits(FuelSavingsForm, _React$Component);
+  function FuelSavingsForm(props, context) {_classCallCheck(this, FuelSavingsForm);var _this = _possibleConstructorReturn(this, (FuelSavingsForm.__proto__ || Object.getPrototypeOf(FuelSavingsForm)).call(this,
+    props, context));
+
+    _this.save = _this.save.bind(_this);
+    _this.onTimeframeChange = _this.onTimeframeChange.bind(_this);
+    _this.fuelSavingsKeypress = _this.fuelSavingsKeypress.bind(_this);return _this;
+  }_createClass(FuelSavingsForm, [{ key: 'onTimeframeChange', value: function onTimeframeChange(
+
+    e) {
+      this.props.calculateFuelSavings(this.props.fuelSavings, 'milesDrivenTimeframe', e.target.value);
+    } }, { key: 'fuelSavingsKeypress', value: function fuelSavingsKeypress(
+
+    name, value) {
+      this.props.calculateFuelSavings(this.props.fuelSavings, name, value);
+    } }, { key: 'save', value: function save()
+
+    {
+      this.props.saveFuelSavings(this.props.fuelSavings);
+    } }, { key: 'render', value: function render()
+
+    {var
+      fuelSavings = this.props.fuelSavings;
+
+      return (
+        _react2.default.createElement('div', null,
+          _react2.default.createElement('h2', null, 'Fuel Savings Analysis'),
+          _react2.default.createElement('table', null,
+            _react2.default.createElement('tbody', null,
+              _react2.default.createElement('tr', null,
+                _react2.default.createElement('td', null, _react2.default.createElement('label', { htmlFor: 'newMpg' }, 'New Vehicle MPG')),
+                _react2.default.createElement('td', null, _react2.default.createElement(_FuelSavingsTextInput2.default, { onChange: this.fuelSavingsKeypress, name: 'newMpg', value: fuelSavings.newMpg }))),
+
+
+              _react2.default.createElement('tr', null,
+                _react2.default.createElement('td', null, _react2.default.createElement('label', { htmlFor: 'tradeMpg' }, 'Trade-in MPG')),
+                _react2.default.createElement('td', null, _react2.default.createElement(_FuelSavingsTextInput2.default, { onChange: this.fuelSavingsKeypress, name: 'tradeMpg', value: fuelSavings.tradeMpg }))),
+
+
+              _react2.default.createElement('tr', null,
+                _react2.default.createElement('td', null, _react2.default.createElement('label', { htmlFor: 'newPpg' }, 'New Vehicle price per gallon')),
+                _react2.default.createElement('td', null, _react2.default.createElement(_FuelSavingsTextInput2.default, { onChange: this.fuelSavingsKeypress, name: 'newPpg', value: fuelSavings.newPpg }))),
+
+
+              _react2.default.createElement('tr', null,
+                _react2.default.createElement('td', null, _react2.default.createElement('label', { htmlFor: 'tradePpg' }, 'Trade-in price per gallon')),
+                _react2.default.createElement('td', null, _react2.default.createElement(_FuelSavingsTextInput2.default, { onChange: this.fuelSavingsKeypress, name: 'tradePpg', value: fuelSavings.tradePpg }))),
+
+
+              _react2.default.createElement('tr', null,
+                _react2.default.createElement('td', null, _react2.default.createElement('label', { htmlFor: 'milesDriven' }, 'Miles Driven')),
+                _react2.default.createElement('td', null,
+                  _react2.default.createElement(_FuelSavingsTextInput2.default, {
+                    onChange: this.fuelSavingsKeypress,
+                    name: 'milesDriven',
+                    value: fuelSavings.milesDriven }), 'miles per',
+
+                  _react2.default.createElement('select', {
+                      name: 'milesDrivenTimeframe',
+                      onChange: this.onTimeframeChange,
+                      value: fuelSavings.milesDrivenTimeframe },
+                    _react2.default.createElement('option', { value: 'week' }, 'Week'),
+                    _react2.default.createElement('option', { value: 'month' }, 'Month'),
+                    _react2.default.createElement('option', { value: 'year' }, 'Year')))),
+
+
+
+              _react2.default.createElement('tr', null,
+                _react2.default.createElement('td', null, _react2.default.createElement('label', null, 'Date Modified')),
+                _react2.default.createElement('td', null, fuelSavings.dateModified)))),
+
+
+
+
+          _react2.default.createElement('hr', null),
+
+          fuelSavings.necessaryDataIsProvidedToCalculateSavings && _react2.default.createElement(_FuelSavingsResults2.default, { savings: fuelSavings.savings }),
+          _react2.default.createElement('input', { type: 'submit', value: 'Save', onClick: this.save })));
+
+
+    } }]);return FuelSavingsForm;}(_react2.default.Component);
+
+
+FuelSavingsForm.propTypes = {
+  saveFuelSavings: _propTypes2.default.func.isRequired,
+  calculateFuelSavings: _propTypes2.default.func.isRequired,
+  fuelSavings: _propTypes2.default.object.isRequired };exports.default =
+
+
+FuelSavingsForm;

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+		<title>Daniel Boggs</title>
+		
+		<link href="https://fonts.googleapis.com/css?family=Abel|Poiret+One|Quicksand" rel="stylesheet">
+
+		<link type="text/css" rel="stylesheet" href="css/pageflip.css">	
+		<link type="text/css" rel="stylesheet" href="css/pageflip-custom.css">	
+
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>	
+		<script type="text/javascript" src="js/jquery-responsive-maps.js"></script>
+		<script type="text/javascript" src="js/pageflip5-min.js"></script>
+		<script type="text/javascript" src="js/key.js"></script>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div id="pageflip"></div>
+		<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					</div>
+					<div class="modal-body">
+						<img src="" id="imagepreview" class="img-responsive" style="margin:auto;" >
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+<script type="text/javascript">
+	var $pageflip = $('#pageflip');
+	var pageflip = $pageflip.pageflip();
+	var CustomPFEventHandler = {
+		onLoad: function( PN ) {
+			if (PN===9) {
+				modalMap();
+			}
+			if (PN===5) {
+				loadit();
+			}
+		}
+	};
+				
+	gotoPage = function( p ) {
+		pageflip.gotoPage( p, true );
+	}
+	selectFeature = function( f ) {
+		$(".features").addClass("off");
+		$("#feature"+f).removeClass("off");
+		$("#featurelist ul li").removeClass("selected");
+		$("#option"+f).addClass("selected");
+	}
+	pageflip.setPFEventCallBack( CustomPFEventHandler );
+	
+	$pageflip.pageflipInit( {
+			PageDataFile: "template/meet-daniel.html",
+			PageWidth: 950,
+			PageHeight: 900,
+			FullScreenEnabled: true,
+			Transparency: true,
+			Margin: 32,
+			MarginBottom: 64,
+			AutoScale: true,
+			FullScale: true,
+			AlwaysOpened: false,
+			AutoFlipLoop: -1,
+			ZoomEnabled: true,
+			AutoSinglePageMode: true,
+			CenterSinglePage: true,
+			DropShadowOpacity: 0.3,
+			FlipTopShadowOpacity: 0.2,
+			FlipShadowOpacity: 0.2,
+			HardFlipOpacity: 0.3,
+			EmbossOpacity: 0.2,
+			SecondaryDragArea: 32,
+			Transparency: true,
+			ControlbarFile: "common/controlbar_svg.html",
+			GoogleAnalytics: true,
+			HashControl: true,
+			ShowCopyright: false,
+			Copyright: Key.Copyright,
+			Key: Key.Key
+	}, "meetpageflip" );
+
+	function modalMap(){
+		$(".img-modal").on("click", function() {
+			$('#imagepreview').attr('src', $(this).attr('src')); 
+			$('#imagemodal').modal('show'); 
+		});
+
+	    $('img[usemap]').rwdImageMaps();
+	}
+
+    function loadit(){
+        $('#c1').load('c1.txt', function() {
+    });
+    }
+</script>
+
+</html>

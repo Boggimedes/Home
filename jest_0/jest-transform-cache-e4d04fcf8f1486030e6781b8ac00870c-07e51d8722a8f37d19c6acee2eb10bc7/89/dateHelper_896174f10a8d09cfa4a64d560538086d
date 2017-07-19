@@ -1,0 +1,7 @@
+"use strict";Object.defineProperty(exports, "__esModule", { value: true });exports.getFormattedDateTime = getFormattedDateTime;exports.
+
+
+
+padLeadingZero = padLeadingZero;function getFormattedDateTime() {var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();return date.getMonth() + 1 + "/" + date.getDate() + " " + date.getHours() + ":" + padLeadingZero(date.getMinutes()) + ":" + padLeadingZero(date.getSeconds());}function padLeadingZero(value) {
+  return value > 9 ? value : "0" + value;
+}

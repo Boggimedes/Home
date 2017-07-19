@@ -1,0 +1,40 @@
+'use strict';var _react = require('react');var _react2 = _interopRequireDefault(_react);
+var _enzyme = require('enzyme');
+var _FuelSavingsTextInput = require('./FuelSavingsTextInput');var _FuelSavingsTextInput2 = _interopRequireDefault(_FuelSavingsTextInput);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('<FuelSavingsTextInput />', function () {
+  it('should be an input element', function () {
+    var props = {
+      name: 'testName',
+      onChange: jest.fn(),
+      placeholder: 'Type Here',
+      value: 100 };
+
+
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_FuelSavingsTextInput2.default, props));
+
+    var actual = wrapper.type();
+    var expected = 'input';
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle change', function () {
+    var props = {
+      name: 'newMpg',
+      onChange: jest.fn(),
+      placeholder: 'Type Here',
+      value: 100 };
+
+
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_FuelSavingsTextInput2.default, props));
+
+    var actual = wrapper.type();
+    var expected = 'input';
+
+    expect(actual).toEqual(expected);
+    expect(props.onChange).not.toBeCalled();
+    wrapper.simulate('change', { target: { value: 101 } });
+    expect(props.onChange).toBeCalledWith('newMpg', 101);
+  });
+});

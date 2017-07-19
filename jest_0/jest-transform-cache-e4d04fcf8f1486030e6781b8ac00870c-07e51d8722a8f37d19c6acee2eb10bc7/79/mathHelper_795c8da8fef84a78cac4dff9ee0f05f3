@@ -1,0 +1,35 @@
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _createClass = function () {function defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}return function (Constructor, protoProps, staticProps) {if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;};}();function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}var MathHelper = function () {function MathHelper() {_classCallCheck(this, MathHelper);}_createClass(MathHelper, null, [{ key: 'roundNumber', value: function roundNumber(
+    numberToRound, numberOfDecimalPlaces) {
+      if (numberToRound === 0) {
+        return 0;
+      }
+
+      if (!numberToRound) {
+        return '';
+      }
+
+      var scrubbedNumber = numberToRound.toString().replace('$', '').replace(',', '');
+      return Math.round(scrubbedNumber * Math.pow(10, numberOfDecimalPlaces)) / Math.pow(10, numberOfDecimalPlaces);
+    } }, { key: 'addArray', value: function addArray(
+
+    values) {var _this = this; // adds array of values passed.
+      var total = values.reduce(function (previousValue, currentValue) {
+        return previousValue + parseInt(_this.convertToPennies(currentValue), 10); // do math in pennies to assure accuracy.
+      }, 0);
+
+      return total / 100; // convert back into dollars
+    } }, { key: 'convertToPennies', value: function convertToPennies(
+
+    value) {
+      if (value === 0) {
+        return 0;
+      }
+
+      var dollarValue = parseFloat(value);
+      dollarValue = this.roundNumber(dollarValue, 2); // round to 2 decimal places.
+      var dollarValueContainsDecimal = dollarValue.toString().indexOf('.') !== -1;
+      return dollarValueContainsDecimal ? parseInt(dollarValue.toString().replace('.', ''), 10) : parseInt(dollarValue, 10) * 100;
+    } }]);return MathHelper;}();exports.default =
+
+
+MathHelper;

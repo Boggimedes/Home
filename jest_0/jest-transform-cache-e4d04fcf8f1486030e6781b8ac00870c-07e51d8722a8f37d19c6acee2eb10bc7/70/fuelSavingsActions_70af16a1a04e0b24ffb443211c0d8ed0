@@ -1,0 +1,26 @@
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });exports.
+
+
+
+
+saveFuelSavings = saveFuelSavings;exports.
+
+
+
+
+
+
+
+
+
+
+
+calculateFuelSavings = calculateFuelSavings;var _actionTypes = require('../constants/actionTypes');var types = _interopRequireWildcard(_actionTypes);var _dateHelper = require('../utils/dateHelper');function _interopRequireWildcard(obj) {if (obj && obj.__esModule) {return obj;} else {var newObj = {};if (obj != null) {for (var key in obj) {if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];}}newObj.default = obj;return newObj;}} // example of a thunk using the redux-thunk middleware
+function saveFuelSavings(settings) {return function (dispatch) {// thunks allow for pre-processing actions, calling apis, and dispatching multiple actions
+    // in this case at this point we could call a service that would persist the fuel savings
+    return dispatch({ type: types.SAVE_FUEL_SAVINGS, dateModified: (0, _dateHelper.getFormattedDateTime)(), settings: settings });};}function calculateFuelSavings(settings, fieldName, value) {return { type: types.CALCULATE_FUEL_SAVINGS, dateModified: (0, _dateHelper.getFormattedDateTime)(),
+    settings: settings,
+    fieldName: fieldName,
+    value: value };
+
+}

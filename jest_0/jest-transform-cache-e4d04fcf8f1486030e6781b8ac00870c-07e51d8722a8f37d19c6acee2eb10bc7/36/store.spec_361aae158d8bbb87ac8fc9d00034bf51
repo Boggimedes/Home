@@ -1,0 +1,139 @@
+'use strict';var _actionTypes = require('../constants/actionTypes');var ActionTypes = _interopRequireWildcard(_actionTypes);
+
+var _mockdate = require('mockdate');var _mockdate2 = _interopRequireDefault(_mockdate);
+var _redux = require('redux');
+
+var _fuelSavingsCalculator = require('../utils/fuelSavingsCalculator');var _fuelSavingsCalculator2 = _interopRequireDefault(_fuelSavingsCalculator);
+var _dateHelper = require('../utils/dateHelper');
+var _initialState = require('../reducers/initialState');var _initialState2 = _interopRequireDefault(_initialState);
+var _reducers = require('../reducers');var _reducers2 = _interopRequireDefault(_reducers);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _interopRequireWildcard(obj) {if (obj && obj.__esModule) {return obj;} else {var newObj = {};if (obj != null) {for (var key in obj) {if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];}}newObj.default = obj;return newObj;}}
+
+describe('Store', function () {
+  var dateModified = void 0;
+  beforeAll(function () {
+    // hardcoded date for consistency in tests and snapshots on all machines
+    _mockdate2.default.set(new Date("1/31 23:14:01"));
+    dateModified = (0, _dateHelper.getFormattedDateTime)();
+  });
+  afterAll(function () {return _mockdate2.default.reset();});
+
+  it('should display results when necessary data is provided', function () {
+    var store = (0, _redux.createStore)(_reducers2.default, _initialState2.default);
+
+    var actions = [
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newMpg', value: 20 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradeMpg', value: 10 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newPpg', value: 1.50 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradePpg', value: 1.50 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDriven', value: 100 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDrivenTimeframe', value: 'month' }];
+
+    actions.forEach(function (action) {return store.dispatch(action);});
+
+    var actual = store.getState();
+    var expected = {
+      newMpg: 20,
+      tradeMpg: 10,
+      newPpg: 1.50,
+      tradePpg: 1.50,
+      milesDriven: 100,
+      milesDrivenTimeframe: 'month',
+      displayResults: false,
+      dateModified: dateModified,
+      necessaryDataIsProvidedToCalculateSavings: true,
+      savings: (0, _fuelSavingsCalculator2.default)().calculateSavings(store.getState().fuelSavings) };
+
+
+    expect(actual.fuelSavings).toEqual(expected);
+  });
+
+  it('should not display results when necessary data is not provided', function () {
+    var store = (0, _redux.createStore)(_reducers2.default, _initialState2.default);
+
+    var actions = [
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newMpg', value: 20 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradeMpg', value: 10 },
+    // { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified, settings: store.getState(), fieldName: 'newPpg', value: 1.50 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradePpg', value: 1.50 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDriven', value: 100 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDrivenTimeframe', value: 'month' }];
+
+
+    actions.forEach(function (action) {return store.dispatch(action);});
+
+    var actual = store.getState();
+
+    var expected = {
+      newMpg: 20,
+      tradeMpg: 10,
+      newPpg: '',
+      tradePpg: 1.5,
+      milesDriven: 100,
+      milesDrivenTimeframe: 'month',
+      displayResults: false,
+      dateModified: dateModified,
+      necessaryDataIsProvidedToCalculateSavings: false,
+      savings: { annual: 0, monthly: 0, threeYear: 0 } };
+
+
+
+    expect(actual.fuelSavings).toEqual(expected);
+  });
+
+
+  it('should handle a flurry of actions', function () {
+    var store = (0, _redux.createStore)(_reducers2.default, _initialState2.default);
+
+    var actions = [
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newMpg', value: 20 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradeMpg', value: 10 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newPpg', value: 1.50 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradePpg', value: 1.50 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDriven', value: 100 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDrivenTimeframe', value: 'month' },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newMpg', value: 20 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradeMpg', value: 10 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newPpg', value: 1.50 },
+    { type: ActionTypes.SAVE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState() },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradePpg', value: 1.50 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDriven', value: 100 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDrivenTimeframe', value: 'week' },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newMpg', value: 20 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradeMpg', value: 10 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'newPpg', value: 1.50 }];
+
+    actions.forEach(function (action) {return store.dispatch(action);});
+
+    (0, _fuelSavingsCalculator2.default)().calculateSavings(store.getState().fuelSavings);
+
+    var moreActions = [
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'tradePpg', value: 0 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDriven', value: 100 },
+    { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: store.getState(), fieldName: 'milesDrivenTimeframe', value: 'year' }];
+
+
+    moreActions.forEach(function (action) {return store.dispatch(action);});
+
+    var actual = store.getState();
+    //const expected = {
+    //  newMpg: 20,
+    //  tradeMpg: 10,
+    //  newPpg: 1.50,
+    //  tradePpg: 0,
+    //  milesDriven: 100,
+    //  milesDrivenTimeframe: 'year',
+    //  displayResults: false,
+    //  dateModified,
+    //  necessaryDataIsProvidedToCalculateSavings: false,
+    //  savings: lastGoodSavings
+    //};
+    //
+    //expect(actual.fuelSavings).toEqual(expected);
+
+    // with jest snapshots the above assertion can be replaced with this one line
+    // jest will store the value in a file within ./__snapshots__
+    // snapshots can/should be committed and reviewed
+    // jest will also update snapshot or delete unused ones using the command `npm run test -- -u`
+    expect(actual.fuelSavings).toMatchSnapshot();
+  });
+});

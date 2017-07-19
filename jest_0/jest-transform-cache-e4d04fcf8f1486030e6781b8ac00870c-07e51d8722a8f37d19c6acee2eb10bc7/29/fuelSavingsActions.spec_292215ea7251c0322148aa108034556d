@@ -1,0 +1,64 @@
+'use strict';var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {return typeof obj;} : function (obj) {return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;};var _actionTypes = require('../constants/actionTypes');var ActionTypes = _interopRequireWildcard(_actionTypes);
+var _fuelSavingsActions = require('./fuelSavingsActions');var ActionCreators = _interopRequireWildcard(_fuelSavingsActions);
+
+var _mockdate = require('mockdate');var _mockdate2 = _interopRequireDefault(_mockdate);
+
+var _dateHelper = require('../utils/dateHelper');function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _interopRequireWildcard(obj) {if (obj && obj.__esModule) {return obj;} else {var newObj = {};if (obj != null) {for (var key in obj) {if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];}}newObj.default = obj;return newObj;}}
+
+describe('Actions', function () {
+  var dateModified = void 0;
+  beforeAll(function () {
+    _mockdate2.default.set(new Date());
+    dateModified = (0, _dateHelper.getFormattedDateTime)();
+  });
+  afterAll(function () {return _mockdate2.default.reset();});
+
+  var appState = {
+    newMpg: 20,
+    tradeMpg: 10,
+    newPpg: 1.50,
+    tradePpg: 1.50,
+    milesDriven: 100,
+    milesDrivenTimeframe: 'week',
+    displayResults: false,
+    dateModified: null,
+    necessaryDataIsProvidedToCalculateSavings: false,
+    savings: {
+      monthly: 0,
+      annual: 0,
+      threeYear: 0 } };
+
+
+
+  it('should create an action to save fuel savings', function () {
+    var dispatch = jest.fn();
+    var expected = {
+      type: ActionTypes.SAVE_FUEL_SAVINGS,
+      dateModified: dateModified,
+      settings: appState };
+
+
+    // we expect this to return a function since it is a thunk
+    expect(_typeof(ActionCreators.saveFuelSavings(appState))).toEqual('function');
+    // then we simulate calling it with dispatch as the store would do
+    ActionCreators.saveFuelSavings(appState)(dispatch);
+    // finally assert that the dispatch was called with our expected action
+    expect(dispatch).toBeCalledWith(expected);
+  });
+
+  it('should create an action to calculate fuel savings', function () {
+    var fieldName = 'newMpg';
+    var value = 100;
+    var actual = ActionCreators.calculateFuelSavings(appState, fieldName, value);
+    var expected = {
+      type: ActionTypes.CALCULATE_FUEL_SAVINGS,
+      dateModified: dateModified,
+      settings: appState,
+      fieldName: fieldName,
+      value: value };
+
+
+    expect(actual).toEqual(expected); // Notice use of deep because it's a nested object
+    // expect(actual).to.equal(expected); // Fails. Not deeply equal
+  });
+});

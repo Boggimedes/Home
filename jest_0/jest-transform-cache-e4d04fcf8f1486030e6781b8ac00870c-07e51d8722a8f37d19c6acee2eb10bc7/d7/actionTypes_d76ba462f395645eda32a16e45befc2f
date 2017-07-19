@@ -1,0 +1,2 @@
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });var SAVE_FUEL_SAVINGS = exports.SAVE_FUEL_SAVINGS = 'SAVE_FUEL_SAVINGS';
+var CALCULATE_FUEL_SAVINGS = exports.CALCULATE_FUEL_SAVINGS = 'CALCULATE_FUEL_SAVINGS';

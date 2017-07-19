@@ -1,0 +1,57 @@
+'use strict';var _mathHelper = require('./mathHelper');var _mathHelper2 = _interopRequireDefault(_mathHelper);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('Math Helper', function () {
+  describe('roundNumber', function () {
+    it('returns 0 when passed null', function () {
+      expect(_mathHelper2.default.roundNumber(null)).toEqual('');
+    });
+
+    it('returns 0 when passed 0', function () {
+      expect(_mathHelper2.default.roundNumber(0)).toEqual(0);
+    });
+
+    it('rounds up to 1.56 when passed 1.55555 rounded to 2 digits', function () {
+      expect(_mathHelper2.default.roundNumber(1.55555, 2)).toEqual(1.56);
+    });
+
+    it('rounds up to -1.56 when passed -1.55555 rounded to 2 digits', function () {
+      expect(_mathHelper2.default.roundNumber(-1.55555, 2)).toEqual(-1.56);
+    });
+  });
+
+  describe('addArray', function () {
+    it('returns 0 when passed empty array', function () {
+      expect(_mathHelper2.default.addArray([])).toEqual(0);
+    });
+
+    // it('returns null when passed null', () => {
+    // 	should.not.exist(MathHelper.addArray(null));
+    // });
+
+    it('returns 6 when passed [2,4]', function () {
+      expect(_mathHelper2.default.addArray([2, 4])).toEqual(6);
+    });
+
+    it('returns 7 when passed [-6, 11, 2]', function () {
+      expect(_mathHelper2.default.addArray([-6, 11, 2])).toEqual(7);
+    });
+  });
+
+  describe('convertToPennies', function () {
+    it('returns 142 when passed 1.42', function () {
+      expect(_mathHelper2.default.convertToPennies(1.42)).toEqual(142);
+    });
+
+    it('returns 0 when passed 0', function () {
+      expect(_mathHelper2.default.convertToPennies(0)).toEqual(0);
+    });
+
+    it('rounds down to 132 when passed 1.3242', function () {
+      expect(_mathHelper2.default.convertToPennies(1.3242)).toEqual(132);
+    });
+
+    it('rounds up to 133 when passed 1.325', function () {
+      expect(_mathHelper2.default.convertToPennies(1.325)).toEqual(133);
+    });
+  });
+});

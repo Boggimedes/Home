@@ -1,0 +1,64 @@
+'use strict';var _react = require('react');var _react2 = _interopRequireDefault(_react);
+var _enzyme = require('enzyme');
+var _FuelSavingsResults = require('./FuelSavingsResults');var _FuelSavingsResults2 = _interopRequireDefault(_FuelSavingsResults);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('<FuelSavingsResults />', function () {
+  it('should display savings when savings exist', function () {
+    var savings = {
+      monthly: '10',
+      annual: '120',
+      threeYear: '360' };
+
+
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_FuelSavingsResults2.default, { savings: savings }));
+    // console.log(wrapper.debug()); // View shallowly rendered component
+    var actual = wrapper.find('.fuel-savings-label').text();
+    var expected = 'Savings';
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should give values a \'savings\' class when savings exist', function () {
+    var savings = {
+      monthly: '10',
+      annual: '120',
+      threeYear: '360' };
+
+
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_FuelSavingsResults2.default, { savings: savings }));
+
+    var actual = wrapper.find('.savings').length;
+    var expected = 3;
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should display loss when savings don\'t exist', function () {
+    var savings = {
+      monthly: '-10',
+      annual: '-120',
+      threeYear: '-360' };
+
+
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_FuelSavingsResults2.default, { savings: savings }));
+
+    var actual = wrapper.find('.fuel-savings-label').text();
+    var expected = 'Loss';
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should give values a \'loss\' class when savings don\'t exist', function () {
+    var savings = {
+      monthly: '-10',
+      annual: '-120',
+      threeYear: '-360' };
+
+
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_FuelSavingsResults2.default, { savings: savings }));
+    var actual = wrapper.find('.loss').length;
+    var expected = 3;
+
+    expect(actual).toEqual(expected);
+  });
+});

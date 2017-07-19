@@ -1,0 +1,68 @@
+'use strict';var _actionTypes = require('../constants/actionTypes');var ActionTypes = _interopRequireWildcard(_actionTypes);
+var _fuelSavingsReducer = require('./fuelSavingsReducer');var _fuelSavingsReducer2 = _interopRequireDefault(_fuelSavingsReducer);
+var _dateHelper = require('../utils/dateHelper');function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _interopRequireWildcard(obj) {if (obj && obj.__esModule) {return obj;} else {var newObj = {};if (obj != null) {for (var key in obj) {if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];}}newObj.default = obj;return newObj;}}
+
+describe('Reducers::FuelSavings', function () {
+  var getInitialState = function getInitialState() {
+    return {
+      newMpg: '',
+      tradeMpg: '',
+      newPpg: '',
+      tradePpg: '',
+      milesDriven: '',
+      milesDrivenTimeframe: 'week',
+      displayResults: false,
+      dateModified: null,
+      necessaryDataIsProvidedToCalculateSavings: false,
+      savings: {
+        monthly: 0,
+        annual: 0,
+        threeYear: 0 } };
+
+
+  };
+
+  var getAppState = function getAppState() {
+    return {
+      newMpg: 20,
+      tradeMpg: 10,
+      newPpg: 1.50,
+      tradePpg: 1.50,
+      milesDriven: 100,
+      milesDrivenTimeframe: 'week',
+      displayResults: false,
+      dateModified: null,
+      necessaryDataIsProvidedToCalculateSavings: false,
+      savings: {
+        monthly: 0,
+        annual: 0,
+        threeYear: 0 } };
+
+
+  };
+  var dateModified = (0, _dateHelper.getFormattedDateTime)();
+
+  it('should set initial state by default', function () {
+    var action = { type: 'unknown' };
+    var expected = getInitialState();
+
+    expect((0, _fuelSavingsReducer2.default)(undefined, action)).toEqual(expected);
+  });
+
+  it('should handle SAVE_FUEL_SAVINGS', function () {
+    var action = { type: ActionTypes.SAVE_FUEL_SAVINGS, dateModified: dateModified, settings: getAppState() };
+    var expected = Object.assign(getAppState(), { dateModified: dateModified });
+
+    expect((0, _fuelSavingsReducer2.default)(getAppState(), action)).toEqual(expected);
+  });
+
+  it('should handle CALCULATE_FUEL_SAVINGS', function () {
+    var action = { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified: dateModified, settings: getAppState(), fieldName: 'newMpg', value: 30 };
+
+    var expectedMpg = 30;
+    var expectedSavings = { monthly: '$43.33', annual: '$519.96', threeYear: '$1,559.88' };
+
+    expect((0, _fuelSavingsReducer2.default)(getAppState(), action).newMpg).toEqual(expectedMpg);
+    expect((0, _fuelSavingsReducer2.default)(getAppState(), action).savings).toEqual(expectedSavings);
+  });
+});

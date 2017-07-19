@@ -1,0 +1,35 @@
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });exports.default =
+
+
+
+
+
+
+
+
+
+fuelSavingsReducer;var _actionTypes = require('../constants/actionTypes');var _fuelSavingsCalculator = require('../utils/fuelSavingsCalculator');var _fuelSavingsCalculator2 = _interopRequireDefault(_fuelSavingsCalculator);var _objectAssign = require('object-assign');var _objectAssign2 = _interopRequireDefault(_objectAssign);var _initialState = require('./initialState');var _initialState2 = _interopRequireDefault(_initialState);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // IMPORTANT: Note that with Redux, state should NEVER be changed.
+// State is considered immutable. Instead,
+// create a copy of the state passed and set new values on the copy.
+// Note that I'm using Object.assign to create a copy of current state
+// and update values on the copy.
+function fuelSavingsReducer() {var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _initialState2.default.fuelSavings;var action = arguments[1];var newState = void 0;switch (action.type) {case _actionTypes.SAVE_FUEL_SAVINGS: // For this example, just simulating a save by changing date modified.
+      // In a real app using Redux, you might use redux-thunk and handle the async call in fuelSavingsActions.js
+      return (0, _objectAssign2.default)({}, state, { dateModified: action.dateModified });
+
+    case _actionTypes.CALCULATE_FUEL_SAVINGS:
+      newState = (0, _objectAssign2.default)({}, state);
+      newState[action.fieldName] = action.value;
+      newState.necessaryDataIsProvidedToCalculateSavings = (0, _fuelSavingsCalculator2.default)().necessaryDataIsProvidedToCalculateSavings(newState);
+      newState.dateModified = action.dateModified;
+
+      if (newState.necessaryDataIsProvidedToCalculateSavings) {
+        newState.savings = (0, _fuelSavingsCalculator2.default)().calculateSavings(newState);
+      }
+
+      return newState;
+
+    default:
+      return state;}
+
+}

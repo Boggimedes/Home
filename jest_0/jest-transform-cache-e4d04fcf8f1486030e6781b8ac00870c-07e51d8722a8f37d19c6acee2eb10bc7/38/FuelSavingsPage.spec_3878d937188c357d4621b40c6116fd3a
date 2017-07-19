@@ -1,0 +1,17 @@
+'use strict';var _react = require('react');var _react2 = _interopRequireDefault(_react);
+var _enzyme = require('enzyme');
+var _FuelSavingsPage = require('./FuelSavingsPage');
+var _FuelSavingsForm = require('../components/FuelSavingsForm');var _FuelSavingsForm2 = _interopRequireDefault(_FuelSavingsForm);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('<FuelSavingsPage />', function () {
+  it('should contain <FuelSavingsForm />', function () {
+    var actions = {
+      saveFuelSavings: function saveFuelSavings() {},
+      calculateFuelSavings: function calculateFuelSavings() {} };
+
+    var fuelSavings = {};
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_FuelSavingsPage.FuelSavingsPage, { actions: actions, fuelSavings: fuelSavings }));
+
+    expect(wrapper.find(_FuelSavingsForm2.default).length).toEqual(1);
+  });
+});

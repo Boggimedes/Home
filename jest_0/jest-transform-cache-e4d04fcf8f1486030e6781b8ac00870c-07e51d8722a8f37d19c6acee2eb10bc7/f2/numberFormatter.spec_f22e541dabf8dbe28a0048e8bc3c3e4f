@@ -1,0 +1,39 @@
+'use strict';var _numberFormatter = require('./numberFormatter');var _numberFormatter2 = _interopRequireDefault(_numberFormatter);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('Number Formatter', function () {
+  describe('getCurrencyFormattedNumber', function () {
+    it('returns $5.50 when passed 5.5', function () {
+      expect(_numberFormatter2.default.getCurrencyFormattedNumber(5.5)).toEqual('$5.50');
+    });
+  });
+
+  describe('isInt', function () {
+    it('returns true when passed 0', function () {
+      expect(_numberFormatter2.default.isInt(0)).toEqual(true);
+    });
+
+    it('returns false when passed an empty string', function () {
+      expect(_numberFormatter2.default.isInt('')).toEqual(false);
+    });
+
+    it('returns true when passed int as a string', function () {
+      expect(_numberFormatter2.default.isInt('5')).toEqual(true);
+    });
+  });
+
+  describe('scrubFormatting', function () {
+    it('strips commas and decimals', function () {
+      expect(_numberFormatter2.default.scrubFormatting('1,234.56')).toEqual('123456');
+    });
+  });
+
+  describe('getFormattedNumber', function () {
+    it('returns 0 if passed 0', function () {
+      expect(_numberFormatter2.default.getFormattedNumber(0)).toEqual(0);
+    });
+
+    it('returns empty string if passed empty string', function () {
+      expect(_numberFormatter2.default.getFormattedNumber('')).toEqual('');
+    });
+  });
+});

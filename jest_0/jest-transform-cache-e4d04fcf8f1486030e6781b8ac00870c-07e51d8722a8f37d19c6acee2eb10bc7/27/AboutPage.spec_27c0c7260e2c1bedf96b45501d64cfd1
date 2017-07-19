@@ -1,0 +1,29 @@
+'use strict';var _react = require('react');var _react2 = _interopRequireDefault(_react);
+var _enzyme = require('enzyme');
+var _AboutPage = require('./AboutPage');var _AboutPage2 = _interopRequireDefault(_AboutPage);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+describe('<AboutPage />', function () {
+  it('should have a header called \'About\'', function () {
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_AboutPage2.default, null));
+    var actual = wrapper.find('h2').text();
+    var expected = 'About';
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should have a header with \'alt-header\' class', function () {
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_AboutPage2.default, null));
+    var actual = wrapper.find('h2').prop('className');
+    var expected = 'alt-header';
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should link to an unknown route path', function () {
+    var wrapper = (0, _enzyme.shallow)(_react2.default.createElement(_AboutPage2.default, null));
+    var actual = wrapper.findWhere(function (n) {return n.prop('to') === '/badlink';}).length;
+    var expected = 1;
+
+    expect(actual).toEqual(expected);
+  });
+});

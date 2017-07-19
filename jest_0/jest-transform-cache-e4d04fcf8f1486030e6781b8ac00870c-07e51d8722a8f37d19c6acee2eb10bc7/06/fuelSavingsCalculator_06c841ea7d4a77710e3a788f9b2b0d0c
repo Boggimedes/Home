@@ -1,0 +1,68 @@
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });var _mathHelper = require('./mathHelper');var _mathHelper2 = _interopRequireDefault(_mathHelper);
+var _numberFormatter = require('./numberFormatter');var _numberFormatter2 = _interopRequireDefault(_numberFormatter);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
+// This file uses the factory function pattern instead of a class.
+// Just showing an alternative to using a class.
+// This declares a function with a private method.
+// The public function returns an object literal.
+// Could arguably be called FuelSavingCalculatorFactory.
+var fuelSavingsCalculator = function fuelSavingsCalculator() {
+  // private
+  var calculateMonthlyCost = function calculateMonthlyCost(milesDrivenPerMonth, ppg, mpg) {
+    var gallonsUsedPerMonth = milesDrivenPerMonth / mpg;
+    return gallonsUsedPerMonth * ppg;
+  };
+
+  // public
+  return {
+    calculateMilesDrivenPerMonth: function calculateMilesDrivenPerMonth(milesDriven, milesDrivenTimeframe) {
+      var monthsPerYear = 12;
+      var weeksPerYear = 52;
+
+      switch (milesDrivenTimeframe) {
+        case 'week':
+          return milesDriven * weeksPerYear / monthsPerYear;
+        case 'month':
+          return milesDriven;
+        case 'year':
+          return milesDriven / monthsPerYear;
+        default:
+          throw new Error('Unknown milesDrivenTimeframe passed: ' + milesDrivenTimeframe);}
+
+    },
+
+    calculateSavingsPerMonth: function calculateSavingsPerMonth(settings) {
+      if (!settings.milesDriven) {
+        return 0;
+      }
+
+      var milesDrivenPerMonth = this.calculateMilesDrivenPerMonth(settings.milesDriven, settings.milesDrivenTimeframe);
+      var tradeFuelCostPerMonth = calculateMonthlyCost(milesDrivenPerMonth, settings.tradePpg, settings.tradeMpg);
+      var newFuelCostPerMonth = calculateMonthlyCost(milesDrivenPerMonth, settings.newPpg, settings.newMpg);
+      var savingsPerMonth = tradeFuelCostPerMonth - newFuelCostPerMonth;
+
+      return _mathHelper2.default.roundNumber(savingsPerMonth, 2);
+    },
+
+
+    necessaryDataIsProvidedToCalculateSavings: function necessaryDataIsProvidedToCalculateSavings(settings) {
+      return settings.newMpg > 0 &&
+      settings.tradeMpg > 0 &&
+      settings.newPpg > 0 &&
+      settings.tradePpg > 0 &&
+      settings.milesDriven > 0;
+    },
+
+    calculateSavings: function calculateSavings(settings) {
+      var monthlySavings = this.calculateSavingsPerMonth(settings);
+
+      return {
+        monthly: _numberFormatter2.default.getCurrencyFormattedNumber(monthlySavings),
+        annual: _numberFormatter2.default.getCurrencyFormattedNumber(monthlySavings * 12),
+        threeYear: _numberFormatter2.default.getCurrencyFormattedNumber(monthlySavings * 12 * 3) };
+
+    } };
+
+};exports.default =
+
+fuelSavingsCalculator;
