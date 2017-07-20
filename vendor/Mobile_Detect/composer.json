@@ -1,0 +1,13 @@
+{
+  "name": "Mobile_Detect/Mobile_Detect",
+  "description": "Mobile detector for PHP",
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mobile_Detect\\": ""
+    },
+    "files": ["Mobile_Detect.php"]
+  }
+}

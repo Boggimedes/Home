@@ -1,4 +1,3 @@
-	var wordCloud = [];
 
 	wordCloud = [
 	{'x': 386, 'y': 632.46, 'style': 'fill:#2CA5B6;font-size:27px', 'value': 'site'},

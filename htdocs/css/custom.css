@@ -131,9 +131,39 @@ svg>text {
 	background-color: darkgrey;
 	color: #f2f2f2;
 }
+.meetdanflip .optionlist ul {
+	margin: 0;
+	padding: 0;
+}
+.meetdanflip .optionlist ul li {
+	list-style: none;
+	margin: -3px 0 0 0;
+	padding: 5px 0 2px 32px;
+	cursor: pointer;
+}
+.meetdanflip .optionlist ul li:hover {
+	background-color: darkgrey;
+}
+.meetdanflip .optionlist ul li.selected,
+.meetdanflip .optionlist ul li.selected:hover {
+	    background: rgb(0, 211, 241);
+}
+.meetdanflip .optionlist ul li:hover {
+	color: rgba( 255,255,255, 0.5 );
+}
 
+.meetdanflip .optionlist ul li.selected {
+	color: rgb( 255,255,255);
+}
+.meetdanflip .optionlist li {
+	color: rgba( 77,77,77, 0.5 );
+}
+.meetdanflip .optionlist a:hover {
+	text-decoration: none;
+}
 #page5.meetdanflip {
 	background: rgb(0, 211, 241);
+	font-weight:bold;
 }
 .meetdanflip .features {
 	position: absolute;
