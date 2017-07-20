@@ -95,15 +95,3 @@
 {'x': 236, 'y': 308.54, 'style': 'fill:#C1752F;font-size:23px', 'value': 'tool'},
 {'x': 150, 'y': 384.62, 'style': 'fill:#C1752F;font-size:19px', 'value': 'database'}
 	];
-	var i = 0;
-	var iLen = wordCloud.length;
-	for (i; i < iLen; i++) {
-	var txt = document.createElement("text");
-		txt.style = wordCloud[i].style;
-		txt.className = 'Gentium';
-		$(txt).attr('x', wordCloud[i].x);
-		$(txt).attr('y', wordCloud[i].y);
-		txt.title = wordCloud[i].value;
-		txt.innerHTML = wordCloud[i].value;
-		$('#word-cloud').append(txt);
-	}

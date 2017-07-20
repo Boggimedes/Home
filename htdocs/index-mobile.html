@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+		<title>Daniel Boggs</title>
+		<link href="https://fonts.googleapis.com/css?family=Abel|Poiret+One|Quicksand" rel="stylesheet">
+
+
+<script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="js/jquery-responsive-maps.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link type="text/css" rel="stylesheet" href="css/custom.css">	
+
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+	</head>
+
+
+
+
+
+<ul class="nav nav-pills navbar-inverse navbar-fixed-bottom" id="mobileTabs" role="tablist">
+  <li role="presentation" class="active"><a data-toggle="tab" href="#home" aria-controls="home" role="tab">Home</a></li>
+  <li role="presentation"><a data-toggle="tab" href="#resume" aria-controls="resume" role="tab">Resume</a></li>
+  <li role="presentation"><a data-toggle="tab" href="#projects">Projects</a></li>
+  <li role="presentation"><a data-toggle="tab" href="#hobbies">Hobbies</a></li>
+  <li role="presentation"><a data-toggle="tab" href="#family">Family</a></li>
+  <li role="presentation"><a data-toggle="tab" href="#closing">Closing</a></li>
+</ul>
+
+<div class="tab-content" style="height:100%;">
+	<div role="tabpanel" class="tab tab-pane active" id="home">
+		<img class="img-responsive" src="img/word-cloud.jpg" ?>
+	</div>
+	<div role="tabpanel" class="tab tab-pane" id="resume">
+		<div id="resume1">
+		<h1>test resume1</h1>
+		</div>
+		<div id="resume2">
+		<h1>test resume2</h1>
+		</div>
+	</div>
+	<div role="tabpanel" class="tab tab-pane" id="projects">
+	<div class="panel-group" role="tablist" id="pgroup">
+	<div class="panel panel-default">
+		<div class="panel-heading" role="tab" id="collapseListGroupHeading1">
+			<h4 class="panel-title">
+				<a href="#cList" class="collapsed" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="cList"> Project List</a>
+			</h4>
+		</div>
+		<div class="panel-collapse collapse" role="tabpanel" id="cList" aria-labelledby="collapseListGroupHeading1" aria-expanded="false" style="height: 0px;">
+			<ul class="list-group">
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature1"  onclick="selectFeature(1);">Overview</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature2" onclick="selectFeature(2);">Tabletop Gaming SaaS</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature3" onclick="selectFeature(3);">Anbient Noise Player</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature4" onclick="selectFeature(4);">World Simulator</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature5" onclick="selectFeature(5);">Map Navigator</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature6" onclick="selectFeature(6);">Image Resizer</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature7" onclick="selectFeature(7);">InFocus internal</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature8" onclick="selectFeature(8);">InFocus Pricing</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature9" onclick="selectFeature(9);">InFocus.com US and Global Sites</li>
+				<li class="list-group-item" data-toggle="collapse" data-parent="#pgroup" data-target="#feature10" onclick="selectFeature(10);">Future Project Ideas</li>
+			</ul>
+		</div>
+	</div>
+	</div>
+	<div id="projectData"></div>
+</div>
+	<div role="tabpanel" class="tab tab-pane" id="hobbies">
+	<h1>test hobbies</h1>
+	</div>
+	<div role="tabpanel" class="tab tab-pane" id="family">
+	<h1>test family</h1>
+	</div>
+	<div role="tabpanel" class="tab tab-pane" id="closing">
+	<h1>test closing</h1>
+	</div>
+	</div>
+</div>
+
+		<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					</div>
+					<div class="modal-body">
+						<img src="" id="imagepreview" class="img-responsive" style="margin:auto;" >
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<style>
+.nav > li > a {
+    padding: 10px 8px;
+}
+.features.off {
+	display: none;
+	opacity: 0;
+}
+.page-container {
+	width: 98%;
+    padding: 2%;
+}
+.resume .list-bullets {
+	margin-left: 0px;
+    padding-left: 5px;
+}
+
+.resume .col-xs-7 {
+	padding:0px;
+}
+</style>
+<script>
+
+	selectFeature = function( f ) {
+		$(".features").addClass("off");
+		$("#feature"+f).removeClass("off");
+		$("#featurelist ul li").removeClass("selected");
+		$("#option"+f).addClass("selected");
+	}
+
+    function loadit(){
+        $('#resume1').load('/template/page1.html');
+        $('#resume2').load('/template/page2.html');
+        $('#projectData').load('/template/page4.html');
+        $('#hobbies').load('/template/page5.html');
+        $('#family').load('/template/page6.html', function(){
+		    $('img[usemap]').rwdImageMaps();
+        });
+        $('#closing').load('/template/coverPg2.html');
+
+        $('#audioController').load('/code/audioController.html');
+        $('#audioFactory').load('/code/audioFactory.html');
+        $('#worldCode').load('/code/worldCode.html');
+        $('#mapDatasource').load('/code/mapDatasource.html');
+        $('#mapServices').load('/code/mapServices.html');
+        $('#imageResizer').load('/code/imageResizer.html');
+        $('#serviceAPI').load('/code/serviceAPI.html');
+        $('#oauth').load('/code/oauth.html');
+        $('#pricingController').load('/code/pricingController.html');
+        $('#pricingServices').load('/code/pricingServices.html');
+
+    }
+    loadit();
+    function loadModal(that){
+    	console.log("Test");
+				$('#imagepreview').attr('src', $(that).attr('src')); 
+				$('#imagemodal').modal('show'); 
+    }
+</script>

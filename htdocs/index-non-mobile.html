@@ -8,7 +8,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Abel|Poiret+One|Quicksand" rel="stylesheet">
 
 		<link type="text/css" rel="stylesheet" href="css/pageflip.css">	
-		<link type="text/css" rel="stylesheet" href="css/pageflip-custom.css">	
+		<link type="text/css" rel="stylesheet" href="css/custom.css">	
 
 		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>	
 		<script type="text/javascript" src="js/jquery-responsive-maps.js"></script>
@@ -21,7 +21,39 @@
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<div id="pageflip"></div>
+		<div id="pageflip">
+			<div class="outerpage" data-html-file="template/outerPg1.html">
+			</div>
+
+			<div class="cover">
+			<div class="" style="margin:auto;width:65%">
+				<svg id="word-cloud" class="word-cloud" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 462 693">
+					<rect width="462" height="693" style="fill:rgb(248,248,252);"></rect>
+				</svg>
+			</div>
+				</div>
+
+			<div class="page" data-html-file="template/page1.html">
+			</div>
+
+			<div class="page" data-html-file="template/page2.html">
+			</div>
+
+			<div class="page" data-html-file="template/page3.html">
+			</div>
+
+			<div class="page" data-html-file="template/page4.html">
+			</div>
+
+			<div class="page" data-html-file="template/page5.html">
+			</div>
+
+			<div class="page" data-html-file="template/page6.html">
+			</div>
+
+			<div class="cover" data-html-file="template/coverPg2.html">
+			</div>
+		</div>
 		<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -40,14 +72,28 @@
 	</body>
 <script type="text/javascript">
 	var $pageflip = $('#pageflip');
+		var wordCloud = [];
+
 	var pageflip = $pageflip.pageflip();
 	var CustomPFEventHandler = {
 		onLoad: function( PN ) {
+			if (PN===1) {
+				$.get( "common/wordcloud.json", function( data ) {
+					var i = 0;
+					var iLen = data.length;
+					for (i; i < iLen; i++) {
+					var txt = document.createElement("text");
+						txt.style = data[i].style;
+						$(txt).attr('x', data[i].x);
+						$(txt).attr('y', data[i].y);
+						txt.title = data[i].value;
+						txt.innerHTML = data[i].value;
+						document.getElementById("word-cloud").innerHTML += txt.outerHTML;
+					}
+				});
+			}
 			if (PN===7) {
 				modalMap();
-			}
-			if (PN===5) {
-				loadit();
 			}
 		}
 	};
@@ -64,7 +110,6 @@
 	pageflip.setPFEventCallBack( CustomPFEventHandler );
 	
 	$pageflip.pageflipInit( {
-			PageDataFile: "template/meet-daniel.html",
 			PageWidth: 950,
 			PageHeight: 900,
 			FullScreenEnabled: true,
@@ -91,7 +136,7 @@
 			ShowCopyright: false,
 			Copyright: Key.Copyright,
 			Key: Key.Key
-	}, "meetpageflip" );
+	}, "meetdanflip" );
 
 	function modalMap(){
 		$(".img-modal").on("click", function() {
@@ -116,5 +161,6 @@
         $('#pricingServices').load('/code/pricingServices.html');
     }
 </script>
+	<script type="text/javascript" src="js/word-cloud.js"></script>
 
 </html>
