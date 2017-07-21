@@ -28,11 +28,9 @@ font-family: 'Quicksand', 'Poiret One','Abel', sans-serif;
 	font-variant: small-caps;
 	font-family: "Fauna One", "Lucida Grande", Helvetica, sans-serif;
 }
-/*
-
-		template 1 - Meet Pageflip Styles
-
-*/
+.features p{
+	text-indent: 29px;
+}
 .word-cloud {
 	width:100%;
 	height:auto;
@@ -50,6 +48,15 @@ svg>text {
 }
 .color-software{
 	color:rgb(101,67,33);
+}
+.resume {
+	font-size: 130%;
+}
+.resume h3{
+	font-size: 150%;
+}
+.resume h4{
+	font-size: 130%;
 }
 .resume hr{
 	margin-top: 5px;
@@ -69,6 +76,7 @@ svg>text {
 }
 .page-container{
 	padding:20px;
+	font-size:large;
 }
 .pf-page-container.pf-left-side.meetdanflip {
 	border-radius: 10px 0 0 10px;
@@ -86,7 +94,12 @@ svg>text {
 .pf-page-container.meetdanflip.pf-outer {
 	background: none;
 }
-
+#page3content {
+	height: 100%;
+}
+#page3content < div{
+	height: 100%;
+}
 .meetdanflip .footertext {
 	position: absolute;
 	bottom: 4px;
@@ -163,7 +176,6 @@ svg>text {
 }
 #page5.meetdanflip {
 	background: rgb(0, 211, 241);
-	font-weight:bold;
 }
 .meetdanflip .features {
 	position: absolute;

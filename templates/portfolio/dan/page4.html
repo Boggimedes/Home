@@ -21,7 +21,7 @@
 					</div>
 				</h4>
 			<p>
-				GameMaster.Pro is a web application designed to make Game Masters' daunting task of creating a rich and intricate world a little easier.  As well as make the mechanics of game run a little smoother.  There are numerous GM tools around the net that do similar things so why, you may ask, design a new one?  Well all the other tools missed one key element for me: Sound!  I find bringing sound effects (and sometimes music) into the game adds an element of richness that truly takes the experience to the next level.  So since I was unable to find something that filled the bill for me, I designed it for myself.  As it grew and improved it occured to me that other GM's might get use out of it as well. GMP was designed as an app, not a webpage so it is what I would call a "minimalist" design.  The goal was to pack as much information into the space as possible.
+				GameMaster.Pro is a web application designed to make Game Masters' daunting task of creating a rich and intricate world a little easier.  As well as make the mechanics of game run a little smoother. GMP was designed as an app, not a webpage so it is what I would call a "minimalist" design.  The goal was to pack as much information into the space as possible.
 			</p>
 			<br>
 			<h3>Here are some features of Game Master Pro:</h3>
@@ -37,9 +37,6 @@
 				</li>
 				<li>
 					Design custom soundscapes for your own use, or share them with the community!
-				</li>
-				<li>
-					Combat manager makes battles seem effortless. Track init, quickly load SRD or custom creatures, programed attacks at the click of a button
 				</li>
 				<li>
 					The "World Generator" creates NPC's not only with names and descriptions, but families, friends, professions, and much much more.  You'll know your NPC's better than you know your neighbors!!
@@ -72,7 +69,7 @@
 			</ul>
 		</div>
 		<div id="feature3" class="features off">
-				<h1>Anbient Noise Player</h1>
+				<h2>Anbient Noise Player</h2>
 				<h4 class="text-center row">
 					<div class="col-xs-4">
 						<strong>Language:</strong> JavaScript
@@ -85,13 +82,12 @@
 					</div>
 				</h4>
 				<div>
-					One of the most unique parts of this software, the ambient noise player allows you to build fully immersive ambient sound schemes from a library of individual sound effects. The output is in 7.1 surround and includes localized sound effects (ex. a bird call that comes from random direction/distance), looping background ambience, and "optional" effects that can be enabled or disabled on the fly. When used in a tabletop RPG setting it can create a real feel for the environment and enhance the game immensely.
+					One of the most unique parts of this software, the ambient noise player allows you to build fully immersive ambient sound schemes from a library of individual sound effects. The output is in 7.1 surround and includes localized sound effects (ex. a bird call that comes from random direction/distance), looping background ambience, and "optional" effects that can be enabled or disabled on the fly.
 				</div>
-				<h3>Interesting Hurdles</h3>
-				<p><strong>Tracking start and end times:</strong> Each sound effect has a different duration, and has different "delay" ranges anywhere from -60 - 600 seconds.  This delay is (generally) randomized between a high and a low limit. Once the track starts playing, the "next play" has to be caluclated and store. In the case of negative numbers this means the sound can play again before the first play is even finished, overlapping the sound effects. When you consider some sound "scenes" have 40+ effects going on, this becomes and interesting challenge to manage.</p>
-				<p><strong>Sound file management:</strong> Hundreds of sound files need to be stored, and catagorized for easy locating. The files are grouped into categories, and then have tags that can be filtered to assist in locating what you are looking for.</p>
+				<strong>Interesting Hurdles</strong>
+				<p><strong>Tracking start and end times:</strong> Each sound effect has a different duration, and has different "delay" ranges anywhere from -60 - 600 seconds.  This delay is (generally) randomized between a high and a low limit. Once the track starts playing, the "next play" has to be caluclated and stored. In the case of negative numbers this means the sound can play again before the first play is even finished, overlapping the sound effects.</p>
 				<p><strong>Audio Context instances:</strong> Only 6 audio context instances can be in existance at any time.  So each scene being played uses a single context (and merges the sounds together).  However since these sound effects need to have fade in AND fade out capability, each time a sound is played it needs to be assigned a gain node. This node is stored in an array, but it can get quite large because the node isn't removed once the sound is finished playing. I will be working on a better way to handle this in the next version.</p>
-				<h3>What I'm not proud of</h3>
+				<strong>What I'm not proud of</strong>
 				<p>There is some sloppy scope usage that grew out of hand. That is part of the reasoning for switching to ReactJS w/ Redux. Also, the sound management feels very messy. I want a cleaner system that is more structured and has some garbage management.</p>
 
 				<ul class="nav nav-tabs" id="audioTabs">
@@ -100,7 +96,7 @@
 				</ul>
 
 
-				<div class="tab-content" style="height:30%;">
+				<div class="tab-content" style="height:28%;">
 					<div class="tab-pane active tab-container" id="audioController">
 						<pre id='c1'>
 						</pre>
@@ -112,7 +108,7 @@
 				</div>
 		</div>
 		<div id="feature4" class="features off">
-				<h1>World Simulator</h1>
+				<h2>World Simulator</h2>
 				<h4 class="text-center row">
 					<div class="col-xs-4">
 						<strong>Language:</strong> PHP
@@ -125,20 +121,20 @@
 					</div>
 				</h4>
 				<div>
-					The world simulator was a very fun and challenging part of this project. The system allows for you to enter parameters for your "world" and it will generate NPCs (characters/people that live in the world). These NPCs would live their lives, get married, have kids, start occupations, and die.  All of which is tracked and calculated based on chance.  The idea is that these aren't ALL the people in the world (obviously, since there are only a few thousand at most), but instead are just the "relavant" people to the story line.  These are the NPCs that the Player Characters have a higher chance to meet.
+					The world simulator was a very fun and challenging part of this project. The system allows for you to enter parameters for your "world" and it will generate NPCs (characters/people that live in the world). These NPCs would live their lives, get married, have kids, start occupations, and die.  All of which is tracked and calculated based on chance.  
 				</div>
-				<h3>Interesting Hurdles</h3>
+				<strong>Interesting Hurdles</strong>
 				<p><strong>Life and Death:</strong> The goal was for the "world" to take on a life of its own. This happened in a very real way. A good chunk of time was spent balancing birth and death rates so the size of the population wouldn't grow exponentially, but also wouldn't die out.  I "killed" many civilizations fine tuning this.  In the end I added a bit of "protection" code that changed the birth and death rates when populations became exceptionally high or exceptionally low.</p>
 				<p><strong>Research:</strong> I wanted some semblance of realism so I included things like same sex relationships, childbirth out of marriage (though, more common if married), and spinsters that never marry.  I ended up doing a lot of research on average statistics for these calculations.</p>
 				<p><strong>Mixing Races:</strong> The design of this system is based on a fantasy world so the idea of differnt races having children together made me want to represent that in code.  So, for example, when a Human and an Elf have a child, it is a Half-Elf.  This was interesting to code, and fun to work out</p>
-				<h3>What I'm not proud of</h3>
-				<p>There is very little in this that I am not pleased with.  There are definitely some efficiency upgrades that could have been done, and many of the SQL queries would be better served as stored procedured, but all in all I like how this turned out</p>
+				<strong>What I'm not proud of</strong>
+				<p>There are definitely some efficiency upgrades that could have been done, and many of the SQL queries would be better served as stored procedured</p>
 				<h3>A Few Interesting Functions</h3>
-				<div id="worldCode" style="height:35%;overflow-x:auto;">
+				<div id="worldCode" style="height:22%;overflow-x:auto;">
 				</div>
 		</div>
 		<div id="feature5" class="features off">
-				<h1>Map Navigator</h1>
+				<h2>Map Navigator</h2>
 				<h4 class="text-center row">
 					<div class="col-xs-4">
 						<strong>Language:</strong> JavaScript
@@ -153,17 +149,17 @@
 				<div>
 					Map navigator allows uploaded images to be navigated via googleMaps api. Locations can be added with HTML notes to keep all the information you need right at your fingertips.
 				</div>
-				<h3>Interesting Hurdles</h3>
+				<strong>Interesting Hurdles</strong>
 				<p><strong>Map Scope:</strong> Since the mapped images are much smaller than googleMaps api was designed for, I saw some odd side effects that I have not yet been able to overcome.  The primary one is the "repeat" of the "locations" on the map, so if you scrolled too far to the right or the left you saw location icons floating in the background off the side of the main map.</p>
 				<p><strong>Note at zoom level:</strong> I wanted the ability for different "layers" of notes, so more detailed information can be shown when the map is zoomed in.</p>
-				<h3>What I'm not proud of</h3>
+				<strong>What I'm not proud of</strong>
 				<p>The use of the API itself is a little clumsy since I'm trying to warp it to my purpose.  I'm thinking it may be better to code my own custom mapping system since there is so much in googleMaps api that I don't need/use.</p>
 				<ul class="nav nav-tabs" id="mapTabs">
 				  <li class="active"><a href="#mapDatasource" data-toggle="tab">Datasource</a></li>
 				  <li><a href="#mapServices" data-toggle="tab">Service</a></li>
 				</ul>
 
-				<div class="tab-content" style="height:48%;"">
+				<div class="tab-content" style="height:35%;"">
 					<div class="tab-pane active tab-container" id="mapDatasource">
 					</div>
 					<div class="tab-pane tab-container" id="mapServices">
@@ -187,7 +183,7 @@
 					A script for use with a large scale website that allows you to store only LARGE copies in your image library but benefit from the speed and image quality of images sized specifically for your use.
 				</div>
 					<h3>Code</h3>
-					<div id="imageResizer" class="col-xs-12" style="height:78%;overflow-x:auto;">
+					<div id="imageResizer" class="col-xs-12" style="height:75%;overflow-x:auto;">
 					</div>
 		</div>
 		<div id="feature7" class="features off">
@@ -206,14 +202,14 @@
 				<div>
 					This is the internal site for InFocus Corporation. It is used for custom internal tools that I developed for the company over the years. These tools range from marketing, pricing, logistics, and the call center. Some of these tools were developed to replace costly or obsolete software/processes, and some were original ideas to increase general efficiency and cost effectiveness.
 				</div>
-				<h3>Interesting Hurdles</h3>
+				<strong>Interesting Hurdles</strong>
 				<p><strong>Office 365 OAuth:</strong> Rather than creating a system where the users had to remember ANOTHER username and password I wanted to tie in our office 365 logins.  The problem is that CraftCMS does not support alternate login systems/credentials.  I had to get a bit creative in order to get the system to work, but once completed the integration was seemless.</p>
 				<ul class="nav nav-tabs" id="internalTabs">
 				  <li class="active"><a href="#serviceAPI" data-toggle="tab">Service Controller</a></li>
 				  <li><a href="#oauth" data-toggle="tab">OAuth Controller</a></li>
 				</ul>
 
-				<div class="tab-content"  style="height:62%;">
+				<div class="tab-content"  style="height:56%;">
 					<div class="tab-pane active tab-container" id="serviceAPI">
 					</div>
 					<div class="tab-pane tab-container" id="oauth">
@@ -221,7 +217,7 @@
 				</div>
 		</div>
 		<div id="feature8" class="features off">
-			<h1>InFocus Pricing</h1>
+			<strong>InFocus Pricing</strong>
 			<h4 class="text-center row">
 				<div class="col-xs-4">
 					<strong>Language:</strong> Javascript
@@ -236,16 +232,16 @@
 			<div>
 				This custom pricing tool was designed to replace the process of emailing excel spreadsheets back and forth. The reason it had not been replaced years ago by an OTB tool is because it was/is rediculously complex.  They have 12 different pricelists for their customer set each with their own rules, columns, and products.  Plus, they wanted a whole host of tracking and analysis added on.
 			</div>
-			<h3>Interesting Hurdles</h3>
+			<strong>Interesting Hurdles</strong>
 			<p><strong>Complex Design</strong> The list of requirements on this project was a mile long.  The owners wanted something that was incredibly customizeable so it would account for any future iterations of changes. Just conceptualizing a system with so many moving parts was a challenge.  Once I got the basic structure down however, it was much easier to progress.</p>
-			<h3>What I'm not proud of</h3>
+			<strong>What I'm not proud of</strong>
 			<p>In the end I was able to deliver above and beyond what they requested, but the complexity and ability to customize everything made for a software that had a steeper learning curve.</p>
 			<ul class="nav nav-tabs" id="pricingTabs">
 			  <li class="active"><a href="#pricingController" data-toggle="tab">Controller</a></li>
 			  <li><a href="#pricingServices" data-toggle="tab">Service</a></li>
 			</ul>
 
-			<div class="tab-content" style="height:50%;">
+			<div class="tab-content" style="height:47%;">
 				<div class="tab-pane active tab-container" id="pricingController">
 				</div>
 				<div class="tab-pane tab-container" id="pricingServices">
@@ -253,7 +249,7 @@
 			</div>
 		</div>
 		<div id="feature9" class="features off">
-				<h1>InFocus.com US and Global Sites</h1>
+				<strong>InFocus.com US and Global Sites</strong>
 				<h4 class="text-center row">
 					<div class="col-xs-4">
 						<strong>Language:</strong> PHP, Javascript
@@ -268,13 +264,13 @@
 				<div>
 					The German version of this site can still be viewed at <a href="www.infocus.de">www.infocus.de</a> (at the time of writing this). The story behind this is it was supposed to be a temporary site.  The whole thing was developed very rapidly (2 months), and the focus was on easy maintainability so the marketing team could focus most of their attention on the development of the NEW new site. That "temporary site" ended up being used for 6 years (and counting for the German site).  So something that was tossed together very quickly, and included a custom CMS, held up surprisingly well given the number of changes and customization that were seen in that 6 year period.
 				</div>
-				<h3>What I'm not proud of</h3>
+				<strong>What I'm not proud of</strong>
 				<p>Given that this was my very first project of this scale, and I had done nothing even close to its scope before, there was a lot I'm not particularly proud of.  By the end of the 6 years it had so much "duct-tape" for all the un-intended customizations.  However for what it was meant to be, a quickly built site with a custom CMS, it served very well. </p>
-				<h3>Code</h3>
+				<strong>Code</strong>
 				<p>Ok, I lied, no code here.  I was going to find a piece of good code to include on this page, but the site is fairly massive, and there isn't a lot that stands out as "impressive" work.  Most of the time I was on a "this needs to be done yesterday" time frame so I rarely had time to do things properly.  I learned to code quickly, but made plenty of shortcuts.  If you do want to see the code you are welcome to peruse the Github repository.</p>
 		</div>
 		<div id="feature10" class="features off">
-			<h2>Upgrade GameMaster.Pro to ReactJS</h2>
+			<strong>Upgrade GameMaster.Pro to ReactJS</h2>
 			<div>
 				<span>The first version of GameMaster.Pro was very functional, but it had its share of "hacks", and hiccups.  Now that I have a better idea of what the end product will be I want to re-code the system in ReactJS.  React (likely with redux and react router) will give a more finely tuned system, and I like the component management it allows for.</span>
 
