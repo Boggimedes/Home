@@ -1,0 +1,100 @@
+<div style="background: #202020; overflow:auto;width:auto;padding:.2em .6em;"><pre style="background: #202020;margin: 0; line-height: 125%"><span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;SoundCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$interval&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$timeout&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$http&#39;</span>
+<span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;soundsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;soundsEditFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;localStorageService&#39;</span><span style="color: #d0d0d0">,</span>
+    <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($scope,</span> <span style="color: #d0d0d0">$interval,</span> <span style="color: #d0d0d0">$timeout,</span> <span style="color: #d0d0d0">$http,</span> <span style="color: #d0d0d0">soundsFactory,</span> <span style="color: #d0d0d0">soundsEditFactory,</span> <span style="color: #d0d0d0">localStorageService)</span> <span style="color: #d0d0d0">{</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">stopTime</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$interval(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{},</span> <span style="color: #3677a9">200</span><span style="color: #d0d0d0">);</span>
+
+        <span style="color: #d0d0d0">$scope.aS</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">context;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">buffer;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">convolver;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">panner;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">source;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">dryGainNode;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">wetGainNode;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">unregister</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">lowFilter;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">gTopProjection</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">gFrontProjection</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">x</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">y</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">z</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">hilightedElement</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">bufferList;</span>
+
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">kInitialReverbLevel</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0.6</span><span style="color: #d0d0d0">;</span>
+
+        <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">mixToMono(buffer)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(buffer.numberOfChannels</span> <span style="color: #d0d0d0">==</span> <span style="color: #3677a9">2</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">pL</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">buffer.getChannelData(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">);</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">pR</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">buffer.getChannelData(</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+                <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">length</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">buffer.length;</span>
+
+                <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(i;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">length;</span> <span style="color: #d0d0d0">++i)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">mono</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0.5</span> <span style="color: #d0d0d0">*</span> <span style="color: #d0d0d0">(pL[i]</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">pR[i]);</span>
+                    <span style="color: #d0d0d0">pL[i]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">mono;</span>
+                    <span style="color: #d0d0d0">pR[i]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">mono;</span>
+                <span style="color: #d0d0d0">}</span>
+            <span style="color: #d0d0d0">}</span>
+        <span style="color: #d0d0d0">}</span>
+
+        <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(localStorageService.get(</span><span style="color: #ed9d13">&#39;collectionId&#39;</span><span style="color: #d0d0d0">))</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #d0d0d0">$scope.collectionId</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">localStorageService.get(</span><span style="color: #ed9d13">&#39;collectionId&#39;</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #d0d0d0">$scope.collectionName</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">localStorageService.get(</span><span style="color: #ed9d13">&#39;collectionName&#39;</span><span style="color: #d0d0d0">);</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">objectData</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #ed9d13">&quot;fields&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;all&quot;</span><span style="color: #d0d0d0">,</span>
+                <span style="color: #ed9d13">&quot;collection&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">$scope.collectionId</span>
+            <span style="color: #d0d0d0">};</span>
+        <span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #d0d0d0">$scope.collectionId</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;default&quot;</span><span style="color: #d0d0d0">;</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">objectData</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #ed9d13">&quot;fields&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;all&quot;</span><span style="color: #d0d0d0">,</span>
+                <span style="color: #ed9d13">&quot;collection&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;default&quot;</span>
+            <span style="color: #d0d0d0">};</span>
+        <span style="color: #d0d0d0">}</span>
+
+        <span style="color: #d0d0d0">soundsFactory.getScenes(objectData).then(</span>
+            <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #d0d0d0">$scope.allScenes</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+                <span style="color: #d0d0d0">soundsFactory.scenes</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(err.status</span> <span style="color: #d0d0d0">==</span> <span style="color: #3677a9">401</span><span style="color: #d0d0d0">){$scope.Ui.turnOn(</span><span style="color: #ed9d13">&#39;login&#39;</span><span style="color: #d0d0d0">);}</span>
+            <span style="color: #d0d0d0">});</span>
+
+        <span style="color: #d0d0d0">soundsEditFactory.getCollections().then(</span>
+            <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #d0d0d0">$scope.collections</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+            <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(err.status</span> <span style="color: #d0d0d0">==</span> <span style="color: #3677a9">401</span><span style="color: #d0d0d0">){$scope.Ui.turnOn(</span><span style="color: #ed9d13">&#39;login&#39;</span><span style="color: #d0d0d0">);}</span>
+            <span style="color: #d0d0d0">});</span>
+
+
+        <span style="color: #d0d0d0">$scope.changeCollection</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(collection)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">objectData</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #ed9d13">&quot;fields&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;all&quot;</span><span style="color: #d0d0d0">,</span>
+                <span style="color: #ed9d13">&quot;collection&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">collection.id</span>
+            <span style="color: #d0d0d0">};</span>
+            <span style="color: #d0d0d0">$scope.collectionName</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">collection.name;</span>
+            <span style="color: #d0d0d0">soundsFactory.getScenes(objectData).then(</span>
+                <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #d0d0d0">$scope.allScenes</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+                    <span style="color: #d0d0d0">soundsFactory.scenes</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+                <span style="color: #d0d0d0">localStorageService.set(</span><span style="color: #ed9d13">&#39;collectionId&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">collection.id);</span>
+                <span style="color: #d0d0d0">localStorageService.set(</span><span style="color: #ed9d13">&#39;collectionName&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">collection.name);</span>
+                <span style="color: #d0d0d0">},</span>
+                <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{</span>
+                    <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(err.status</span> <span style="color: #d0d0d0">==</span> <span style="color: #3677a9">401</span><span style="color: #d0d0d0">){$scope.Ui.turnOn(</span><span style="color: #ed9d13">&#39;login&#39;</span><span style="color: #d0d0d0">);}</span>
+                <span style="color: #d0d0d0">});</span>
+        <span style="color: #d0d0d0">};</span>
+
+        <span style="color: #d0d0d0">$scope.toggleScene</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(scene)</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #d0d0d0">scene.active</span> <span style="color: #d0d0d0">=!</span> <span style="color: #d0d0d0">scene.active;</span>
+            <span style="color: #d0d0d0">soundsFactory.toggleScene(scene);</span>
+
+        <span style="color: #d0d0d0">};</span>
+
+    <span style="color: #d0d0d0">}</span>
+<span style="color: #d0d0d0">])</span>
+</pre></div>

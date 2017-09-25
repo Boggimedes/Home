@@ -1,0 +1,194 @@
+<!-- HTML generated using hilite.me --><div style="background: #202020; overflow:auto;width:auto;padding:.2em .6em;"><pre style="background: #202020; margin: 0; line-height: 125%"><span style="color: #ed9d13">&#39;use strict&#39;</span><span style="color: #d0d0d0">;</span>
+
+<span style="color: #d0d0d0">angular.module(</span><span style="color: #ed9d13">&#39;myApp.services&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[])</span>
+
+<span style="color: #d0d0d0">.factory(</span><span style="color: #ed9d13">&#39;pagesFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$http&#39;</span><span style="color: #d0d0d0">,</span>
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($http)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">getPages:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/api/pages&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">savePage:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">id</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">pageData._id;</span>
+
+				<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(id</span> <span style="color: #d0d0d0">===</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/pages/add&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+				<span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/pages/update&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+				<span style="color: #d0d0d0">}</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">deletePage:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(id)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/api/pages/delete&#39;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">id);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">getAdminPageContent:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(id)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/api/pages/admin-details/&#39;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">id);</span>
+			<span style="color: #d0d0d0">},</span>
+       		<span style="color: #d0d0d0">getPageContent:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(url)</span> <span style="color: #d0d0d0">{</span>
+        		<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/index.php?page=&#39;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">url);</span>
+      		<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">getProducts:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/api/pages&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+
+      <span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">}</span>
+<span style="color: #d0d0d0">])</span>
+
+<span style="color: #d0d0d0">.factory(</span><span style="color: #ed9d13">&#39;productsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$http&#39;</span><span style="color: #d0d0d0">,</span>
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($http)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">getProducts:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=get&amp;view=&#39;</span><span style="color: #d0d0d0">+view);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">getCategories:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getCategories&amp;view=&#39;</span><span style="color: #d0d0d0">+view);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">saveProduct:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=update&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">addProduct:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=add&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">moveRow:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=reorder&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">getColumns:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getColumns&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">getTabColumns:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getTabColumns&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">saveView:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=saveView&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">saveTab:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=saveTab&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">setColumns:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=setColumns&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">deleteView:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=deleteView&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">deleteTab:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=deleteTab&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">getTabs:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getTabs&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">getSheets:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getSheets&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">setSheets:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=setSheets&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">getParts:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getParts&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">getKits:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getKits&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">setKits:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=setKits&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">getTabAssignments:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getTabAssignments&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">setTabAssignments:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=setTabAssignments&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">getRules:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getRules&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">getRuleLists:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getRuleLists&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">setRules:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=setRules&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">getNotes:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=getNotes&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">setNotes:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=setNotes&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">setHistory:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=setHistory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">publishPricing:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=publishPricing&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">previewPricing:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=previewPricing&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData,{</span><span style="color: #ed9d13">&quot;responseType&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&#39;arraybuffer&#39;</span><span style="color: #d0d0d0">});</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">deleteProduct:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/pricingAPI.php?action=deleteProduct&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+			<span style="color: #d0d0d0">},</span>
+
+			<span style="color: #d0d0d0">getAdminProductContent:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(id)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/api/products/admin-details/&#39;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">id);</span>
+			<span style="color: #d0d0d0">},</span>
+       		<span style="color: #d0d0d0">getProductContent:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(url)</span> <span style="color: #d0d0d0">{</span>
+        		<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/api/products/details/&#39;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">url);</span>
+      		<span style="color: #d0d0d0">},</span>
+      <span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">}</span>
+<span style="color: #d0d0d0">])</span>
+
+<span style="color: #d0d0d0">.factory(</span><span style="color: #ed9d13">&#39;AuthService&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$http&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($http)</span> <span style="color: #d0d0d0">{</span>
+	<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">login:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(credentials)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/login&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">credentials);</span>
+		<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">logout:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+			<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.get(</span><span style="color: #ed9d13">&#39;/api/logout&#39;</span><span style="color: #d0d0d0">);</span>
+		<span style="color: #d0d0d0">}</span>
+	<span style="color: #d0d0d0">};</span>
+<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.factory(</span><span style="color: #ed9d13">&#39;flashMessageService&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$rootScope&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($rootScope)</span> <span style="color: #d0d0d0">{</span>
+  <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">message</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+  <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">{</span>
+    <span style="color: #d0d0d0">getMessage:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+      	<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">message;</span>
+    <span style="color: #d0d0d0">},</span>
+    <span style="color: #d0d0d0">setMessage:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(newMessage,alertType)</span> <span style="color: #d0d0d0">{</span>
+      	<span style="color: #d0d0d0">message.message</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">newMessage;</span>
+      	<span style="color: #d0d0d0">message.alert</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">alertType;</span>
+    	<span style="color: #d0d0d0">$rootScope.$broadcast(</span><span style="color: #ed9d13">&#39;NEW_MESSAGE&#39;</span><span style="color: #d0d0d0">);</span>
+	<span style="color: #d0d0d0">}</span>
+  <span style="color: #d0d0d0">};</span>
+<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.factory(</span><span style="color: #ed9d13">&#39;myHttpInterceptor&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$q&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$location&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($q,</span> <span style="color: #d0d0d0">$location){</span>
+	<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">response:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">response;</span>
+		<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">responseError:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(response.status</span> <span style="color: #d0d0d0">===</span> <span style="color: #3677a9">401</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #d0d0d0">$location.path(</span><span style="color: #ed9d13">&#39;/admin/login&#39;</span><span style="color: #d0d0d0">);</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$q.reject(response);</span>
+			<span style="color: #d0d0d0">}</span>
+			<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$q.reject(response);</span>
+		<span style="color: #d0d0d0">}</span>
+	<span style="color: #d0d0d0">};</span>
+<span style="color: #d0d0d0">}])</span>
+</pre></div>

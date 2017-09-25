@@ -1,0 +1,33 @@
+<!-- HTML generated using hilite.me --><div style="background: #202020; overflow:auto;width:auto;padding:.2em .6em;"><pre style="background: #202020; margin: 0; line-height: 125%"><span style="color: #d0d0d0">.factory(</span><span style="color: #ed9d13">&#39;mapDatasource&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$timeout&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$http&#39;</span><span style="color: #d0d0d0">,</span>
+    <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($timeout,</span> <span style="color: #d0d0d0">$http)</span> <span style="color: #d0d0d0">{</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">nf</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;&#39;</span><span style="color: #d0d0d0">;</span>
+        <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">maps</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+        <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #d0d0d0">getMaps:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/map/getMaps&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">getMarkers:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/map/getMarkers&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">addMap:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/map/addMap&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">addMarker:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/map/addMarker&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">updateMap:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/map/updateMap&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">updateMarker:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/map/updateMarker&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">deleteMap:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/map/deleteMap&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">},</span>
+            <span style="color: #d0d0d0">deleteMarker:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(pageData)</span> <span style="color: #d0d0d0">{</span>
+                <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$http.post(</span><span style="color: #ed9d13">&#39;/api/map/deleteMarker&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">pageData);</span>
+            <span style="color: #d0d0d0">}</span>
+        <span style="color: #d0d0d0">};</span>
+    <span style="color: #d0d0d0">}</span>
+<span style="color: #d0d0d0">])</span>
+</pre></div>

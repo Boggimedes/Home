@@ -1,0 +1,205 @@
+/*
+
+		Global Pageflip Styles
+		
+*/
+#pageflip {
+	width: 100%;
+	background: #ececec;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+}
+#pf-stage {
+	background: #ececec;
+}
+/*
+	
+		Container HTML Page Styles
+		
+*/
+.pf-page-content {
+	margin: 0;
+font-family: 'Quicksand', 'Poiret One','Abel', sans-serif;
+}
+.header h1{
+	font-size:6em;
+	margin-bottom:15px;
+	font-variant: small-caps;
+	font-family: "Fauna One", "Lucida Grande", Helvetica, sans-serif;
+}
+.features p{
+	text-indent: 29px;
+}
+.word-cloud {
+	width:100%;
+	height:auto;
+	display:block;
+}
+svg>text {
+    cursor: default;
+}
+
+.color-language{
+	color:rgb(31,78,121);
+}
+.color-library{
+	color:rgb(54,84,34);
+}
+.color-software{
+	color:rgb(101,67,33);
+}
+.resume {
+	font-size: 130%;
+}
+.resume h3{
+	font-size: 150%;
+}
+.resume h4{
+	font-size: 130%;
+}
+.resume hr{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border: 0;
+	border-top: 1px solid #000;
+}
+.resume h1, .resume h2, .resume h3, .resume h4{
+	color:rgb(255, 156, 65);
+}
+.resume-paragraph{
+	margin-left: 10px;
+    text-indent: -10px;
+}
+.tab-container {
+	height:100%;overflow-x:auto;
+}
+.page-container{
+	padding:20px;
+	font-size:large;
+}
+.pf-page-container.pf-left-side.meetdanflip {
+	border-radius: 10px 0 0 10px;
+}
+#thevideo,
+.pf-page-container.pf-right-side.meetdanflip {
+	border-radius: 0 10px 10px 0;
+}
+#pf-dropshadow.meetdanflip {
+	border-radius: 20px;
+}
+.pf-page-container.meetdanflip {
+	background: #f2f2f2;
+}
+.pf-page-container.meetdanflip.pf-outer {
+	background: none;
+}
+#page3content {
+	height: 100%;
+}
+#page3content < div{
+	height: 100%;
+}
+.meetdanflip .footertext {
+	position: absolute;
+	bottom: 4px;
+	left: 32px;
+	width: 386px;
+}
+.meetdanflip .footertext p span.larger {
+	font-size: 138%;
+}
+.meetdanflip .footertext p {
+	color: #4d4d4d;
+}
+#page1.meetdanflip {
+	background: #f09600;
+}
+#toc{
+	font-size:3em;
+	line-height:1.5em;
+	margin-top:15px;
+}
+#page3.meetdanflip {
+	background: #ededed;
+}
+.meetdanflip .linklist ul {
+	margin: 0;
+	padding: 0;
+}
+.meetdanflip .linklist ul p {
+	margin: 0 0 5px 0;
+	padding: 0 0 0 32px;
+	opacity: 0.25;
+}
+.meetdanflip .linklist ul li {
+	list-style: none;
+	margin: -4px 0 0 0;
+	padding: 0 0 0 32px;
+	width: 418px;
+	color: rgb(0, 211, 241);
+	cursor: pointer;
+}
+.meetdanflip .linklist ul li:hover {
+	background-color: darkgrey;
+	color: #f2f2f2;
+}
+.meetdanflip .optionlist ul {
+	margin: 0;
+	padding: 0;
+}
+.meetdanflip .optionlist ul li {
+	list-style: none;
+	margin: -3px 0 0 0;
+	padding: 5px 0 2px 32px;
+	cursor: pointer;
+}
+.meetdanflip .optionlist ul li:hover {
+	background-color: darkgrey;
+}
+.meetdanflip .optionlist ul li.selected,
+.meetdanflip .optionlist ul li.selected:hover {
+	    background: rgb(0, 211, 241);
+}
+.meetdanflip .optionlist ul li:hover {
+	color: rgba( 255,255,255, 0.5 );
+}
+
+.meetdanflip .optionlist ul li.selected {
+	color: rgb( 255,255,255);
+}
+.meetdanflip .optionlist li {
+	color: rgba( 77,77,77, 0.5 );
+}
+.meetdanflip .optionlist a:hover {
+	text-decoration: none;
+}
+#page5.meetdanflip {
+	background: rgb(0, 211, 241);
+}
+.meetdanflip .features {
+	position: absolute;
+	top: 0;
+    left: 20px;
+    width: 95%;
+   	height: 95%;
+	overflow: hidden;
+	opacity: 1;
+}
+
+.meetdanflip .features div p {
+	color: #f2f2f2;
+	opacity: 0.5;
+	margin-left: 3px;
+}
+.meetdanflip .features.off {
+	display: none;
+	opacity: 0;
+}
+.meetdanflip .features {
+	-webkit-transition: opacity 1s;
+	-moz-transition:    opacity 1s;
+	-o-transition: 	    opacity 1s;
+	-ms-transition:     opacity 1s;
+	transition: 	    opacity 1s;
+}

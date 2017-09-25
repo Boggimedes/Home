@@ -1,0 +1,913 @@
+<!-- HTML generated using hilite.me --><div style="background: #202020; overflow:auto;width:auto;padding:.2em .6em;"><pre style="background: #202020; margin: 0; line-height: 125%"><span style="color: #ed9d13">&#39;use strict&#39;</span><span style="color: #d0d0d0">;</span>
+
+
+<span style="color: #d0d0d0">angular.module(</span><span style="color: #ed9d13">&#39;myApp.controllers&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;AppCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$window&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;flashMessageService&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$rootScope&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;AuthService&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$location&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$cookies&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;SharedState&#39;</span><span style="color: #d0d0d0">,</span>
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($window,</span> <span style="color: #d0d0d0">$scope,flashMessageService,$rootScope,AuthService,$location,</span> <span style="color: #d0d0d0">$cookies,SharedState)</span> <span style="color: #d0d0d0">{</span>
+  <span style="color: #d0d0d0">$scope.userAgent</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">navigator.userAgent;</span>
+
+	<span style="color: #d0d0d0">$rootScope.$watch(</span><span style="color: #ed9d13">&#39;saveCheck&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(newValue){</span>
+			<span style="color: #d0d0d0">$window.onbeforeunload</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(e)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #ed9d13">&#39;It looks like you may have unsaved changes, are you sure you want to leave the page?&#39;</span><span style="color: #d0d0d0">;</span>
+				<span style="color: #d0d0d0">};</span>
+			<span style="color: #d0d0d0">}</span>
+			<span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">$window.onbeforeunload</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+
+      <span style="color: #d0d0d0">$scope.site</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+            <span style="color: #d0d0d0">logo:</span> <span style="color: #ed9d13">&quot;img/infocus-logo.png&quot;</span><span style="color: #d0d0d0">,</span>
+            <span style="color: #d0d0d0">footer:</span> <span style="color: #ed9d13">&quot;Copyright 2016 InFocus Corporation&quot;</span>
+        <span style="color: #d0d0d0">};</span>
+        	<span style="color: #d0d0d0">SharedState.initialize($scope,</span> <span style="color: #ed9d13">&quot;uiSidebarLeft&quot;</span><span style="color: #d0d0d0">);</span>
+        			  <span style="color: #d0d0d0">$scope.notices</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+  
+		<span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">j</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">j</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #3677a9">10</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">j++)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">$scope.notices.push({icon:</span> <span style="color: #ed9d13">&#39;envelope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">message:</span> <span style="color: #ed9d13">&#39;Notice &#39;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">(j</span> <span style="color: #d0d0d0">+</span> <span style="color: #3677a9">1</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">});</span>
+		<span style="color: #d0d0d0">}</span>
+
+		<span style="color: #d0d0d0">$scope.deleteNotice</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(notice)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">index</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.notices.indexOf(notice);</span>
+		<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(index</span> <span style="color: #d0d0d0">&gt;</span> <span style="color: #d0d0d0">-</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		  <span style="color: #d0d0d0">$scope.notices.splice(index,</span> <span style="color: #3677a9">1</span><span style="color: #d0d0d0">);</span>
+		<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">$scope.logout</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+	
+	  <span style="color: #d0d0d0">AuthService.logout().then(</span>
+	    <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+
+	      <span style="color: #d0d0d0">$location.path(</span><span style="color: #ed9d13">&#39;/admin/login&#39;</span><span style="color: #d0d0d0">);</span>
+	      <span style="color: #999999; font-style: italic">// flashMessageService.setMessage(&quot;Successfully logged out&quot;);</span>
+	      <span style="color: #d0d0d0">$scope.loggedInUser</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;&#39;</span><span style="color: #d0d0d0">;</span>
+	      <span style="color: #d0d0d0">$cookies.remove(</span><span style="color: #ed9d13">&#39;loggedInUser&#39;</span><span style="color: #d0d0d0">);</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{</span>
+	    <span style="color: #d0d0d0">});</span>
+	<span style="color: #d0d0d0">};</span>
+    <span style="color: #d0d0d0">}</span>
+	<span style="color: #d0d0d0">])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;AddEditPageCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$log&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;pagesFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$stateParams&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$location&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$filter&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($scope,</span> <span style="color: #d0d0d0">$log,</span> <span style="color: #d0d0d0">pagesFactory,</span> <span style="color: #d0d0d0">$stateParams,</span> <span style="color: #d0d0d0">$location,</span> <span style="color: #d0d0d0">$filter){</span>
+	<span style="color: #d0d0d0">$scope.pageContent</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{};</span>
+	<span style="color: #d0d0d0">$scope.pageContent._id</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$stateParams.id;</span>
+	<span style="color: #d0d0d0">$scope.heading</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;Add a New Page&quot;</span><span style="color: #d0d0d0">;</span>
+
+	<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.pageContent._id</span> <span style="color: #d0d0d0">!==</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">$scope.heading</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;Update Page&quot;</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">pagesFactory.getAdminPageContent($scope.pageContent._id).then(</span>
+			<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #d0d0d0">$scope.pageContent</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+				<span style="color: #d0d0d0">$log.info($scope.pageContent);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #d0d0d0">$log.error(err);</span>
+			<span style="color: #d0d0d0">});</span>
+	<span style="color: #d0d0d0">}</span>
+	<span style="color: #d0d0d0">$scope.tinymceOptions</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+	  <span style="color: #d0d0d0">height:</span> <span style="color: #3677a9">500</span><span style="color: #d0d0d0">,</span>
+	  <span style="color: #d0d0d0">theme:</span> <span style="color: #ed9d13">&#39;modern&#39;</span><span style="color: #d0d0d0">,</span>
+	  <span style="color: #d0d0d0">plugins:</span> <span style="color: #d0d0d0">[</span>
+	    <span style="color: #ed9d13">&#39;advlist autolink lists link image charmap print preview hr anchor pagebreak&#39;</span><span style="color: #d0d0d0">,</span>
+	    <span style="color: #ed9d13">&#39;searchreplace wordcount visualblocks visualchars code fullscreen&#39;</span><span style="color: #d0d0d0">,</span>
+	    <span style="color: #ed9d13">&#39;insertdatetime media nonbreaking save table contextmenu directionality&#39;</span><span style="color: #d0d0d0">,</span>
+	    <span style="color: #ed9d13">&#39;emoticons template paste textcolor colorpicker textpattern imagetools importcss&#39;</span>
+	  <span style="color: #d0d0d0">],</span>
+	  <span style="color: #d0d0d0">toolbar1:</span> <span style="color: #ed9d13">&#39;insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image&#39;</span><span style="color: #d0d0d0">,</span>
+	  <span style="color: #d0d0d0">toolbar2:</span> <span style="color: #ed9d13">&#39;print preview media | forecolor backcolor emoticons&#39;</span><span style="color: #d0d0d0">,</span>
+	  <span style="color: #d0d0d0">image_advtab:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+	  <span style="color: #d0d0d0">templates:</span> <span style="color: #d0d0d0">[</span>
+	    <span style="color: #d0d0d0">{</span> <span style="color: #d0d0d0">title:</span> <span style="color: #ed9d13">&#39;Test template 1&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">content:</span> <span style="color: #ed9d13">&#39;Test 1&#39;</span> <span style="color: #d0d0d0">},</span>
+	    <span style="color: #d0d0d0">{</span> <span style="color: #d0d0d0">title:</span> <span style="color: #ed9d13">&#39;Test template 2&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">content:</span> <span style="color: #ed9d13">&#39;Test 2&#39;</span> <span style="color: #d0d0d0">}</span>
+	  <span style="color: #d0d0d0">],</span>
+	  <span style="color: #d0d0d0">content_css:</span> <span style="color: #d0d0d0">[</span>
+	    <span style="color: #ed9d13">&#39;/bower_components/html5-boilerplate/css/main.css&#39;</span><span style="color: #d0d0d0">,</span>
+	    <span style="color: #ed9d13">&#39;/bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-hover.min.css&#39;</span><span style="color: #d0d0d0">,</span>
+	    <span style="color: #ed9d13">&#39;/bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css&#39;</span><span style="color: #d0d0d0">,</span>
+	    <span style="color: #ed9d13">&#39;/bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-desktop.min.css&#39;</span><span style="color: #d0d0d0">,</span>
+	    <span style="color: #ed9d13">&#39;/css/app.css&#39;</span>
+	  <span style="color: #d0d0d0">]</span>
+    <span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">$scope.updateURL=</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+	  	<span style="color: #d0d0d0">$scope.pageContent.url=$filter(</span><span style="color: #ed9d13">&#39;formatURL&#39;</span><span style="color: #d0d0d0">)($scope.pageContent.title);</span>
+	<span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">$scope.savePage</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">pagesFactory.savePage($scope.pageContent).then(</span>
+			<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #999999; font-style: italic">// flashMessageService.setMessage(&quot;Page Saved Successfully&quot;);</span>
+				<span style="color: #d0d0d0">$location.path(</span><span style="color: #ed9d13">&#39;/admin/pages&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">},</span>
+			<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #d0d0d0">$log.error(</span><span style="color: #ed9d13">&#39;error saving data&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">);</span>
+	<span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;PageCtrl&#39;</span><span style="color: #d0d0d0">,</span>  <span style="color: #d0d0d0">[</span> <span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$cookies&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;pagesFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$stateParams&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$sce&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($scope,$cookies,</span> <span style="color: #d0d0d0">pagesFactory,</span> <span style="color: #d0d0d0">$stateParams,$sce)</span> <span style="color: #d0d0d0">{</span>
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">url</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$stateParams.url;</span>
+	<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!url)</span> <span style="color: #d0d0d0">url=</span><span style="color: #ed9d13">&quot;home&quot;</span><span style="color: #d0d0d0">;</span>
+    <span style="color: #d0d0d0">pagesFactory.getPageContent(url).then(</span>
+      <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">$scope.pageContent</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{};</span>
+		<span style="color: #d0d0d0">$scope.pageContent.title</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.title;</span>
+		<span style="color: #d0d0d0">$scope.userRoll</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$cookies.get(</span><span style="color: #ed9d13">&#39;userRoll&#39;</span><span style="color: #d0d0d0">);</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.userRoll</span> <span style="color: #d0d0d0">==</span> <span style="color: #d0d0d0">response.data.rollRequired</span> <span style="color: #d0d0d0">||</span> <span style="color: #d0d0d0">$scope.userRoll</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&#39;admin&#39;</span><span style="color: #d0d0d0">)</span>
+		<span style="color: #d0d0d0">$scope.pageContent.content</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$sce.trustAsHtml(response.data.content);</span>
+			<span style="color: #6ab825; font-weight: bold">else</span>
+			<span style="color: #d0d0d0">$scope.pageContent.content</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$sce.trustAsHtml(</span><span style="color: #ed9d13">&#39;You are not authorized to view this page&#39;</span><span style="color: #d0d0d0">);</span>
+      <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+      <span style="color: #d0d0d0">});</span>
+	<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;AdminLoginCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$location&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$cookies&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;AuthService&#39;</span><span style="color: #d0d0d0">,</span>
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($scope,</span> <span style="color: #d0d0d0">$location,</span> <span style="color: #d0d0d0">$cookies,</span> <span style="color: #d0d0d0">AuthService)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">$scope.credentials</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">username:</span> <span style="color: #ed9d13">&#39;&#39;</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #d0d0d0">password:</span> <span style="color: #ed9d13">&#39;&#39;</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #d0d0d0">roll:</span> <span style="color: #ed9d13">&#39;&#39;</span>
+		<span style="color: #d0d0d0">};</span>
+		<span style="color: #d0d0d0">$scope.login</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(credentials)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">AuthService.login(credentials).then(</span>
+				<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(res,</span> <span style="color: #d0d0d0">err)</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">$cookies.loggedInUser</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">res.data.username;</span>
+					<span style="color: #d0d0d0">$cookies.userRoll</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">res.data.roll;</span>
+					<span style="color: #d0d0d0">$cookies.put(</span><span style="color: #ed9d13">&#39;loggedInUser&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">res.data.username);</span>
+					<span style="color: #d0d0d0">$cookies.put(</span><span style="color: #ed9d13">&#39;userRoll&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">res.data.roll);</span>
+					<span style="color: #d0d0d0">$location.path(</span><span style="color: #ed9d13">&#39;/admin/pages&#39;</span><span style="color: #d0d0d0">);</span>
+				<span style="color: #d0d0d0">},</span>
+				<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #d0d0d0">});</span>
+		<span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">}</span>
+	<span style="color: #d0d0d0">])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;AdminPagesCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$log&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;pagesFactory&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($scope,</span> <span style="color: #d0d0d0">$log,</span> <span style="color: #d0d0d0">pagesFactory){</span>
+	<span style="color: #d0d0d0">pagesFactory.getPages().then(</span>
+		<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">$scope.allPages</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+		<span style="color: #d0d0d0">},</span>
+		<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">$log.error(err);</span>
+		<span style="color: #d0d0d0">});</span>
+
+		<span style="color: #d0d0d0">$scope.deletePage</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(id)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">pagesFactory.deletePage(id);</span>
+		<span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">}</span>
+	<span style="color: #d0d0d0">])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;PricingCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$stateParams&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$state&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;flashMessageService&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$rootScope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$http&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;productsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;hotRegisterer&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$filter&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;SharedState&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($scope,$stateParams,$state,flashMessageService,$rootScope,$http,productsFactory,hotRegisterer,$filter,SharedState)</span> <span style="color: #d0d0d0">{</span>
+
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">viewData</span> <span style="color: #d0d0d0">=[];</span>
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">w</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">angular.element(</span><span style="color: #24909d">window</span><span style="color: #d0d0d0">);</span>
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">body</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.getElementsByClassName(</span><span style="color: #ed9d13">&quot;app-content&quot;</span><span style="color: #d0d0d0">);</span>
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">h</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">body[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">].clientHeight;</span>	
+	<span style="color: #d0d0d0">$scope.hideColumns=[];</span>
+	<span style="color: #d0d0d0">$scope.ttValue=[];</span>
+	<span style="color: #d0d0d0">viewData[</span><span style="color: #ed9d13">&quot;view&quot;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$stateParams.view;</span>
+	<span style="color: #d0d0d0">$scope.minSpareRows</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+	<span style="color: #d0d0d0">$scope.rowHeaders</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+	<span style="color: #d0d0d0">$scope.db</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+	<span style="color: #d0d0d0">$scope.dbUnfiltered</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+	<span style="color: #d0d0d0">$scope.errorMessages=[];</span>
+
+	<span style="color: #d0d0d0">$scope.init</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+		<span style="color: #d0d0d0">$scope.setView($stateParams);</span>
+		<span style="color: #d0d0d0">$scope.getProducts($stateParams.view);</span>
+		<span style="color: #d0d0d0">$scope.month</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #24909d">Date</span><span style="color: #d0d0d0">().getMonth()+</span><span style="color: #3677a9">2</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">$scope.year</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #24909d">Date</span><span style="color: #d0d0d0">().getFullYear();</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.setView</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view){</span>
+		<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">k</span> <span style="color: #6ab825; font-weight: bold">in</span> <span style="color: #d0d0d0">$scope.views){</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.views[k]</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">k</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;accessories&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">view.view</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;accessories&quot;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">$scope.reloadView</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!$scope.views[</span><span style="color: #ed9d13">&quot;accessories&quot;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">&amp;</span> <span style="color: #d0d0d0">view.view</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;accessories&quot;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">$scope.reloadView</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">$state.go(</span><span style="color: #ed9d13">&#39;pricing&#39;</span><span style="color: #d0d0d0">,{view:view.view},{notify:</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">reload:</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">});</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.reloadView)</span> <span style="color: #d0d0d0">$scope.getProducts(view.view);</span>
+		<span style="color: #d0d0d0">$scope.reloadView</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">$scope.currentView</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">view.view;</span>
+		<span style="color: #d0d0d0">productsFactory.getColumns(view).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">$scope.views</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.views;</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tmpColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.columns;</span>
+			<span style="color: #d0d0d0">$scope.exColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.exColumns;</span>
+			<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">tmpColumns.length;i++){</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(tmpColumns[i][</span><span style="color: #ed9d13">&#39;data&#39;</span><span style="color: #d0d0d0">]!=</span><span style="color: #ed9d13">&quot;part&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">tmpColumns[i][</span><span style="color: #ed9d13">&#39;data&#39;</span><span style="color: #d0d0d0">]!=</span><span style="color: #ed9d13">&quot;productGroup&quot;</span> <span style="color: #d0d0d0">){tmpColumns[i][</span><span style="color: #ed9d13">&#39;renderer&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.defaultValueRenderer;}</span>
+				<span style="color: #d0d0d0">}</span>
+			<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">$scope.exColumns.length;i++){</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.exColumns[i][</span><span style="color: #ed9d13">&#39;data&#39;</span><span style="color: #d0d0d0">]!=</span><span style="color: #ed9d13">&quot;part&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">$scope.exColumns[i][</span><span style="color: #ed9d13">&#39;data&#39;</span><span style="color: #d0d0d0">]!=</span><span style="color: #ed9d13">&quot;productGroup&quot;</span><span style="color: #d0d0d0">){$scope.exColumns[i][</span><span style="color: #ed9d13">&#39;renderer&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.defaultValueRenderer;}</span>
+				<span style="color: #d0d0d0">}</span>
+			<span style="color: #d0d0d0">$scope.columns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">tmpColumns;</span>
+			<span style="color: #d0d0d0">$scope.settings.columns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.columns;</span>
+			<span style="color: #d0d0d0">$scope.hot.updateSettings($scope.settings);</span>
+			<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.getProducts</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view){</span>
+		<span style="color: #d0d0d0">productsFactory.getProducts(view).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">$scope.db</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+			<span style="color: #d0d0d0">$scope.dbUnfiltered</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+			<span style="color: #d0d0d0">$scope.rendered</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{$log.error(err);});</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.saveView</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view){</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(view</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&#39;all&#39;</span><span style="color: #d0d0d0">){</span>
+			<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Cannot overwrite &#39;All&#39; view&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;alert-error&quot;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">view</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">view</span> <span style="color: #d0d0d0">?</span> <span style="color: #d0d0d0">view</span> <span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;default&quot;</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">pageData</span> <span style="color: #d0d0d0">={};</span>
+		<span style="color: #d0d0d0">pageData[</span><span style="color: #ed9d13">&#39;view&#39;</span><span style="color: #d0d0d0">]=view;</span>
+		<span style="color: #d0d0d0">pageData[</span><span style="color: #ed9d13">&#39;data&#39;</span><span style="color: #d0d0d0">]=$scope.columns;</span>
+		<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i&lt;$scope.columns.length;i++){</span>
+			<span style="color: #d0d0d0">$scope.columns[$scope.hot.manualColumnPositions[i]][</span><span style="color: #ed9d13">&#39;order&#39;</span><span style="color: #d0d0d0">]=i;</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">productsFactory.saveView(pageData).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;View Saved&quot;</span><span style="color: #d0d0d0">);</span>
+		<span style="color: #d0d0d0">$state.go(</span><span style="color: #ed9d13">&#39;pricing&#39;</span><span style="color: #d0d0d0">,{view:view},{notify:</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">reload:</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">});</span>
+		<span style="color: #d0d0d0">$scope.currentView</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">view;</span>
+			<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.removeCol</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(col){</span>
+		<span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span> <span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">$scope.hot.manualColumnPositions.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.hot.manualColumnPositions[i]&gt;$scope.hot.manualColumnPositions[col])</span> <span style="color: #d0d0d0">$scope.hot.manualColumnPositions[i]--;</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">col</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.manualColumnPositions.splice(col,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">)[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">];</span>
+		<span style="color: #d0d0d0">$scope.exColumns.push($scope.columns.splice(col,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">)[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">]);</span>
+		<span style="color: #d0d0d0">$scope.hot.updateSettings($scope.settings);</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.renameCol</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(col){</span>
+		<span style="color: #d0d0d0">col</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.manualColumnPositions[col];</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">response</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">prompt(</span><span style="color: #ed9d13">&quot;New Column Header?&quot;</span><span style="color: #d0d0d0">,$scope.columns[col].title);</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(response</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">$scope.columns[col].title</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response;</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.cleanUp</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+		<span style="color: #d0d0d0">$scope.hot.renderCall</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">$scope.hot.render();</span>
+		<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i&lt;$scope.hideColumns.length;i++){</span>
+			<span style="color: #d0d0d0">$scope.exColumns.splice($scope.hideColumns[i],</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">$scope.hideColumns=[];</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.addCol</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(col){</span>
+		<span style="color: #d0d0d0">$scope.hideColumns.push(col);</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">spliced</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.exColumns[col];</span>
+		<span style="color: #d0d0d0">$scope.columns.splice(</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">,</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,spliced);</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tempSettings</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.settings;</span>
+		<span style="color: #d0d0d0">tempSettings.columns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.columns;</span>
+		<span style="color: #d0d0d0">$scope.hot.updateSettings(tempSettings);</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.defaultValueRenderer</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(hotInstance,</span> <span style="color: #d0d0d0">td,</span> <span style="color: #d0d0d0">row,</span> <span style="color: #d0d0d0">col,</span> <span style="color: #d0d0d0">prop,</span> <span style="color: #d0d0d0">value,</span> <span style="color: #d0d0d0">cellProperties)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">Handsontable.renderers.NumericRenderer.apply(</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">arguments);</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">defaultValue</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">hotInstance.getDataAtRowProp(row,prop.replace(</span><span style="color: #ed9d13">&quot;value&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;default&quot;</span><span style="color: #d0d0d0">));</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">hotInstance.getDataAtRowProp(row,prop.replace(</span><span style="color: #ed9d13">&quot;value&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;history&quot;</span><span style="color: #d0d0d0">));</span>
+
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(defaultValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">defaultValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">value</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">(prop</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;demo.value&quot;</span> <span style="color: #d0d0d0">||</span> <span style="color: #d0d0d0">value</span> <span style="color: #d0d0d0">!=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)){</span>
+			<span style="color: #d0d0d0">td.style.fontWeight</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;bold&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">td.style.color</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;#00217F&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">td.style.background</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;#CBDDED&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">defaultValue</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">defaultValue</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(historyValue</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;0&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">value</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">(prop</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;demo.value&quot;</span> <span style="color: #d0d0d0">||</span> <span style="color: #d0d0d0">value</span> <span style="color: #d0d0d0">!=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">)){</span>
+			<span style="color: #d0d0d0">td.style.fontWeight</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;bold&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">td.style.color</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;#7E7F00&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">td.style.background</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;#EDECCB&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">}</span> <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(historyValue</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">defaultValue</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">historyValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">defaultValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">){</span>
+			<span style="color: #d0d0d0">td.style.color</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;#007F03&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">td.style.background</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;#CCEDCB&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span> <span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$scope.inputFilter</span> <span style="color: #d0d0d0">},</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+		<span style="color: #d0d0d0">$scope.db</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$filter(</span><span style="color: #ed9d13">&#39;filter&#39;</span><span style="color: #d0d0d0">)($scope.dbUnfiltered,</span>  <span style="color: #d0d0d0">$scope.inputFilter</span> <span style="color: #d0d0d0">);</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.inputFilter</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;&quot;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">$scope.hot.updateSettings({manualRowMove:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">});</span>
+			<span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">$scope.hot.updateSettings({manualRowMove:</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">});</span>
+		<span style="color: #d0d0d0">})</span>
+
+	<span style="color: #d0d0d0">$scope.publishPricing</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(year,month){</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">pageData</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span><span style="color: #ed9d13">&quot;year&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">year,</span> <span style="color: #ed9d13">&quot;month&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">month};</span>
+		<span style="color: #d0d0d0">productsFactory.setHistory(pageData).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+		<span style="color: #d0d0d0">productsFactory.publishPricing(pageData).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+		<span style="color: #999999; font-style: italic">//code for creating xml</span>
+		<span style="color: #d0d0d0">}</span>
+
+	<span style="color: #d0d0d0">$scope.mouseTrack</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(e){</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tooltipSpan,</span>	<span style="color: #d0d0d0">x,</span>	<span style="color: #d0d0d0">y;</span>
+		<span style="color: #d0d0d0">tooltipSpan</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.getElementById(</span><span style="color: #ed9d13">&#39;tooltip-span&#39;</span><span style="color: #d0d0d0">);</span>
+		<span style="color: #d0d0d0">x</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">e.clientX,</span>
+		<span style="color: #d0d0d0">y</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">e.clientY;</span>
+		<span style="color: #d0d0d0">tooltipSpan.style.top</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">(y-</span><span style="color: #3677a9">30</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">tooltipSpan.style.left</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">(x+</span><span style="color: #3677a9">15</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&#39;px&#39;</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">w.bind(</span><span style="color: #ed9d13">&#39;resize&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">body</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.getElementsByClassName(</span><span style="color: #ed9d13">&quot;app-content&quot;</span><span style="color: #d0d0d0">);</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">h</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">body[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">].clientHeight;</span>
+		<span style="color: #d0d0d0">$scope.settings.height</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">h;</span>
+		<span style="color: #d0d0d0">$scope.hot.updateSettings($scope.settings);</span>
+		<span style="color: #d0d0d0">});</span>
+
+	<span style="color: #d0d0d0">$scope.settings</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">height:</span> <span style="color: #d0d0d0">h</span> <span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">manualColumnMove:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">manualColumnResize:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">renderAllRows:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">renderAllColumns:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">viewportColumnRenderingOffset:</span> <span style="color: #3677a9">100</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">manualRowMove:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">colHeaders:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">rowHeaders:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">columnSorting:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">sortIndicator:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">filters:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #999999; font-style: italic">//columns: $scope.columns,</span>
+		<span style="color: #d0d0d0">onAfterInit:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{$scope.hot</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">;},</span>
+		<span style="color: #d0d0d0">onAfterChange:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">(changes,</span> <span style="color: #d0d0d0">source)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(changes</span> <span style="color: #d0d0d0">==</span> <span style="color: #6ab825; font-weight: bold">null</span> <span style="color: #d0d0d0">||</span> <span style="color: #d0d0d0">source==</span><span style="color: #ed9d13">&quot;auto&quot;</span> <span style="color: #d0d0d0">||</span> <span style="color: #d0d0d0">source==</span><span style="color: #ed9d13">&quot;external&quot;</span><span style="color: #d0d0d0">){</span><span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;}</span>
+			<span style="color: #d0d0d0">changes.forEach(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(change){</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(change[</span><span style="color: #3677a9">3</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">===</span> <span style="color: #d0d0d0">change[</span><span style="color: #3677a9">2</span><span style="color: #d0d0d0">]){</span><span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;}</span>
+				<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(source</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&#39;loadData&#39;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>          
+					<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">hot</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot;</span>
+					<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">dataSend</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #24909d">Object</span><span style="color: #d0d0d0">;</span>
+					<span style="color: #d0d0d0">dataSend.part</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">hot.getDataAtRowProp(change[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">],</span><span style="color: #ed9d13">&quot;part&quot;</span><span style="color: #d0d0d0">);</span>
+					<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(change[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;part&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">(dataSend.part</span> <span style="color: #d0d0d0">==</span> <span style="color: #6ab825; font-weight: bold">null</span> <span style="color: #d0d0d0">||</span> <span style="color: #d0d0d0">dataSend.part</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&#39;&#39;</span><span style="color: #d0d0d0">))</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Enter a part number first!&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;alert-danger&quot;</span><span style="color: #d0d0d0">);</span>
+						<span style="color: #d0d0d0">hot.setDataAtRowProp(change[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">],change[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">],change[</span><span style="color: #3677a9">2</span><span style="color: #d0d0d0">],</span><span style="color: #ed9d13">&quot;auto&quot;</span><span style="color: #d0d0d0">);</span>
+						<span style="color: #d0d0d0">}</span>
+					<span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(hot.getDataAtRowProp(change[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">],</span><span style="color: #ed9d13">&quot;productGroup&quot;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">==</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">)</span> 
+					<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Will not show on any pricelist without a product group value!&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;alert-danger&quot;</span><span style="color: #d0d0d0">);</span>
+					<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(change[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;part&quot;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #d0d0d0">dataSend.part</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">change[</span><span style="color: #3677a9">2</span><span style="color: #d0d0d0">];</span>
+						<span style="color: #d0d0d0">dataSend.row</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">change[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">];</span>
+						<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(change[</span><span style="color: #3677a9">3</span><span style="color: #d0d0d0">]==</span><span style="color: #ed9d13">&#39;&#39;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Cannot empty part number field!&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;alert-danger&quot;</span><span style="color: #d0d0d0">);</span>
+						<span style="color: #d0d0d0">hot.setDataAtRowProp(change[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">],change[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">],change[</span><span style="color: #3677a9">2</span><span style="color: #d0d0d0">],</span><span style="color: #ed9d13">&quot;auto&quot;</span><span style="color: #d0d0d0">);</span>
+							<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+						<span style="color: #d0d0d0">}</span>
+						<span style="color: #d0d0d0">}</span>
+					<span style="color: #d0d0d0">dataSend.data</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #24909d">Object</span><span style="color: #d0d0d0">;</span>
+					<span style="color: #d0d0d0">dataSend.data[change[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">]]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">change[</span><span style="color: #3677a9">3</span><span style="color: #d0d0d0">];</span>
+					<span style="color: #d0d0d0">productsFactory.saveProduct(dataSend).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">defaultValue</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">hot.getDataAtRowProp(change[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">],change[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">].replace(</span><span style="color: #ed9d13">&quot;value&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;default&quot;</span><span style="color: #d0d0d0">));</span>
+						<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(change[</span><span style="color: #3677a9">3</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">===</span> <span style="color: #ed9d13">&#39;&#39;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">defaultValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">)</span>
+						<span style="color: #d0d0d0">{hot.setDataAtRowProp(change[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">],change[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">],defaultValue,</span><span style="color: #ed9d13">&quot;loadData&quot;</span><span style="color: #d0d0d0">)}</span>
+						<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #d0d0d0">});</span>
+					<span style="color: #d0d0d0">}</span>
+				<span style="color: #d0d0d0">});</span>
+			<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">onAfterColumnSort:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">newVal</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.sortingEnabled</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">$scope.hot.sortOrder</span> <span style="color: #d0d0d0">!==</span> <span style="color: #ed9d13">&#39;undefined&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(newVal){</span>
+				<span style="color: #d0d0d0">$scope.hot.updateSettings({manualRowMove:</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">});</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(!$scope.isSorted)</span> <span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Moving of rows is disabled while sorted&quot;</span><span style="color: #d0d0d0">);</span>
+				<span style="color: #d0d0d0">$scope.isSorted</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+				<span style="color: #d0d0d0">}</span>
+				<span style="color: #6ab825; font-weight: bold">else</span><span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">$scope.hot.updateSettings({manualRowMove:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">});</span>
+					<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Moving of rows has been re-enabled&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;alert-success&quot;</span><span style="color: #d0d0d0">);</span>
+					<span style="color: #d0d0d0">$scope.isSorted</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+					<span style="color: #d0d0d0">}</span>
+			<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">afterOnCellMouseOver:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(event,</span> <span style="color: #d0d0d0">coords,</span> <span style="color: #d0d0d0">td){</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">prop</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.getCellMeta(coords.row,</span> <span style="color: #d0d0d0">coords.col);</span>
+			<span style="color: #d0d0d0">prop</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">prop.prop;</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(coords.col</span> <span style="color: #d0d0d0">==</span> <span style="color: #d0d0d0">-</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">)</span> <span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">coreField</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">prop.split(</span><span style="color: #ed9d13">&quot;.&quot;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">coreField</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">coreField[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">];</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tmpFieldVal</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.getDataAtRowProp(coords.row,</span> <span style="color: #d0d0d0">prop)</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tmpDefaultVal</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.getDataAtRowProp(coords.row,</span> <span style="color: #d0d0d0">coreField+</span><span style="color: #ed9d13">&quot;.default&quot;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">histVal</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.getDataAtRowProp(coords.row,</span> <span style="color: #d0d0d0">coreField+</span><span style="color: #ed9d13">&quot;.history&quot;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(prop.substr(-</span><span style="color: #3677a9">5</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;value&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span>  <span style="color: #d0d0d0">(tmpDefaultVal</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">tmpFieldVal</span> <span style="color: #d0d0d0">||</span> <span style="color: #d0d0d0">(tmpFieldVal</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">histVal</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">histVal</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">))){</span>
+				<span style="color: #d0d0d0">$scope.ttShow</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(tmpDefaultVal</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">tmpFieldVal</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">tmpDefaultVal</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span><span style="color: #d0d0d0">){</span>
+					<span style="color: #d0d0d0">$scope.ttShow</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+					<span style="color: #d0d0d0">$scope.ttValue.val</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">tmpDefaultVal;</span>
+					<span style="color: #d0d0d0">$scope.ttValue.compare</span> <span style="color: #d0d0d0">=</span>  <span style="color: #24909d">eval</span><span style="color: #d0d0d0">(</span><span style="color: #3677a9">100</span><span style="color: #d0d0d0">-(</span><span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor((tmpFieldVal/tmpDefaultVal)*</span><span style="color: #3677a9">100</span><span style="color: #d0d0d0">)));</span>
+					<span style="color: #d0d0d0">$scope.ttValue.compare</span> <span style="color: #d0d0d0">=</span>  <span style="color: #d0d0d0">$scope.ttValue.compare&gt;</span><span style="color: #3677a9">0</span> <span style="color: #d0d0d0">?</span> <span style="color: #ed9d13">&quot; +&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">$scope.ttValue.compare</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;%&quot;</span> <span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot; &quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">$scope.ttValue.compare</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;%&quot;</span><span style="color: #d0d0d0">;</span> 
+					<span style="color: #d0d0d0">}</span>
+					<span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">$scope.ttValue=[];</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(tmpFieldVal</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">histVal</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">histVal</span> <span style="color: #d0d0d0">!=</span> <span style="color: #6ab825; font-weight: bold">null</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">histVal</span> <span style="color: #d0d0d0">!=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">){</span>
+					<span style="color: #d0d0d0">$scope.ttShow</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+					<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #24909d">isNaN</span><span style="color: #d0d0d0">(histVal))</span> <span style="color: #d0d0d0">$scope.ttValue.history</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">histVal;</span>
+						<span style="color: #6ab825; font-weight: bold">else</span><span style="color: #d0d0d0">{</span>
+							<span style="color: #d0d0d0">$scope.ttValue.history</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;$&quot;</span><span style="color: #d0d0d0">+histVal;</span>
+							<span style="color: #d0d0d0">$scope.ttValue.hcompare</span> <span style="color: #d0d0d0">=</span>  <span style="color: #24909d">eval</span><span style="color: #d0d0d0">(</span><span style="color: #3677a9">100</span><span style="color: #d0d0d0">-(</span><span style="color: #24909d">Math</span><span style="color: #d0d0d0">.floor((tmpFieldVal/histVal)*</span><span style="color: #3677a9">100</span><span style="color: #d0d0d0">)));</span>
+							<span style="color: #d0d0d0">$scope.ttValue.hcompare</span> <span style="color: #d0d0d0">=</span>  <span style="color: #d0d0d0">$scope.ttValue.hcompare&gt;</span><span style="color: #3677a9">0</span> <span style="color: #d0d0d0">?</span> <span style="color: #ed9d13">&quot; +&quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">$scope.ttValue.hcompare</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;%&quot;</span> <span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot; &quot;</span> <span style="color: #d0d0d0">+</span> <span style="color: #d0d0d0">$scope.ttValue.hcompare</span> <span style="color: #d0d0d0">+</span> <span style="color: #ed9d13">&quot;%&quot;</span><span style="color: #d0d0d0">;</span> 
+							<span style="color: #d0d0d0">}</span>
+					<span style="color: #d0d0d0">}</span>
+					<span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">$scope.ttValue.history</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&quot;&quot;</span><span style="color: #d0d0d0">;</span>
+				<span style="color: #d0d0d0">}</span>
+				<span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">$scope.ttShow</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">onBeforeRemoveRow:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(index,amount,rowsArray){</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">hot</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot;</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">dataSend</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{};</span>
+			<span style="color: #d0d0d0">dataSend.data</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+			<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">rowsArray.length;i++){dataSend.data.push(hot.getDataAtRowProp(rowsArray[i],</span><span style="color: #ed9d13">&quot;part&quot;</span><span style="color: #d0d0d0">));}</span>
+			<span style="color: #d0d0d0">productsFactory.deleteProduct(dataSend).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Product(s) Removed&quot;</span><span style="color: #d0d0d0">);</span>
+				<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{});</span>
+			<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">onAfterRowMove:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(startRow,endRow){</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">dataSend</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{};</span>
+			<span style="color: #d0d0d0">dataSend.data</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+			<span style="color: #d0d0d0">dataSend.endRow</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">endRow+</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">dataSend.startRow</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">startRow+</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">$scope.hot.manualRowPositions.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #d0d0d0">$scope.hot.manualRowPositions[i]</span>
+				<span style="color: #d0d0d0">dataSend.data.push({</span><span style="color: #ed9d13">&quot;part&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">$scope.hot.getDataAtRowProp(i,</span><span style="color: #ed9d13">&quot;part&quot;</span><span style="color: #d0d0d0">),</span> <span style="color: #ed9d13">&quot;rank&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">i});</span>
+			<span style="color: #d0d0d0">}</span>
+			<span style="color: #d0d0d0">productsFactory.moveRow(dataSend).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response){</span>
+
+				<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+			<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">modifyColWidth:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(width,</span> <span style="color: #d0d0d0">col){</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.columns[</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.manualColumnPositions[col]].width</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">width</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">$scope.rendered){</span>
+				<span style="color: #d0d0d0">$scope.columns[</span><span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.manualColumnPositions[col]].width</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">width;</span>
+				<span style="color: #d0d0d0">}</span> 
+			<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">contextMenu:</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">callback:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">(key,</span> <span style="color: #d0d0d0">options)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(key</span> <span style="color: #d0d0d0">===</span> <span style="color: #ed9d13">&#39;about&#39;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">setTimeout(</span><span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #999999; font-style: italic">// timeout is used to make sure the menu collapsed before alert is shown</span>
+					<span style="color: #d0d0d0">alert(</span><span style="color: #ed9d13">&quot;This is a context menu with default and custom options mixed&quot;</span><span style="color: #d0d0d0">);</span>
+					<span style="color: #d0d0d0">},</span> <span style="color: #3677a9">100</span><span style="color: #d0d0d0">);</span>
+					<span style="color: #d0d0d0">}</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(key</span> <span style="color: #d0d0d0">===</span> <span style="color: #ed9d13">&#39;Remove Column&#39;</span><span style="color: #d0d0d0">){</span>
+					<span style="color: #d0d0d0">$scope.removeCol(options.start.col);</span>
+					<span style="color: #d0d0d0">}</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(key</span> <span style="color: #d0d0d0">===</span> <span style="color: #ed9d13">&#39;Rename Column&#39;</span><span style="color: #d0d0d0">){</span>
+					<span style="color: #d0d0d0">$scope.renameCol(options.start.col);</span>
+					<span style="color: #d0d0d0">}</span>
+				<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">items:</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #ed9d13">&quot;Rename Column&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">name:</span> <span style="color: #ed9d13">&#39;Rename Column&#39;</span><span style="color: #d0d0d0">,</span>
+					<span style="color: #d0d0d0">disabled:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #999999; font-style: italic">// if first row, disable this option</span>
+						<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+						<span style="color: #d0d0d0">}</span>        
+					<span style="color: #d0d0d0">},</span>   				<span style="color: #ed9d13">&quot;Remove Column&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">name:</span> <span style="color: #ed9d13">&#39;Remove Column&#39;</span><span style="color: #d0d0d0">,</span>
+					<span style="color: #d0d0d0">disabled:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #999999; font-style: italic">// if first row, disable this option</span>
+						<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$scope.hot.getSelected()[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">$scope.hot.getSelected()[</span><span style="color: #3677a9">3</span><span style="color: #d0d0d0">]</span>
+						<span style="color: #d0d0d0">}</span>        
+					<span style="color: #d0d0d0">},</span>        
+				<span style="color: #ed9d13">&quot;hsep2&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;---------&quot;</span><span style="color: #d0d0d0">,</span>
+				<span style="color: #ed9d13">&quot;row_above&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">disabled:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #999999; font-style: italic">// if first row, disable this option</span>
+						<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+						<span style="color: #d0d0d0">}</span>
+					<span style="color: #d0d0d0">},</span>
+				<span style="color: #ed9d13">&quot;row_below&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{},</span>
+				<span style="color: #ed9d13">&quot;hsep1&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;---------&quot;</span><span style="color: #d0d0d0">,</span>
+				<span style="color: #ed9d13">&quot;remove_row&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">name:</span> <span style="color: #ed9d13">&#39;Remove row&#39;</span><span style="color: #d0d0d0">,</span>
+					<span style="color: #d0d0d0">disabled:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #999999; font-style: italic">// if first row, disable this option</span>
+						<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+						<span style="color: #d0d0d0">}</span>
+					<span style="color: #d0d0d0">}</span>
+
+				<span style="color: #d0d0d0">}</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;TabsCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$window&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$compile&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$stateParams&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$state&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;flashMessageService&#39;</span>
+<span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$rootScope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$http&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;productsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;hotRegisterer&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$filter&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;SharedState&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($window,$scope,</span> <span style="color: #d0d0d0">$compile,$stateParams,$state,flashMessageService,$rootScope,$http,productsFactory,hotRegisterer,$filter,SharedState)</span> <span style="color: #d0d0d0">{</span>
+
+	<span style="color: #d0d0d0">$scope.hideColumns=[];</span>
+	<span style="color: #d0d0d0">$scope.ttValue=[];</span>
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">viewData</span> <span style="color: #d0d0d0">=[];</span>
+	<span style="color: #d0d0d0">viewData[</span><span style="color: #ed9d13">&quot;view&quot;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$stateParams.view;</span>
+	
+	<span style="color: #d0d0d0">$scope.init</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+		<span style="color: #d0d0d0">$scope.setView($stateParams);</span>
+		<span style="color: #d0d0d0">productsFactory.getCategories($stateParams.view);</span>
+		<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">$scope.existCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(newView){</span>
+			<span style="color: #d0d0d0">$scope.viewExist</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #24909d">Object</span><span style="color: #d0d0d0">.keys($scope.views).forEach(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(key,index)</span> <span style="color: #d0d0d0">{</span>
+			    <span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(newView</span> <span style="color: #d0d0d0">==</span> <span style="color: #d0d0d0">$scope.views[key].name)</span> <span style="color: #d0d0d0">$scope.viewExist</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">});</span>
+		<span style="color: #d0d0d0">}</span>
+	<span style="color: #d0d0d0">$scope.setView</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view){</span>
+		<span style="color: #d0d0d0">$state.go(</span><span style="color: #ed9d13">&#39;edittabs&#39;</span><span style="color: #d0d0d0">,{view:view.view},{notify:</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">reload:</span><span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">});</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.reloadView)</span> <span style="color: #d0d0d0">$scope.getProducts(view.view);</span>
+		<span style="color: #d0d0d0">$scope.reloadView</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">view.view</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">view.view?</span> <span style="color: #d0d0d0">view.view</span> <span style="color: #d0d0d0">:</span> <span style="color: #3677a9">1</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">productsFactory.getTabColumns(view).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">$scope.currentView</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.name;</span>
+			<span style="color: #d0d0d0">$scope.views</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.views;</span>
+			<span style="color: #d0d0d0">$scope.columns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.columns;</span>
+			<span style="color: #d0d0d0">$scope.exColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.exColumns;</span>
+			<span style="color: #d0d0d0">$scope.notesKey</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.notesKey;</span>
+			<span style="color: #d0d0d0">$scope.categorySpacers</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.categorySpacers;</span>
+			<span style="color: #d0d0d0">$scope.tabType</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.tabType;</span>
+			<span style="color: #d0d0d0">$scope.productHeaderOrder</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.productHeaderOrder;</span>
+			<span style="color: #d0d0d0">$scope.header</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.header;</span>
+			<span style="color: #d0d0d0">$scope.tabid</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.id;</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(response.data.name</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;all&quot;</span><span style="color: #d0d0d0">){</span>
+				<span style="color: #d0d0d0">productsFactory.getCategories(view).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">$scope.db</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+					<span style="color: #d0d0d0">$scope.dbUnfiltered</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+					<span style="color: #d0d0d0">$scope.rendered</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+					<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{$log.error(err);});</span>
+				<span style="color: #d0d0d0">}</span>
+				<span style="color: #6ab825; font-weight: bold">else</span><span style="color: #d0d0d0">{</span>
+					<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tmpDB</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+					<span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">$scope.productHeaderOrder.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #d0d0d0">tmpDB.push({</span><span style="color: #ed9d13">&quot;categoryName&quot;</span><span style="color: #d0d0d0">:$scope.productHeaderOrder[i]});</span>
+						<span style="color: #d0d0d0">}</span>
+					<span style="color: #d0d0d0">$scope.db</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">tmpDB;</span>
+					<span style="color: #d0d0d0">}</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tmpColumns;</span>
+			<span style="color: #d0d0d0">tmpColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">angular.copy($scope.columns)</span>
+			<span style="color: #d0d0d0">tmpColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">formatHeaders(tmpColumns);</span>
+			<span style="color: #d0d0d0">tmpColumns.splice(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,{</span><span style="color: #ed9d13">&quot;title&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;Category Name&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;data&quot;</span><span style="color: #d0d0d0">:</span><span style="color: #ed9d13">&quot;categoryName&quot;</span><span style="color: #d0d0d0">})</span>
+			<span style="color: #d0d0d0">$scope.settings.columns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">tmpColumns;</span>
+			<span style="color: #d0d0d0">$scope.hot.manualColumnPositions=[];</span>
+			<span style="color: #d0d0d0">$scope.hot.updateSettings($scope.settings);</span>
+			<span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">$scope.hideColumns=[];</span>
+			<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+		<span style="color: #d0d0d0">}</span>
+
+	<span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">formatHeaders(hotHeaders){</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tmpColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">hotHeaders;</span>
+		<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">tmpColumns.length;i++){</span>
+			<span style="color: #d0d0d0">tmpColumns[i].title</span> <span style="color: #d0d0d0">=</span> <span style="color: #ed9d13">&#39;</span>
+<span style="color: #ed9d13">			&lt; input type=&quot;text&quot; title=&quot;&#39;</span><span style="color: #d0d0d0">+tmpColumns[i].data.split(</span><span style="color: #ed9d13">&quot;.&quot;</span><span style="color: #d0d0d0">)[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">]+</span><span style="color: #ed9d13">&#39;&quot; </span>
+<span style="color: #ed9d13">			class=&quot;hot-header form-control&quot; ng-model=&quot;columns[&#39;</span><span style="color: #d0d0d0">+i+</span><span style="color: #ed9d13">&#39;].title&quot; /&gt;&#39;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">tmpColumns;</span>
+		<span style="color: #d0d0d0">}</span>
+
+	<span style="color: #d0d0d0">$scope.resetCategories</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">view=</span><span style="color: #ed9d13">&quot;all&quot;</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">productsFactory.getCategories(view).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #d0d0d0">$scope.db</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+				<span style="color: #d0d0d0">$scope.dbUnfiltered</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+				<span style="color: #d0d0d0">$scope.rendered</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+				<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{$log.error(err);});</span>
+		<span style="color: #d0d0d0">};</span>
+
+
+	<span style="color: #d0d0d0">$scope.newTab</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view){</span>
+		<span style="color: #d0d0d0">$scope.tabid=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">$scope.saveTab(view);</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.deleteTab</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view){</span>
+		<span style="color: #d0d0d0">productsFactory.deleteTab({</span><span style="color: #ed9d13">&quot;id&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">$scope.tabid}).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Tab Deleted&quot;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">$scope.setView({</span><span style="color: #ed9d13">&#39;view&#39;</span><span style="color: #d0d0d0">:</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">});</span>
+			<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;columns&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">newValue!=oldValue)</span>
+		<span style="color: #d0d0d0">{$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;notesKey&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">newValue!=oldValue)</span>
+		<span style="color: #d0d0d0">{$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;notesKey&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">newValue!=oldValue)</span>
+		<span style="color: #d0d0d0">{$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;categorySpacers&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">newValue!=oldValue)</span>
+		<span style="color: #d0d0d0">{$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;header&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">newValue!=oldValue)</span>
+		<span style="color: #d0d0d0">{$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+
+	<span style="color: #d0d0d0">$scope.saveTab</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(view){</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">columnSort=[];</span>
+		<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">;i&lt;$scope.hot.manualColumnPositions.length;i++){</span>
+			<span style="color: #d0d0d0">columnSort.push($scope.columns[$scope.hot.manualColumnPositions[i]-</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">]);</span>
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">data</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.getData();</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">productHeaderOrder</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+		<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">data.length;i++){</span>
+			<span style="color: #d0d0d0">productHeaderOrder.push(data[i][</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">]);</span>
+			<span style="color: #d0d0d0">}</span>
+		  <span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">newArray</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #24909d">Array</span><span style="color: #d0d0d0">();</span>
+		  <span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">columnSort.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+		    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(columnSort[i])</span> <span style="color: #d0d0d0">{</span>
+		      <span style="color: #d0d0d0">newArray.push(columnSort[i]);</span>
+		    <span style="color: #d0d0d0">}</span>
+		  <span style="color: #d0d0d0">}</span>
+		  <span style="color: #d0d0d0">columnSort</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">newArray;</span>
+		<span style="color: #d0d0d0">$scope.notesKey</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.notesKey</span> <span style="color: #d0d0d0">?</span> <span style="color: #3677a9">1</span> <span style="color: #d0d0d0">:</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">$scope.categorySpacers</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.categorySpacers</span> <span style="color: #d0d0d0">?</span> <span style="color: #3677a9">1</span> <span style="color: #d0d0d0">:</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">data</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{};</span>
+		<span style="color: #d0d0d0">data[</span><span style="color: #ed9d13">&#39;id&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.tabid;</span>
+		<span style="color: #d0d0d0">data[</span><span style="color: #ed9d13">&#39;productHeaderOrder&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">productHeaderOrder;</span>
+		<span style="color: #d0d0d0">data[</span><span style="color: #ed9d13">&#39;columns&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">columnSort;</span>
+		<span style="color: #d0d0d0">data[</span><span style="color: #ed9d13">&#39;name&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">view;</span>
+		<span style="color: #d0d0d0">data[</span><span style="color: #ed9d13">&#39;notesKey&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.notesKey;</span>
+		<span style="color: #d0d0d0">data[</span><span style="color: #ed9d13">&#39;categorySpacers&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.categorySpacers;</span>
+		<span style="color: #d0d0d0">data[</span><span style="color: #ed9d13">&#39;tabType&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.tabType;</span>
+		<span style="color: #d0d0d0">data[</span><span style="color: #ed9d13">&#39;header&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.header;</span>
+	    <span style="color: #d0d0d0">productsFactory.saveTab(data).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+	    	<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Tab Saved&quot;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #999999; font-style: italic">//$scope.setView({&#39;view&#39;:response.data});</span>
+			<span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+
+		    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.removeCol</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(col){</span>
+		<span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span> <span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">$scope.hot.manualColumnPositions.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">($scope.hot.manualColumnPositions[i]&gt;$scope.hot.manualColumnPositions[col])</span> <span style="color: #d0d0d0">$scope.hot.manualColumnPositions[i]--;</span>
+		<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">col</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.hot.manualColumnPositions.splice(col,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">)[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">];</span>
+		<span style="color: #d0d0d0">$scope.exColumns.push($scope.columns.splice(col-</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">)[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">]);</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tmpColumns;</span>
+		<span style="color: #d0d0d0">tmpColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">angular.copy($scope.columns)</span>
+		<span style="color: #d0d0d0">tmpColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">formatHeaders(tmpColumns);</span>
+		<span style="color: #d0d0d0">tmpColumns.splice(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,{</span><span style="color: #ed9d13">&quot;title&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;Category Name&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;data&quot;</span><span style="color: #d0d0d0">:</span><span style="color: #ed9d13">&quot;categoryName&quot;</span><span style="color: #d0d0d0">})</span>
+		<span style="color: #d0d0d0">$scope.settings.columns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">tmpColumns;</span>
+		<span style="color: #d0d0d0">$scope.hot.updateSettings($scope.settings);</span>
+		<span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.cleanUp</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+		<span style="color: #d0d0d0">$scope.hot.renderCall</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+		<span style="color: #d0d0d0">$scope.hot.render();</span>
+		<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i&lt;$scope.hideColumns.length;i++){$scope.exColumns.splice($scope.hideColumns[i],</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);}</span>
+		<span style="color: #d0d0d0">$scope.hideColumns=[];</span>
+		<span style="color: #d0d0d0">}</span>
+
+	<span style="color: #d0d0d0">$scope.addCol</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(col){</span>
+		<span style="color: #d0d0d0">$scope.hideColumns.push(col);</span>
+
+		<span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">1</span> <span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">$scope.hot.manualColumnPositions.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">$scope.hot.manualColumnPositions[i]++;</span>
+		<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">$scope.hot.manualColumnPositions.splice(</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">,</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">spliced</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">$scope.exColumns[col];</span>
+		<span style="color: #d0d0d0">$scope.columns.splice(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,spliced);</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">tmpColumns;</span>
+		<span style="color: #d0d0d0">tmpColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">angular.copy($scope.columns)</span>
+		<span style="color: #d0d0d0">tmpColumns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">formatHeaders(tmpColumns);</span>
+		<span style="color: #d0d0d0">tmpColumns.splice(</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">,{</span><span style="color: #ed9d13">&quot;title&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;Category Name&quot;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&quot;data&quot;</span><span style="color: #d0d0d0">:</span><span style="color: #ed9d13">&quot;categoryName&quot;</span><span style="color: #d0d0d0">})</span>
+		<span style="color: #d0d0d0">$scope.settings.columns</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">tmpColumns;</span>
+		<span style="color: #d0d0d0">$scope.hot.updateSettings($scope.settings);</span>
+
+		<span style="color: #d0d0d0">};</span>
+
+
+	<span style="color: #d0d0d0">$scope.minSpareRows</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+	<span style="color: #d0d0d0">$scope.rowHeaders</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+	<span style="color: #d0d0d0">$scope.db</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+	<span style="color: #d0d0d0">$scope.dbUnfiltered</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">[];</span>
+
+	<span style="color: #d0d0d0">$scope.errorMessages=[];</span>
+
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">w</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">angular.element($window);</span>
+	<span style="color: #d0d0d0">w.bind(</span><span style="color: #ed9d13">&#39;resize&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">body</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.getElementsByClassName(</span><span style="color: #ed9d13">&quot;app-content&quot;</span><span style="color: #d0d0d0">);</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">h</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">body[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">].clientHeight;</span>
+		<span style="color: #d0d0d0">$scope.settings.height</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">h;</span>
+		<span style="color: #d0d0d0">$scope.hot.updateSettings($scope.settings);</span>
+		<span style="color: #d0d0d0">});</span>
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">body</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.getElementsByClassName(</span><span style="color: #ed9d13">&quot;app-content&quot;</span><span style="color: #d0d0d0">);</span>
+	<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">h</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">body[</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">].clientHeight;</span>
+	<span style="color: #d0d0d0">$scope.settings</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">height:</span> <span style="color: #d0d0d0">h</span> <span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">manualColumnMove:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">manualRowMove:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">colHeaders:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">rowHeaders:</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">,</span>
+		<span style="color: #d0d0d0">afterOnCellMouseDown</span> <span style="color: #d0d0d0">:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(sender,</span> <span style="color: #d0d0d0">e){</span>
+			<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(e.row</span> <span style="color: #d0d0d0">===</span> <span style="color: #d0d0d0">-</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">)</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.getInstance().deselectCell();</span>
+			<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">onAfterInit:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">$scope.hot</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.manualColumnMovePlugin</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">this</span><span style="color: #d0d0d0">.getPlugin(</span><span style="color: #ed9d13">&#39;manualColumnMove&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+			<span style="color: #d0d0d0">},</span>
+		<span style="color: #d0d0d0">onAfterColumnMove:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;},</span>
+	    <span style="color: #d0d0d0">onAfterRender:</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+			<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">hotHeaders</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">document</span><span style="color: #d0d0d0">.getElementsByClassName(</span><span style="color: #ed9d13">&#39;hot-header&#39;</span><span style="color: #d0d0d0">);</span>
+			<span style="color: #6ab825; font-weight: bold">for</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i=</span><span style="color: #3677a9">0</span><span style="color: #d0d0d0">;i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">hotHeaders.length;i++){$compile(hotHeaders[i])($scope);}</span>    
+			<span style="color: #d0d0d0">},</span>
+	    <span style="color: #d0d0d0">contextMenu:</span> <span style="color: #d0d0d0">{</span>
+			<span style="color: #d0d0d0">callback:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">(key,</span> <span style="color: #d0d0d0">options)</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(key</span> <span style="color: #d0d0d0">===</span> <span style="color: #ed9d13">&#39;about&#39;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">setTimeout(</span><span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #999999; font-style: italic">// timeout is used to make sure the menu collapsed before alert is shown</span>
+					<span style="color: #d0d0d0">alert(</span><span style="color: #ed9d13">&quot;This is a context menu with default and custom options mixed&quot;</span><span style="color: #d0d0d0">);</span>
+					<span style="color: #d0d0d0">},</span> <span style="color: #3677a9">100</span><span style="color: #d0d0d0">);</span>
+					<span style="color: #d0d0d0">}</span>
+				<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(key</span> <span style="color: #d0d0d0">===</span> <span style="color: #ed9d13">&#39;Remove Column&#39;</span><span style="color: #d0d0d0">)$scope.removeCol(options.start.col);</span>
+				<span style="color: #d0d0d0">},</span>
+			<span style="color: #d0d0d0">items:</span> <span style="color: #d0d0d0">{</span>
+				<span style="color: #ed9d13">&quot;undo&quot;</span><span style="color: #d0d0d0">:{},</span>
+				<span style="color: #ed9d13">&quot;redo&quot;</span><span style="color: #d0d0d0">:{},</span>
+				<span style="color: #ed9d13">&quot;Remove Column&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{name:</span> <span style="color: #ed9d13">&#39;Remove Column&#39;</span><span style="color: #d0d0d0">,</span>
+					<span style="color: #d0d0d0">disabled:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #999999; font-style: italic">// if first row, disable this option</span>
+						<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #d0d0d0">$scope.hot.getSelected()[</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">!=</span> <span style="color: #d0d0d0">$scope.hot.getSelected()[</span><span style="color: #3677a9">3</span><span style="color: #d0d0d0">]</span>
+						<span style="color: #d0d0d0">}</span>        
+					<span style="color: #d0d0d0">},</span>        
+				<span style="color: #ed9d13">&quot;hsep2&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;---------&quot;</span><span style="color: #d0d0d0">,</span>
+				<span style="color: #ed9d13">&quot;row_above&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">disabled:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #999999; font-style: italic">// if first row, disable this option</span>
+						<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+						<span style="color: #d0d0d0">}</span>
+					<span style="color: #d0d0d0">},</span>
+				<span style="color: #ed9d13">&quot;row_below&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{},</span>
+				<span style="color: #ed9d13">&quot;hsep1&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #ed9d13">&quot;---------&quot;</span><span style="color: #d0d0d0">,</span>
+				<span style="color: #ed9d13">&quot;remove_row&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">name:</span> <span style="color: #ed9d13">&#39;Remove row&#39;</span><span style="color: #d0d0d0">,</span>
+					<span style="color: #d0d0d0">disabled:</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #d0d0d0">()</span> <span style="color: #d0d0d0">{</span>
+						<span style="color: #999999; font-style: italic">// if first row, disable this option</span>
+						<span style="color: #6ab825; font-weight: bold">return</span><span style="color: #d0d0d0">;</span>
+						<span style="color: #d0d0d0">}</span>
+					<span style="color: #d0d0d0">}</span>
+
+				<span style="color: #d0d0d0">}</span>    
+			<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">};</span>
+	<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;SheetsCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$window&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$compile&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$stateParams&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$state&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;flashMessageService&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$rootScope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$http&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;productsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;hotRegisterer&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$filter&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;SharedState&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($window,</span> <span style="color: #d0d0d0">$scope,</span> <span style="color: #d0d0d0">$compile,$stateParams,$state,flashMessageService,$rootScope,$http,productsFactory,hotRegisterer,$filter,SharedState)</span> <span style="color: #d0d0d0">{</span>
+
+    <span style="color: #d0d0d0">productsFactory.getSheets().then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">$scope.sheets</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+    <span style="color: #d0d0d0">productsFactory.getTabs().then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">$scope.tabs</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;sheets&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span><span style="color: #d0d0d0">){$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+    
+    <span style="color: #d0d0d0">$scope.deleteSheet</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(sheetId){$scope.sheets.splice(sheetId,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);};</span>
+
+	<span style="color: #d0d0d0">$scope.previewPricing</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(sheet){</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">currentTime</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #24909d">Date</span><span style="color: #d0d0d0">()</span>
+		<span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">pageData</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">{</span><span style="color: #ed9d13">&quot;year&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">currentTime.getFullYear(),</span> <span style="color: #ed9d13">&quot;month&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">currentTime.getMonth()+</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&quot;sheet&quot;</span><span style="color: #d0d0d0">:</span> <span style="color: #d0d0d0">sheet};</span>
+		<span style="color: #d0d0d0">productsFactory.previewPricing(pageData).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+		    <span style="color: #999999; font-style: italic">// var blob = new Blob([response.data], {type: &quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;});</span>
+		    <span style="color: #999999; font-style: italic">// var objectUrl = URL.createObjectURL(blob);</span>
+		    <span style="color: #24909d">window</span><span style="color: #d0d0d0">.open(</span><span style="color: #ed9d13">&quot;/sheets/tmp_sheet.xlsx&quot;</span><span style="color: #d0d0d0">);</span>			
+			<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+		<span style="color: #d0d0d0">}</span>
+
+
+    <span style="color: #d0d0d0">$scope.saveSheets</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+	    <span style="color: #d0d0d0">productsFactory.setSheets($scope.sheets).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Sheets Saved&quot;</span><span style="color: #d0d0d0">);</span>    	
+		<span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>    	
+	    <span style="color: #d0d0d0">}</span>
+
+		<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;AssignCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$window&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;flashMessageService&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;productsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$filter&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;SharedState&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($window,</span> <span style="color: #d0d0d0">$scope,</span> <span style="color: #d0d0d0">flashMessageService,productsFactory,$filter,SharedState)</span> <span style="color: #d0d0d0">{</span>
+
+    <span style="color: #d0d0d0">productsFactory.getTabAssignments().then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">$scope.tabAssignments</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;tabAssignments&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span><span style="color: #d0d0d0">){$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+
+    <span style="color: #d0d0d0">$scope.saveAssignments</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+    	<span style="color: #d0d0d0">productsFactory.setTabAssignments($scope.tabAssignments).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response){</span>
+    	<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Assignments Saved&quot;</span><span style="color: #d0d0d0">);</span>    	
+	    <span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+	    <span style="color: #d0d0d0">};</span>
+
+	<span style="color: #d0d0d0">$scope.setAll</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(index,setting,type){</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(type==</span><span style="color: #ed9d13">&#39;row&#39;</span><span style="color: #d0d0d0">){</span>
+			<span style="color: #d0d0d0">$scope.tabAssignments[index].tab_ID</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">setting;</span>
+			<span style="color: #d0d0d0">$scope.tabAssignments[index].tab_PS</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">setting;</span>
+			<span style="color: #d0d0d0">$scope.tabAssignments[index].tab_AC</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">setting;</span>
+			<span style="color: #d0d0d0">$scope.tabAssignments[index].tab_EV</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">setting;</span>
+			<span style="color: #d0d0d0">$scope.tabAssignments[index].tab_C1</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">setting;</span>
+			<span style="color: #d0d0d0">$scope.tabAssignments[index].tab_C2</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">setting;</span>
+			<span style="color: #d0d0d0">}</span>
+			<span style="color: #6ab825; font-weight: bold">else</span><span style="color: #d0d0d0">{</span>
+				<span style="color: #6ab825; font-weight: bold">for</span> <span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">var</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">=</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span> <span style="color: #d0d0d0">i</span> <span style="color: #d0d0d0">&lt;</span> <span style="color: #d0d0d0">$scope.tabAssignments.length;</span> <span style="color: #d0d0d0">i++)</span> <span style="color: #d0d0d0">{</span>
+					<span style="color: #d0d0d0">$scope.tabAssignments[i][index]=setting;</span>
+					<span style="color: #d0d0d0">}</span>
+				<span style="color: #d0d0d0">}</span>
+		<span style="color: #d0d0d0">};</span>
+
+		<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;RulesCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$window&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;flashMessageService&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;productsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$filter&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;SharedState&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($window,</span> <span style="color: #d0d0d0">$scope,</span> <span style="color: #d0d0d0">flashMessageService,productsFactory,$filter,SharedState)</span> <span style="color: #d0d0d0">{</span>
+
+    <span style="color: #d0d0d0">productsFactory.getRules().then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">$scope.rules</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+    <span style="color: #d0d0d0">productsFactory.getRuleLists().then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">$scope.colList</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.colList;</span>
+    	<span style="color: #d0d0d0">$scope.groupList</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data.groupList;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;rules&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span><span style="color: #d0d0d0">){$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+
+    <span style="color: #d0d0d0">$scope.saveRules</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+    	<span style="color: #d0d0d0">productsFactory.setRules($scope.rules).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response){</span>
+    	<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Rules Saved&quot;</span><span style="color: #d0d0d0">);</span>    	
+	    <span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+	    <span style="color: #d0d0d0">}</span>
+
+    <span style="color: #d0d0d0">$scope.deleteRule</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(ruleId){$scope.rules.splice(ruleId,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);};</span>
+
+		<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;NotesCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$window&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;flashMessageService&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;productsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$filter&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;SharedState&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($window,</span> <span style="color: #d0d0d0">$scope,</span> <span style="color: #d0d0d0">flashMessageService,productsFactory,$filter,SharedState)</span> <span style="color: #d0d0d0">{</span>
+
+    <span style="color: #d0d0d0">productsFactory.getNotes().then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">$scope.notes</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;notes&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span><span style="color: #d0d0d0">){$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+
+    <span style="color: #d0d0d0">$scope.saveNotes</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+    	<span style="color: #d0d0d0">productsFactory.setNotes($scope.notes).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response){</span>
+    	<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Notes Saved&quot;</span><span style="color: #d0d0d0">);</span>    	
+	    <span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+	    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+	    <span style="color: #d0d0d0">}</span>
+
+    <span style="color: #d0d0d0">$scope.deleteNote</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(noteId){$scope.notes.splice(noteId,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);};</span>
+
+		<span style="color: #d0d0d0">}])</span>
+
+<span style="color: #d0d0d0">.controller(</span><span style="color: #ed9d13">&#39;KitsCtrl&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;$scope&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;flashMessageService&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;productsFactory&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;$filter&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;SharedState&#39;</span><span style="color: #d0d0d0">,</span> 
+	<span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">($scope,</span> <span style="color: #d0d0d0">flashMessageService,productsFactory,$filter,SharedState,</span> <span style="color: #d0d0d0">hotRegisterer)</span> <span style="color: #d0d0d0">{</span>
+
+    <span style="color: #d0d0d0">productsFactory.getKits().then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">$scope.kits</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+    	<span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+
+    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+	<span style="color: #d0d0d0">$scope.$watch(</span><span style="color: #ed9d13">&#39;kits&#39;</span><span style="color: #d0d0d0">,</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(</span> <span style="color: #d0d0d0">newValue,</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+		<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">typeof</span> <span style="color: #d0d0d0">oldValue</span> <span style="color: #d0d0d0">!=</span> <span style="color: #ed9d13">&quot;undefined&quot;</span><span style="color: #d0d0d0">){$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;}</span>
+		<span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+
+    <span style="color: #d0d0d0">productsFactory.getParts().then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">$scope.parts</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">response.data;</span>
+    <span style="color: #d0d0d0">},</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>
+
+    <span style="color: #d0d0d0">$scope.deleteKit</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(kitsId){$scope.kits.splice(kitsId,</span><span style="color: #3677a9">1</span><span style="color: #d0d0d0">);};</span>
+    <span style="color: #d0d0d0">$scope.saveKits</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(){</span>
+	    <span style="color: #d0d0d0">productsFactory.setKits($scope.kits).then(</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(response)</span> <span style="color: #d0d0d0">{</span>
+    	<span style="color: #d0d0d0">flashMessageService.setMessage(</span><span style="color: #ed9d13">&quot;Kits Saved&quot;</span><span style="color: #d0d0d0">);</span>    
+    	<span style="color: #d0d0d0">$scope.$parent.$parent.$root.saveCheck</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>	
+	    <span style="color: #d0d0d0">},</span><span style="color: #6ab825; font-weight: bold">function</span><span style="color: #d0d0d0">(err)</span> <span style="color: #d0d0d0">{});</span>    	
+	    <span style="color: #d0d0d0">}</span>
+
+	<span style="color: #d0d0d0">}])</span>
+</pre></div>

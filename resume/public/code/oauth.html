@@ -1,0 +1,217 @@
+<!-- HTML generated using hilite.me --><div style="background: #202020; overflow:auto;width:auto;padding:.2em .6em;"><pre style="background: #202020; margin: 0; line-height: 125%">
+<span style="color: #6ab825; font-weight: bold">namespace</span> <span style="color: #d0d0d0">Craft;</span>
+
+	    	<span style="color: #6ab825; font-weight: bold">require_once</span><span style="color: #d0d0d0">(CRAFT_PLUGINS_PATH.</span><span style="color: #ed9d13">&#39;oauth365/AuthenticationManager.php&#39;</span><span style="color: #d0d0d0">);</span>
+
+<span style="color: #6ab825; font-weight: bold">class</span> <span style="color: #447fcf; text-decoration: underline">Oauth365_LoginController</span> <span style="color: #6ab825; font-weight: bold">extends</span> <span style="color: #d0d0d0">BaseController</span>
+<span style="color: #d0d0d0">{</span>
+     <span style="color: #6ab825; font-weight: bold">protected</span> <span style="color: #40ffff">$allowAnonymous</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+
+	   <span style="color: #6ab825; font-weight: bold">public</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #447fcf">actionAuth</span><span style="color: #d0d0d0">()</span>
+	    <span style="color: #d0d0d0">{</span>
+          <span style="color: #40ffff">$client_id</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">plugins</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getPlugin</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&quot;oauth365&quot;</span><span style="color: #d0d0d0">)-&gt;</span><span style="color: #bbbbbb">getSettings</span><span style="color: #d0d0d0">()-&gt;</span><span style="color: #bbbbbb">CLIENT_ID</span><span style="color: #d0d0d0">;</span>
+          <span style="color: #40ffff">$redirect_uri</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">plugins</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getPlugin</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&quot;oauth365&quot;</span><span style="color: #d0d0d0">)-&gt;</span><span style="color: #bbbbbb">getSettings</span><span style="color: #d0d0d0">()-&gt;</span><span style="color: #bbbbbb">REDIRECT_URI</span><span style="color: #d0d0d0">;</span>
+
+	    	<span style="color: #d0d0d0">\Microsoft\Office365\UnifiedAPI\Connect\AuthenticationManager::</span><span style="color: #bbbbbb">connect</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$client_id</span><span style="color: #d0d0d0">,</span><span style="color: #40ffff">$redirect_uri</span><span style="color: #d0d0d0">);</span>
+	    <span style="color: #d0d0d0">}</span>
+
+	   <span style="color: #6ab825; font-weight: bold">public</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #447fcf">actionCallback</span><span style="color: #d0d0d0">()</span>
+	    <span style="color: #d0d0d0">{</span>
+
+	    	<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(session_status()</span> <span style="color: #d0d0d0">==</span> <span style="color: #d0d0d0">PHP_SESSION_NONE)</span> <span style="color: #d0d0d0">{</span>
+			    <span style="color: #24909d">session_start</span><span style="color: #d0d0d0">();</span>
+			<span style="color: #d0d0d0">}</span>
+
+			<span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_SERVER</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;REQUEST_METHOD&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">===</span> <span style="color: #ed9d13">&#39;GET&#39;</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #24909d">isset</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;code&#39;</span><span style="color: #d0d0d0">]))</span> <span style="color: #d0d0d0">{</span>
+			    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #24909d">isset</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;admin_consent&#39;</span><span style="color: #d0d0d0">]))</span> <span style="color: #d0d0d0">{</span>
+			        <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;admin_consent&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;admin_consent&#39;</span><span style="color: #d0d0d0">];</span>
+			    <span style="color: #d0d0d0">}</span>
+			    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #24909d">isset</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;code&#39;</span><span style="color: #d0d0d0">]))</span> <span style="color: #d0d0d0">{</span>
+			        <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;code&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span>  <span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;code&#39;</span><span style="color: #d0d0d0">];</span>
+			    <span style="color: #d0d0d0">}</span>
+			    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #24909d">isset</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;session_state&#39;</span><span style="color: #d0d0d0">]))</span> <span style="color: #d0d0d0">{</span>
+			        <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;session_state&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span>  <span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;session_state&#39;</span><span style="color: #d0d0d0">];</span>
+			    <span style="color: #d0d0d0">}</span>
+			    <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #24909d">isset</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;state&#39;</span><span style="color: #d0d0d0">]))</span> <span style="color: #d0d0d0">{</span>
+			        <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;state&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span>  <span style="color: #40ffff">$_GET</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;state&#39;</span><span style="color: #d0d0d0">];</span>
+			    <span style="color: #d0d0d0">}</span>
+			    
+			    <span style="color: #999999; font-style: italic">// With the authorization code, we can retrieve access tokens and other data.</span>
+			    <span style="color: #6ab825; font-weight: bold">try</span> 
+			    <span style="color: #d0d0d0">{</span>
+                    <span style="color: #40ffff">$client_id</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">plugins</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getPlugin</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&quot;oauth365&quot;</span><span style="color: #d0d0d0">)-&gt;</span><span style="color: #bbbbbb">getSettings</span><span style="color: #d0d0d0">()-&gt;</span><span style="color: #bbbbbb">CLIENT_ID</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #40ffff">$redirect_uri</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">plugins</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getPlugin</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&quot;oauth365&quot;</span><span style="color: #d0d0d0">)-&gt;</span><span style="color: #bbbbbb">getSettings</span><span style="color: #d0d0d0">()-&gt;</span><span style="color: #bbbbbb">REDIRECT_URI</span><span style="color: #d0d0d0">;</span>
+                    <span style="color: #40ffff">$client_secret</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">plugins</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getPlugin</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&quot;oauth365&quot;</span><span style="color: #d0d0d0">)-&gt;</span><span style="color: #bbbbbb">getSettings</span><span style="color: #d0d0d0">()-&gt;</span><span style="color: #bbbbbb">CLIENT_SECRET</span><span style="color: #d0d0d0">;</span>
+
+			        <span style="color: #d0d0d0">\Microsoft\Office365\UnifiedAPI\Connect\AuthenticationManager::</span><span style="color: #bbbbbb">acquireToken</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$client_id</span><span style="color: #d0d0d0">,</span><span style="color: #40ffff">$redirect_uri</span><span style="color: #d0d0d0">,</span><span style="color: #40ffff">$client_secret</span><span style="color: #d0d0d0">);</span>
+			        <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">request</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">redirect</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;/actions/oauth365/login/submit&#39;</span><span style="color: #d0d0d0">);</span>
+			        <span style="color: #6ab825; font-weight: bold">exit</span><span style="color: #d0d0d0">();</span>
+			    <span style="color: #d0d0d0">}</span> 
+			    <span style="color: #6ab825; font-weight: bold">catch</span> <span style="color: #d0d0d0">(\RuntimeException</span> <span style="color: #40ffff">$e</span><span style="color: #d0d0d0">)</span>
+			    <span style="color: #d0d0d0">{</span>
+			        <span style="color: #6ab825; font-weight: bold">echo</span> <span style="color: #ed9d13">&#39;Something went wrong, couldn\&#39;t get tokens: &#39;</span> <span style="color: #d0d0d0">.</span> <span style="color: #40ffff">$e</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getMessage</span><span style="color: #d0d0d0">();</span>
+			    <span style="color: #d0d0d0">}</span>
+			<span style="color: #d0d0d0">}</span>
+        	    <span style="color: #d0d0d0">}</span>
+
+	   <span style="color: #6ab825; font-weight: bold">public</span> <span style="color: #6ab825; font-weight: bold">function</span> <span style="color: #447fcf">actionSubmit</span><span style="color: #d0d0d0">()</span>
+	    <span style="color: #d0d0d0">{</span>
+
+	    	<span style="color: #999999; font-style: italic">// $var=[];</span>
+	    	<span style="color: #999999; font-style: italic">// $var[&#39;id&#39;]=print_r($_SESSION,true);</span>
+	    	<span style="color: #999999; font-style: italic">// $this-&gt;renderTemplate(&#39;oauth365/MailTemplate.html&#39;,$var);</span>
+	    	<span style="color: #999999; font-style: italic">// exit();</span>
+			<span style="color: #6ab825; font-weight: bold">if</span><span style="color: #d0d0d0">(craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">login</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;unique_name&#39;</span><span style="color: #d0d0d0">],</span> <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;oid&#39;</span><span style="color: #d0d0d0">],</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">))</span>
+				<span style="color: #d0d0d0">{craft()-&gt;</span><span style="color: #bbbbbb">request</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">redirect</span><span style="color: #d0d0d0">(craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getReturnUrl</span><span style="color: #d0d0d0">());}</span>
+				<span style="color: #6ab825; font-weight: bold">elseif</span><span style="color: #d0d0d0">(substr(</span><span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;unique_name&#39;</span><span style="color: #d0d0d0">],-</span><span style="color: #3677a9">12</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">==</span> <span style="color: #ed9d13">&quot;@infocus.com&quot;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">{</span>
+
+     <span style="color: #40ffff">$craftEdition</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">getEdition</span><span style="color: #d0d0d0">();</span>
+     <span style="color: #40ffff">$currentUser</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getUser</span><span style="color: #d0d0d0">();</span>
+     <span style="color: #40ffff">$requireEmailVerification</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">systemSettings</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getSetting</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;users&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;requireEmailVerification&#39;</span><span style="color: #d0d0d0">);</span>
+
+     <span style="color: #999999; font-style: italic">// Get the user being edited</span>
+     <span style="color: #999999; font-style: italic">// ---------------------------------------------------------------------</span>
+
+     <span style="color: #40ffff">$userId</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">request</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getPost</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;userId&#39;</span><span style="color: #d0d0d0">);</span>
+     <span style="color: #40ffff">$isNewUser</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">!</span><span style="color: #40ffff">$userId</span><span style="color: #d0d0d0">;</span>
+     <span style="color: #40ffff">$thisIsPublicRegistration</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+
+     <span style="color: #999999; font-style: italic">// Are we editing an existing user?</span>
+     <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$userId</span><span style="color: #d0d0d0">)</span>
+     <span style="color: #d0d0d0">{</span>
+          <span style="color: #40ffff">$user</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">users</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getUserById</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$userId</span><span style="color: #d0d0d0">);</span>
+
+          <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(!</span><span style="color: #40ffff">$user</span><span style="color: #d0d0d0">)</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #6ab825; font-weight: bold">throw</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">Exception(Craft::</span><span style="color: #bbbbbb">t</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;No user exists with the ID “{id}”.&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #6ab825; font-weight: bold">array</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;id&#39;</span> <span style="color: #d0d0d0">=&gt;</span> <span style="color: #40ffff">$userId</span><span style="color: #d0d0d0">)));</span>
+          <span style="color: #d0d0d0">}</span>
+
+          <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(!</span><span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">isCurrent</span><span style="color: #d0d0d0">())</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #999999; font-style: italic">// Make sure they have permission to edit other users</span>
+               <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">requirePermission</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;editUsers&#39;</span><span style="color: #d0d0d0">);</span>
+          <span style="color: #d0d0d0">}</span>
+     <span style="color: #d0d0d0">}</span>
+     <span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$craftEdition</span> <span style="color: #d0d0d0">==</span> <span style="color: #d0d0d0">Craft::</span><span style="color: #bbbbbb">Client</span><span style="color: #d0d0d0">)</span>
+     <span style="color: #d0d0d0">{</span>
+          <span style="color: #999999; font-style: italic">// Make sure they&#39;re logged in</span>
+          <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">requireAdmin</span><span style="color: #d0d0d0">();</span>
+
+          <span style="color: #999999; font-style: italic">// Make sure there&#39;s no Client user yet</span>
+          <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(craft()-&gt;</span><span style="color: #bbbbbb">users</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getClient</span><span style="color: #d0d0d0">())</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #6ab825; font-weight: bold">throw</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">Exception(Craft::</span><span style="color: #bbbbbb">t</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;A client account already exists.&#39;</span><span style="color: #d0d0d0">));</span>
+          <span style="color: #d0d0d0">}</span>
+
+          <span style="color: #40ffff">$user</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">UserModel();</span>
+          <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">client</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+     <span style="color: #d0d0d0">}</span>
+     <span style="color: #6ab825; font-weight: bold">else</span>
+     <span style="color: #d0d0d0">{</span>
+          <span style="color: #999999; font-style: italic">// Make sure this is Craft Pro, since that&#39;s required for having multiple user accounts</span>
+          <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">requireEdition</span><span style="color: #d0d0d0">(Craft::</span><span style="color: #bbbbbb">Pro</span><span style="color: #d0d0d0">);</span>
+
+          <span style="color: #999999; font-style: italic">// Is someone logged in?</span>
+          <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$currentUser</span><span style="color: #d0d0d0">)</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #999999; font-style: italic">// Make sure they have permission to register users</span>
+               <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">requirePermission</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;registerUsers&#39;</span><span style="color: #d0d0d0">);</span>
+          <span style="color: #d0d0d0">}</span>
+          <span style="color: #6ab825; font-weight: bold">else</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #999999; font-style: italic">// Make sure public registration is allowed</span>
+               <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(!craft()-&gt;</span><span style="color: #bbbbbb">systemSettings</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getSetting</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;users&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;allowPublicRegistration&#39;</span><span style="color: #d0d0d0">))</span>
+               <span style="color: #d0d0d0">{</span>
+                    <span style="color: #999999; font-style: italic">//throw new HttpException(403);</span>
+               <span style="color: #d0d0d0">}</span>
+
+               <span style="color: #40ffff">$thisIsPublicRegistration</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+          <span style="color: #d0d0d0">}</span>
+
+          <span style="color: #40ffff">$user</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">UserModel();</span>
+     <span style="color: #d0d0d0">}</span>
+
+     <span style="color: #40ffff">$isCurrentUser</span> <span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">isCurrent</span><span style="color: #d0d0d0">();</span>
+
+     <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$isCurrentUser</span><span style="color: #d0d0d0">)</span>
+     <span style="color: #d0d0d0">{</span>
+          <span style="color: #999999; font-style: italic">// Remember the old username in case it changes</span>
+          <span style="color: #40ffff">$oldUsername</span> <span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">username</span><span style="color: #d0d0d0">;</span>
+     <span style="color: #d0d0d0">}</span>
+
+
+     <span style="color: #999999; font-style: italic">// Handle the rest of the user properties</span>
+     <span style="color: #999999; font-style: italic">// ---------------------------------------------------------------------</span>
+
+
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">email</span>    		<span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;unique_name&#39;</span><span style="color: #d0d0d0">];</span>
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">username</span>    	<span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;unique_name&#39;</span><span style="color: #d0d0d0">];</span>
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">firstName</span>       <span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;given_name&#39;</span><span style="color: #d0d0d0">];</span>
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">lastName</span>        <span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;family_name&#39;</span><span style="color: #d0d0d0">];</span>
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">preferredLocale</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">request</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getPost</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;preferredLocale&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">preferredLocale</span><span style="color: #d0d0d0">);</span>
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">weekStartDay</span>    <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">request</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getPost</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;weekStartDay&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">weekStartDay</span><span style="color: #d0d0d0">);</span>
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">passwordResetRequired</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">newPassword</span> <span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;oid&#39;</span><span style="color: #d0d0d0">];</span>
+     <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">pending</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+
+
+     <span style="color: #999999; font-style: italic">// If this is Craft Pro, grab any profile content from post</span>
+     <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$craftEdition</span> <span style="color: #d0d0d0">==</span> <span style="color: #d0d0d0">Craft::</span><span style="color: #bbbbbb">Pro</span><span style="color: #d0d0d0">)</span>
+     <span style="color: #d0d0d0">{</span>
+          <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">setContentFromPost</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;fields&#39;</span><span style="color: #d0d0d0">);</span>
+     <span style="color: #d0d0d0">}</span>
+
+     <span style="color: #999999; font-style: italic">// Validate and save!</span>
+     <span style="color: #999999; font-style: italic">// ---------------------------------------------------------------------</span>
+     <span style="color: #40ffff">$imageValidates</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">;</span>
+     <span style="color: #40ffff">$userPhoto</span> <span style="color: #d0d0d0">=</span> <span style="color: #d0d0d0">UploadedFile::</span><span style="color: #bbbbbb">getInstanceByName</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;userPhoto&#39;</span><span style="color: #d0d0d0">);</span>
+
+     <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$userPhoto</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">!ImageHelper::</span><span style="color: #bbbbbb">isImageManipulatable</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$userPhoto</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getExtensionName</span><span style="color: #d0d0d0">()))</span>
+     <span style="color: #d0d0d0">{</span>
+          <span style="color: #40ffff">$imageValidates</span> <span style="color: #d0d0d0">=</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">;</span>
+          <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">addError</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;userPhoto&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #d0d0d0">Craft::</span><span style="color: #bbbbbb">t</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&quot;The user photo provided is not an image.&quot;</span><span style="color: #d0d0d0">));</span>
+     <span style="color: #d0d0d0">}</span>
+
+     <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$imageValidates</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">users</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">saveUser</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$user</span><span style="color: #d0d0d0">))</span>
+     <span style="color: #d0d0d0">{</span>
+          <span style="color: #999999; font-style: italic">// Is this the current user, and did their username just change?</span>
+          <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$isCurrentUser</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">username</span> <span style="color: #d0d0d0">!==</span> <span style="color: #40ffff">$oldUsername</span><span style="color: #d0d0d0">)</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #999999; font-style: italic">// Update the username cookie</span>
+               <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">processUsernameCookie</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">username</span><span style="color: #d0d0d0">);</span>
+          <span style="color: #d0d0d0">}</span>
+
+
+          <span style="color: #999999; font-style: italic">// If this is public registration, assign the user to the default user group</span>
+          <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #40ffff">$thisIsPublicRegistration</span><span style="color: #d0d0d0">)</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #999999; font-style: italic">// Assign them to the default user group</span>
+               <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">userGroups</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">assignUserToDefaultGroup</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$user</span><span style="color: #d0d0d0">);</span>
+          <span style="color: #d0d0d0">}</span>
+          <span style="color: #6ab825; font-weight: bold">else</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #999999; font-style: italic">// Assign user groups and permissions if the current user is allowed to do that</span>
+               <span style="color: #40ffff">$this</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">_processUserGroupsPermissions</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$user</span><span style="color: #d0d0d0">);</span>
+          <span style="color: #d0d0d0">}</span>
+
+          <span style="color: #6ab825; font-weight: bold">if</span> <span style="color: #d0d0d0">(</span><span style="color: #24909d">isset</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_POST</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;redirect&#39;</span><span style="color: #d0d0d0">])</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #24909d">mb_strpos</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_POST</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;redirect&#39;</span><span style="color: #d0d0d0">],</span> <span style="color: #ed9d13">&#39;{userId}&#39;</span><span style="color: #d0d0d0">)</span> <span style="color: #d0d0d0">!==</span> <span style="color: #6ab825; font-weight: bold">false</span><span style="color: #d0d0d0">)</span>
+          <span style="color: #d0d0d0">{</span>
+               <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">deprecator</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">log</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;UsersController::saveUser():userId_redirect&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;The {userId} token within the ‘redirect’ param on users/saveUser requests has been deprecated. Use {id} instead.&#39;</span><span style="color: #d0d0d0">);</span>
+               <span style="color: #40ffff">$_POST</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;redirect&#39;</span><span style="color: #d0d0d0">]</span> <span style="color: #d0d0d0">=</span> <span style="color: #24909d">str_replace</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;{userId}&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #ed9d13">&#39;{id}&#39;</span><span style="color: #d0d0d0">,</span> <span style="color: #40ffff">$_POST</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;redirect&#39;</span><span style="color: #d0d0d0">]);</span>
+          <span style="color: #d0d0d0">}</span>
+
+          <span style="color: #999999; font-style: italic">// Is this public registration, and was the user going to be activated automatically?</span>
+          <span style="color: #40ffff">$publicActivation</span> <span style="color: #d0d0d0">=</span> <span style="color: #40ffff">$thisIsPublicRegistration</span> <span style="color: #d0d0d0">&amp;&amp;</span> <span style="color: #40ffff">$user</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">status</span> <span style="color: #d0d0d0">==</span> <span style="color: #d0d0d0">UserStatus::</span><span style="color: #bbbbbb">Active</span><span style="color: #d0d0d0">;</span>
+     <span style="color: #d0d0d0">}</span>
+     <span style="color: #6ab825; font-weight: bold">else</span>
+     <span style="color: #d0d0d0">{</span>
+		<span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">request</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">redirect</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;/admin/login&#39;</span><span style="color: #d0d0d0">);</span>
+     <span style="color: #d0d0d0">}</span>
+     <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">login</span><span style="color: #d0d0d0">(</span><span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;unique_name&#39;</span><span style="color: #d0d0d0">],</span> <span style="color: #40ffff">$_SESSION</span><span style="color: #d0d0d0">[</span><span style="color: #ed9d13">&#39;oid&#39;</span><span style="color: #d0d0d0">],</span> <span style="color: #6ab825; font-weight: bold">true</span><span style="color: #d0d0d0">);</span>
+<span style="color: #d0d0d0">}</span>
+<span style="color: #6ab825; font-weight: bold">else</span> <span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">request</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">redirect</span><span style="color: #d0d0d0">(</span><span style="color: #ed9d13">&#39;/admin/login&#39;</span><span style="color: #d0d0d0">);</span>
+
+<span style="color: #d0d0d0">craft()-&gt;</span><span style="color: #bbbbbb">request</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">redirect</span><span style="color: #d0d0d0">(craft()-&gt;</span><span style="color: #bbbbbb">userSession</span><span style="color: #d0d0d0">-&gt;</span><span style="color: #bbbbbb">getReturnUrl</span><span style="color: #d0d0d0">());</span>
+	    <span style="color: #d0d0d0">}</span>
+<span style="color: #d0d0d0">}</span>
+</pre></div>
