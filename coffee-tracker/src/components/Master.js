@@ -4,7 +4,7 @@ import axios from 'axios';
 import Home from './Home';
 import Profile from './Profile';
 import Coffees from './Coffees';
-import { Navbar, Nav, Jumbotron, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, Jumbotron } from 'react-bootstrap';
 
 class Master extends Component {
     state = {
@@ -40,7 +40,7 @@ class Master extends Component {
         let drinks = this.state.user.drinks;
         let user = this.state.user;
         axios.delete(uri);
-        drinks = drinks.filter((drink) => drink.id != id);
+        drinks = drinks.filter((drink) => drink.id !== id);
         user.drinks = drinks;
         this.setState({
             user: user
@@ -109,8 +109,8 @@ class Master extends Component {
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav>
-              <NavItem className={this.state.user.username ? '' : 'hidden'} eventKey={1} href={`/coffee-tracker/${this.state.user.username}/profile/`}>Profile</NavItem>
-              <NavItem className={this.state.user.username ? '' : 'hidden'} eventKey={2} href={`/coffee-tracker/${this.state.user.username}/coffees/`}>Coffees</NavItem>
+              <li><NavLink className={this.state.user.username ? '' : 'hidden'} eventKey={1} to={`/coffee-tracker/${this.state.user.username}/profile/`}>Profile</NavLink></li>
+              <li><NavLink className={this.state.user.username ? '' : 'hidden'} eventKey={2} to={`/coffee-tracker/${this.state.user.username}/coffees/`}>Coffees</NavLink></li>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
