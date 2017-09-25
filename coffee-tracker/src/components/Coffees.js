@@ -15,8 +15,18 @@ class Coffees extends Component {
   handleKeyPress = e => {
     if (e.key === 'Enter') {
       this.props.addDrink(this.state.drinkName);
+      this.setState({
+        drinkName: ''
+      })
     }
   };
+
+  handleSubmit = () => {
+    this.props.addDrink(this.state.drinkName)
+    this.setState({
+      drinkName: ''
+    })
+  }
 
   handleChange = e => {
     this.setState({
@@ -40,7 +50,7 @@ class Coffees extends Component {
             <input className="form-control"  type="text"  value={this.state.drinkName} onKeyPress={(e) => this.handleKeyPress(e)} onChange={(e) => this.handleChange(e)} placeholder="Enter Drink Name (eg Mocha, Coffee, Tea, Chai, etc)" />
           </div>
           <div className="col-md-2">
-            <Button onClick={() => this.props.addDrink(this.state.drinkName)} bsStyle="primary">Add Drink</Button>
+            <Button onClick={this.handleSubmit} bsStyle="primary">Add Drink</Button>
           </div>
         </div><br />
         <table className="table table-hover">
