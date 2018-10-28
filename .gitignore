@@ -1,3 +1,5 @@
 *.env
-coffee-tracker/build/*
+coffee-tracker/*
+resume/*
+portfolio/*
 vendor/*
