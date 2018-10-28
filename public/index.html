@@ -1,0 +1,419 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<style>
+
+.rect-top, .rect-bottom {
+    height: 12px;
+    width: 340px;
+    position: absolute;
+    background: linear-gradient(90deg, gold 50%, white 50%);
+    background-repeat: repeat-x;
+    background-size: 40px 10px;
+/*    transition: background-position 0.5s linear;
+*/    z-index: 70;
+    left: 39px;
+}
+
+.rect-bottom {
+    background-position: 0px 100%;
+    top: 103px;
+}
+
+.rect-top {
+    background-position: 0px 0px;
+	top: -4.5px;
+    border-radius: 1px;
+}
+
+.trans {
+/*	transition: transform 0.5s linear;
+*/}
+
+.scroll {
+/*	transition: top 0.5s linear;
+*/}
+
+
+.left, .right {
+    position: relative;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+	transform: rotate(22.5deg);
+/*	-webkit-transition: transform 0.5s linear;
+*//*	-moz-transition: transform 0.5s linear;
+*//*	-ms-transition: transform 0.5s linear;
+*//*	-o-transition: transform 0.5s linear;
+*//*	transition: transform 0.5s linear;
+*/}
+#gear-right {
+    top: 5px;
+    left: 322px;
+    position: absolute;
+}
+#gear-left {
+    top: 5px;
+    left: 0px;
+    position: absolute;
+}
+#gear-left > div, #gear-left > div {
+    position: relative;
+}
+.gear-reverse {
+    left: 350px;
+    top: -45px;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background: transparent;
+    box-shadow: inset 0 0 0px 12px dimgrey, inset 0 0 0px 16px #444;
+    border-radius: 50%;
+/*    -webkit-transition: transform 0.5s linear;
+*//*    -moz-transition: transform 0.5s linear;
+*//*    -ms-transition: transform 0.5s linear;
+*//*    -o-transition: transform 0.5s linear;
+*//*    transition: transform 0.5s linear;
+*/    z-index: 100;
+    transform: rotate(0deg);
+}
+.gear-reverse:after{
+    height: 20px;
+    width: 20px;
+    content: '';
+    border-radius: 20%;
+    position: absolute;
+    background: dimgray;
+	transform: rotate(45deg);
+    top: -4px;
+    left: 25px;
+    box-shadow: 0px 40px 0 0 dimgrey, 20px 20px 0 0 dimgrey, -20px 20px 0 0 dimgrey;
+    z-index: 10;
+}
+.gear-reverse:before {
+    top: -10px; left: 40px;
+	z-index: 10;
+}
+
+
+.left:before, .left:after, .right:before, .right:after {
+    height: 20px;
+    width: 20px;
+    content: '';
+    position: absolute;
+    background: gold;
+}
+.left:before, .right:before {
+    box-shadow: 50px 50px 0 0 gold, -50px 50px 0 0 gold, 0 100px 0 0 gold;
+    top: -10px;
+    left: 40px;
+}
+.left:after, .right:after {
+    transform: rotate(45deg);
+    top: 5px;
+    left: 76px;
+    box-shadow: 0px 100px 0 0 gold, 50px 50px 0 0 gold, -50px 50px 0 0 gold;
+}
+@-webkit-keyframes rotate {
+    0% {-webkit-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(-360deg);}
+}
+@-moz-keyframes rotate {
+    0% {-moz-transform: rotate(0deg);}
+    100% {-moz-transform: rotate(-360deg);}
+}
+@keyframes rotate {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(-360deg);}
+}
+.cover {
+    height: 104px;
+    width: 446px;
+    border-radius: 50px;
+    position: relative;
+    background: rgba(255,255,255,1);
+    top: -312px;
+    left: -2px;
+}
+.gear {
+    height: 100px;
+    width: 100px;
+    background: transparent;
+    box-shadow: inset 0 0 0px 35px dimgray, inset 0 0 0px 40px #444;
+    border-radius: 50%;
+    position: absolute;
+/*	-webkit-transition: transform 0.5s linear;
+*//*	-moz-transition: transform 0.5s linear;
+*//*	-ms-transition: transform 0.5s linear;
+*//*	-o-transition: transform 0.5s linear;
+*//*	transition: transform 0.5s linear;
+*/    z-index: 100;
+	transform: rotate(0deg);
+}
+
+.gear:before, .gear:after{
+    height: 20px;
+    width: 20px;
+    content: '';
+    border-radius: 20%;
+    position: absolute;
+    background: dimgray;
+}
+.gear:before {
+    box-shadow: 50px 50px 0 0 dimgray, -50px 50px 0 0 dimgray, 0 100px 0 0 dimgray;
+    top: -10px; left: 40px;
+	z-index: 10;
+}
+.gear:after {
+    transform: rotate(45deg);
+    top: 5px; left: 76px;
+    box-shadow: 0px 100px 0 0 dimgray, 50px 50px 0 0 dimgray, -50px 50px 0 0 dimgray;
+	z-index: 10;
+}
+
+.view {
+	height: calc(100vh + 180px);
+	top: 114px;
+	left: 116px;
+	background: linear-gradient(0deg, transparent 50%, black 50%);
+    background-repeat: repeat-y;
+    background-size: 12px 40px;
+    display: inline-block;
+    background-position: 0px 0px;
+    position:relative;
+    z-index: 40;
+}
+
+.gearbox {
+	z-index: 100;
+    top: 33px;
+    transform: rotate(90deg);
+    left: 75px;
+}
+.hide-gear-right {
+    height: 124px;
+    position: absolute;
+    width: 75px;
+    background-color: white;
+    top: -14px;
+    left: 40px;
+    z-index: 60;
+}
+.hide-gear-left {
+	height: 124px;
+    position: absolute;
+    width: 70px;
+    background-color: white;
+    top: -12px;
+    left: -10px;
+    z-index: 60;
+}
+
+.start {
+	transform: rotateZ(-90deg) translateY(-100px) translateX(-100px);
+}
+.out1 {
+	transform: rotateZ(-60deg) translateY(-105px) translateX(-20px);
+}
+.out2 {
+	transform: rotateZ(-30deg) translateY(-800px) translateX(-120px);
+}
+.out3 {
+	transform: rotateZ(0deg) translateY(60px) translateX(600px);
+	z-index:3;
+}
+</style>
+<script>
+	var rotadeg = 0;
+	var rotdeg = 20;
+	var trans = -20;
+	var scroll = 0;
+	var winheight= window.innerHeight || (document.documentElement || document.body).clientHeight;
+  // var elem = document.getElementById("animate");   
+  // var pos = 0;
+  // var id = setInterval(frame, 5);
+
+  // function frame() {
+  //   if (pos == 350) {
+  //     clearInterval(id);
+  //   } else {
+  //     pos++; 
+  //     elem.style.top = pos + 'px'; 
+  //     elem.style.left = pos + 'px'; 
+  //   }
+  // }
+// Based on http://www.sitepoint.com/html5-javascript-mouse-wheel/
+var scrollGears = function (percent) 
+{
+	// cross-browser wheel delta
+	// Chrome / IE: both are set to the same thing - WheelEvent for Chrome, MouseWheelEvent for IE
+	// Firefox: first one is undefined, second one is MouseScrollEvent
+	var e = window.event || event;
+	// Chrome / IE: first one is +/-120 (positive on mouse up), second one is zero
+	// Firefox: first one is undefined, second one is -/+3 (negative on mouse up)
+	var height = Math.floor(winheight / 20);
+	// var delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
+ //  	console.log("height"+height);
+ //  	console.log("delta"+delta);
+ //  	console.log("trans"+trans);
+	// height = height - (height % 20);
+	// e.preventDefault();
+	// if ((trans == 0 && delta > 0) || (trans == height && delta < 0)) {
+	// 	return;
+	// }
+	// trans += 20 * delta;
+	// trans = Math.min(0, trans);
+	// trans = Math.max(height, trans);Crystal Ball Music Box
+	// rotdeg += 22.5 * delta * -1;
+	// rotdeg = Math.min(942.5, rotdeg);
+	// rotadeg += 45 * delta;
+	// rotadeg = Math.min(810, rotadeg);
+	var ratio = 320 / 360;
+	var gearMax = (winheight-114) / ratio; //-22.5 for offset 
+	var backgroundMax = 960;
+	var gearReverseMax = gearMax * -2;
+	var gear = gearMax * percent;
+	var reverseGear = gearReverseMax * percent;
+	var background = backgroundMax * percent;
+
+	document.getElementsByClassName('gear')[0].style.transform = 'rotate(' +  (gear + 0) + 'deg)';
+	document.getElementsByClassName('gear')[1].style.transform = 'rotate(' +  (gear + 0) + 'deg)';
+	document.getElementsByClassName('gear-reverse')[0].style.transform = 'rotate(' +  (reverseGear + 0) + 'deg)';
+	document.getElementsByClassName('left')[0].style.transform = 'rotate(' +  (gear + 22.5) + 'deg)';
+	document.getElementsByClassName('right')[0].style.transform = 'rotate(' +  (gear + 22.5) + 'deg)';
+	document.getElementsByClassName('rect-top')[0].style.backgroundPosition = background + 'px 0px';
+	document.getElementsByClassName('rect-bottom')[0].style.backgroundPosition = (background * -1) + 'px 100%';
+	// document.getElementsByClassName('scroll')[0].style.top = ((backgroundMax * percent) + 114) + 'px';
+};
+
+var handleWheel = function (event) 
+{
+
+	// cross-browser wheel delta
+	// Chrome / IE: both are set to the same thing - WheelEvent for Chrome, MouseWheelEvent for IE
+	// Firefox: first one is undefined, second one is MouseScrollEvent
+	var e = window.event || event;
+	var delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
+	var docheight = getDocHeight();
+	var trackLength = docheight - winheight;
+	e.preventDefault();
+	scroll = scroll - (50 * delta);
+	scroll = Math.min(trackLength, scroll);
+	scroll = Math.max(0, scroll);
+  	console.log(trackLength);
+  	console.log(scroll);
+	window.scrollTo({
+		top: scroll, 
+		left: 0, 
+		behavior: 'smooth' 
+	});
+};
+
+var addMouseWheelEventListener = function (scrollHandler)
+{
+  if (window.addEventListener) 
+  {
+  	console.log("Should Fire Here");
+    // IE9+, Chrome, Safari, Opera
+    window.addEventListener("mousewheel", scrollHandler, false);
+    // Firefox
+    window.addEventListener("DOMMouseScroll", scrollHandler, false);
+  } 
+  else 
+  {
+    // // IE 6/7/8
+    window.attachEvent("onmousewheel", scrollHandler);
+  }
+};
+
+addMouseWheelEventListener(handleWheel);
+
+function getDocHeight() {
+    var D = document;
+    return Math.max(
+        D.body.scrollHeight, D.documentElement.scrollHeight,
+        D.body.offsetHeight, D.documentElement.offsetHeight,
+        D.body.clientHeight, D.documentElement.clientHeight
+    )
+}
+
+function amountscrolled(){
+	var docheight = getDocHeight();
+	var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
+	var trackLength = docheight - winheight;
+	var pctScrolled = scrollTop/trackLength; // gets percentage scrolled (ie: 80 or NaN if tracklength == 0)
+	console.log(pctScrolled);
+	return pctScrolled;
+}
+
+window.addEventListener("scroll", function(){
+	console.log(amountscrolled());
+	scrollGears(amountscrolled());
+}, false)
+
+	</script>
+<body style="margin: 0px;">
+<div class="container-fluid p-0" style="">
+<div  class="position-fixed gearbox">
+
+	<div id="gear-left">
+		<div>
+			<div class="gear"></div>
+			<div class="hide-gear-right"></div>
+			<div class="left"></div>
+		</div>
+	</div>
+
+	<div id="gear-right">
+		<div class="gear"></div>
+		<div class="hide-gear-left"></div>
+		<div class="right"></div>
+	</div>
+	<div class="rect-top"></div>
+	<div class="rect-bottom"></div>
+
+		<div class="gear-reverse"></div>
+
+</div>
+
+<div class="position-fixed col-12" style="    z-index: 90;
+    height: 114px;
+    background-color: white;">
+
+</div>
+
+<div class="scroll view pl-3  ml-1 row w-100">
+	<div class="col-12" style="
+		height:calc(100vh - 114px);
+		background-color:blue;
+	">
+	<div class="col-9" style="height: 80vh">
+		<div class="col-6 start" style="transition: 2s; border:1px solid grey;top:30px;left:100px;background-color: white;height: 70vh;position: absolute;"><h1>Something Here</h1></div>
+		<div class="col-6 start" style="border:1px solid grey;top:30px;left:160px;background-color: white;height: 70vh;position: absolute;"><h1>Something Else Here</h1></div>
+		<div class="col-6 start" style="border:1px solid grey;top:30px;left:220px;background-color: white;height: 70vh;position: absolute;"></div>
+		<div class="col-6 start" style="border:1px solid grey;top:30px;left:280px;background-color: white;height: 70vh;position: absolute;"></div>
+		<div class="col-6 start" style="border:1px solid grey;top:30px;left:340px;background-color: white;height: 70vh;position: absolute;"></div>
+		<div class="col-6 start" style="border:1px solid grey;top:30px;left:400px;background-color: white;height: 70vh;position: absolute;"></div>
+		<div class="col-6 start" style="border:1px solid grey;top:30px;left:460px;background-color: white;height: 70vh;position: absolute;"></div>
+	</div>
+	</div>
+
+	<div class="col-12" style="
+		height:calc(100vh - 114px);
+		background-color:red;
+	">
+</div>
+
+</div>
+<script>
+		var el = document.getElementsByClassName('out1')[0];
+	document.getElementsByClassName('out1')[0].addEventListener("transitionend", function(){
+			el.classList .remove('out1');
+			el.classList .add('out2');
+	document.getElementsByClassName('out2')[0].addEventListener("transitionend", function(){
+			el.classList .remove('out2');
+			el.classList .add('out3');
+	}, true);
+	}, true);
+</script>
+</body>
+
