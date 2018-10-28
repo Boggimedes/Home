@@ -17,9 +17,6 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::resource('user', 'UserController');
-Route::resource('drink', 'DrinkController');
-Route::resource('family', 'FamilyController');
 Route::post('family/command', 'FamilyController@command');
 Route::post('family/play/{data}', 'FamilyController@play');
 Route::post('family/resume/{data}', 'FamilyController@resume');
@@ -32,3 +29,6 @@ Route::post('family/movieTime', 'FamilyController@movieTime');
 Route::post('family/projOff', 'FamilyController@projOff');
 Route::post('family/camille', 'FamilyController@camille');
 Route::post('family/ir', 'FamilyController@ir');
+Route::resource('user', 'UserController');
+Route::resource('drink', 'DrinkController');
+Route::resource('family', 'FamilyController');
