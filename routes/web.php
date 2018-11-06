@@ -14,6 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/something', function () {
+    return view('welcome');
+});
+Route::post('home/command', 'HomeController@command');
 
 // Route::get('/coffee-tracker', function () {
 //     return view('coffee-tracker');

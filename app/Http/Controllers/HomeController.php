@@ -41,6 +41,11 @@ class HomeController extends Controller
 		if (!empty($data)) $send['params'] = "\"$data\"";
 		$data_string = json_encode($send);
 		$this->trigger($data_string);
+		return response()->json(
+			[
+				'message'               => 'Command Sent!',
+				'command'   => $params['command'],
+			]);
 	}
 
 	public function stopAll(Request $request)
